@@ -6,7 +6,7 @@ use App\Models\condicion;
 use App\Models\Personal;
 use App\Models\Servicio;
 use FFI\Exception;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
@@ -57,13 +57,13 @@ class PersonalController extends Controller
     public function registrarPersonal(Request $request)
     {
         try{
-            $nombre = $request->input('nombre');
-            $apellido = $request->input('apellido');
-            $dni = $request->input('dni');
-            $celular = $request->input('celular');
-            $condicion = $request->input('condicion');
-            $servicio = $request->input('servicio');
-    
+            $nombre = $request->nombre;
+            $apellido = $request->apellido;
+            $dni = $request->dni;
+            $celular = $request->celular;
+            $condicion = $request->condicion;
+            $servicio = $request->servicio;
+
             $personal = new Personal();
             $personal->Nombres = $nombre;
             $personal->Apellidos = $apellido;
@@ -75,9 +75,9 @@ class PersonalController extends Controller
     
             $personal->save();
     
-            $last_id = Personal::latest()->first();
+            $last_id = Personal::select('IdPersonal')->where('Dni','=',$dni)->get();
 
-            if($last_id > 0){
+            if($last_id){
                 return response()->json([
                     'exito' => true,
                     'mensajeError' => '',

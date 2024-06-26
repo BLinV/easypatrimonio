@@ -33,7 +33,14 @@ function listarPersonal() {
                     response._personal.forEach(element => {
                         tabla += `<tr class="option-table" data-filter="${element.Persona.toUpperCase()}">
                         <td>${element.Dni}</td><td>${element.Persona}</td><td>${element.Celular}</td>
-                        <td>${element.Condicion}</td><td>${element.Servicio}</td><td>${element.Estado}</td>
+                        <td>${element.Condicion}</td><td>${element.Servicio}</td>
+                        <td>`
+                        if (element.Estado == 1) {
+                            tabla += `<p class="bg-success text-white p-2 d-inline rounded-pill">Activo</p>`
+                        } else {
+                            tabla += `<p class="bg-danger text-white p-2 d-inline rounded-pill">Inactivo</p>`
+                        }
+                        tabla += `</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-info dropdown-toggle" type="button"
@@ -57,10 +64,15 @@ function listarPersonal() {
         }
     });
 }
-listarPersonal();
+listarPersonal()
 
-function Ver(e) {
-
+function Limpiar() {
+    $('#nombre').val('')
+    $('#apellido').val('')
+    $('#dni').val('')
+    $('#celular').val('')
+    $('#condicion').val('')
+    $('#servicio').val('')
 }
 
 function validar() {
@@ -124,25 +136,31 @@ const GuardarPersona = () => {
 
 
         let datos = {
-            'nombre': nombre,
-            'apellido': apellido,
-            'dni': dni,
-            'celular': celular,
-            'condicion': condicion,
-            'servicio': servicio
+            "nombre": nombre,
+            "apellido": apellido,
+            "dni": dni,
+            "celular": celular,
+            "condicion": condicion,
+            "servicio": servicio
         }
 
         $.ajax({
             type: "post",
-            url: "api/registrar_personal",
-            data: datos,
+            url: "/api/registrar_personal",
+            data: JSON.stringify(datos),
             dataType: "json",
             contentType: 'application/json',
             processData: false,
             success: function (response) {
                 LoadingOverlay(false)
 
-                console.log(response);
+                if (response.exito) {
+                    Alertas('Confirmación', response.mensaje, 'success')
+                    Limpiar()
+                    listarPersonal()
+                } else {
+                    Alertas('Error', response.mensajeError, 'error')
+                }
 
             }, beforeSend: function () {
                 LoadingOverlay(true)
