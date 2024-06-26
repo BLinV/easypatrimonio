@@ -24,6 +24,7 @@ class CreateDetallepatrimoniosTable extends Migration
             $table->unsignedInteger('IdServicio')->nullable(false);
             $table->foreign('IdPatrimonio')->references('IdPatrimonio')->on('patrimonio');
             $table->foreign('IdServicio')->references('IdServicio')->on('servicio');
+            $table->timestamps();
         });
     }
 

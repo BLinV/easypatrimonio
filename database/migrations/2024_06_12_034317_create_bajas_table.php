@@ -20,6 +20,7 @@ class CreateBajasTable extends Migration
             $table->string('Observacion', 100)->nullable();
             $table->unsignedInteger('IdPersonal')->nullable(false);
             $table->foreign('IdPersonal')->references('IdPersonal')->on('personal');
+            $table->timestamps();
         });
     }
 

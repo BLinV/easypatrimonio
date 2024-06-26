@@ -16,6 +16,7 @@ class CreateOrigenesTable extends Migration
         Schema::create('origen', function (Blueprint $table) {
             $table->Increments("IdOrigen");
             $table->string("Descripcion", 100)->nullable(false)->unique();
+            $table->timestamps();
         });
     }
 

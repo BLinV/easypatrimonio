@@ -16,6 +16,7 @@ class CreateCondicionesTable extends Migration
         Schema::create('condicion', function (Blueprint $table) {
             $table->Increments("IdCondicion", 11);
             $table->string("Descripcion", 50)->nullable(false)->unique();
+            $table->timestamps();
         });
     }
 

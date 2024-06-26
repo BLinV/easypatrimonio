@@ -22,6 +22,7 @@ class CreateIngresosTable extends Migration
             $table->unsignedInteger('IdPersonal')->nullable(false);
             $table->foreign('IdOrigen')->references('IdOrigen')->on('origen');
             $table->foreign('IdPersonal')->references('IdPersonal')->on('personal');
+            $table->timestamps();
         });
     }
 

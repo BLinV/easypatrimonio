@@ -20,6 +20,7 @@ class CreateDetallebajasTable extends Migration
             $table->string('Estado', 50)->nullable();
             $table->foreign('IdBaja')->references('IdBaja')->on('Baja');
             $table->foreign('IdDetallePatrimonio')->references('IdDetallePatrimonio')->on('detallepatrimonio');
+            $table->timestamps();
         });
     }
 

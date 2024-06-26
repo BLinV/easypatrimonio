@@ -22,6 +22,7 @@ class CreatePatrimoniosTable extends Migration
             $table->foreign('IdTipo')->references('IdTipo')->on('tipo');
             $table->foreign('IdMarca')->references('IdMarca')->on('marca');
             $table->foreign('IdCategoria')->references('IdCategoria')->on('categoria');
+            $table->timestamps();
         });
     }
 

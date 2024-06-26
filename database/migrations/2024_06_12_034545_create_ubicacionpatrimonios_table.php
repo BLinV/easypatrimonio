@@ -23,6 +23,7 @@ class CreateUbicacionpatrimoniosTable extends Migration
             $table->foreign('IdDetallePatrimonio')->references('IdDetallePatrimonio')->on('detallepatrimonio');
             $table->foreign('IdServicio')->references('IdServicio')->on('servicio');
             $table->foreign('IdPersonal')->references('IdPersonal')->on('personal');
+            $table->timestamps();
         });
     }
 

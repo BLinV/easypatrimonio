@@ -20,6 +20,7 @@ class CreateDetalleingresosTable extends Migration
             $table->string('Estado', 50)->nullable();
             $table->foreign('IdIngreso')->references('IdIngreso')->on('ingreso');
             $table->foreign('IdDetallePatrimonio')->references('IdDetallePatrimonio')->on('detallepatrimonio');
+            $table->timestamps();
         });
     }
 
