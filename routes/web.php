@@ -1,18 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BajaController;
+use App\Http\Controllers\BienvenidoController;
+use App\Http\Controllers\IngresoController;
+use App\Http\Controllers\MovimientoController;
+use App\Http\Controllers\PatrimonioController;
+use App\Http\Controllers\PersonalController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', [BienvenidoController::class, 'index'])->name('home');
 
-Route::get('/', function () {
+/* Módulos */   //php artisan route:list
+Route::resource('Personal', PersonalController::class)->names('personal');
+Route::resource('Patrimonio', PatrimonioController::class)->names('patrimonio');
+Route::resource('Ingresos', IngresoController::class)->names('ingresos');
+Route::resource('Bajas', BajaController::class)->names('bajas');
+Route::resource('Movimientos', MovimientoController::class)->names('movimientos');
+
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/

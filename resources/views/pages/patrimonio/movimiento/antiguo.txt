@@ -1,0 +1,70 @@
+En modelos:
+
+    public function marca()
+    {
+        return $this->belongsTo(Marca::class, 'IdMarca');
+    }
+
+    public function tipo()
+    {
+        return $this->belongsTo(Tipo::class, 'IdTipo');
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'IdCategoria');
+    }
+
+    public function detalle()
+    {
+        return $this->hasMany(DetallePatrimonio::class, 'IdPatrimonio');
+    }
+
+    
+    public function patrimonio()
+    {
+        return $this->belongsTo(Patrimonio::class, 'IdPatrimonio');
+    }
+    public function patrimonio()
+    {
+        return $this->hasMany(Patrimonio::class, 'IdMarca');
+    }
+    public function patrimonio()
+    {
+        return $this->hasMany(Patrimonio::class, 'IdCategoria');
+    }
+    public function personal()
+    {
+        return $this->hasMany(Personal::class, 'IdServicio');
+    }
+
+    public function patrimonio()
+    {
+        return $this->hasMany(Patrimonio::class, 'IdServicio');
+    }
+
+
+$patrimonios = Patrimonio::with(['marca', 'tipo', 'categoria', 'detalle'])->paginate(4);
+<tbody>
+@if($patrimonios)
+    @foreach ($patrimonios as $Patrimonio)
+    @foreach ($Patrimonio->detalle as $itPatrimonio)
+    <tr>
+        <td>{{ $itPatrimonio->CodUTES}}</td>
+        <td>{{ $itPatrimonio->CodInterno}}</td>
+        <td>{{ $Patrimonio->tipo->Descripcion}} {{ $Patrimonio->marca->Descripcion}} {{ $Patrimonio->Modelo}}</td>
+        <td>{{ $itPatrimonio->Descripcion}}</td>
+        <td>{{ $Patrimonio->categoria->Descripcion}}</td>
+        <td>{{ $itPatrimonio->Operativo}}</td>  
+        <td>{{ $itPatrimonio->Baja}}</td>
+        <td></td>
+        <td><a href="{{ route('actualizar.index') }}">Actualizar</a></td>
+    </tr>
+    @endforeach
+    @endforeach
+    @else
+    <tr>
+        <td colspan="9">No se encontraron registros.</td>
+    </tr>
+    @endif
+</tbody>

@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Marca extends Model
+{
+    protected $primaryKey = "IdMarca";
+    protected $guarded = [];
+    protected $table = "marca";
+    use HasFactory;
+
+    public function patrimonio()
+    {
+        return $this->hasMany(Patrimonio::class, 'IdMarca');
+    }
+}
