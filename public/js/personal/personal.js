@@ -1,6 +1,19 @@
 /*Todo lo llena el metodo ListarPersonal()
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
+
+function Buscador(e) {
+    var buscador = $(e).val()
+    console.log(buscador);
+    if (buscador == '') {
+        $("#tablaPersonal .option-table").show();
+    } else {
+        $("#tablaPersonal .option-table").hide();
+        $("#tablaPersonal .option-table[data-filter\*='" + buscador.toUpperCase() + "']").show();
+    }
+
+}
+
 function listarPersonal() {
     $.ajax({
         type: "get",
@@ -10,7 +23,6 @@ function listarPersonal() {
         contentType: "application/json",
         processData: false,
         success: function (response) {
-            console.log(response);
             if (response.exito) {
                 let servicio = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
                 if (response._servicio.length > 0) {              //Cbobox Servicio
@@ -31,7 +43,7 @@ function listarPersonal() {
                 let tabla = ''
                 if (response._personal.length > 0) {              //Tabla informacion personal
                     response._personal.forEach(element => {
-                        tabla += `<tr>
+                        tabla += `<tr class="option-table" data-filter="${element.Persona.toUpperCase()}">
                         <td>${element.Dni}</td><td>${element.Persona}</td><td>${element.Celular}</td>
                         <td>${element.Condicion}</td><td>${element.Servicio}</td><td>${element.Estado}</td>
                         <td>
@@ -41,7 +53,7 @@ function listarPersonal() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a class="dropdown-item" href="#">Actualizar</a></li>
+                                    <li><a class="dropdown-item" data-dni="${element.Dni}" onclick="Ver(this)">Actualizar</a></li>
                                     <li><a class="dropdown-item" href="#">Retirar</a></li>
                                 </ul>
                             </div>
@@ -58,6 +70,10 @@ function listarPersonal() {
     });
 }
 listarPersonal();
+
+function Ver(e) {
+
+}
 
 function validar() {
     let nombre = $('#nombre').val()
