@@ -1,7 +1,7 @@
-const Alertas = (icono, titulo, texto) => {
-    Swal.fire({
+const Alertas = (titulo, texto, icono) => {
+    swal({
         title: titulo,
-        html: texto,
+        text: texto,
         icon: icono
     });
 }

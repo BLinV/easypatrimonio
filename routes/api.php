@@ -29,6 +29,9 @@ Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaR
 Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');
 
 
+//Personal
+Route::post('/registrar_personal',[PersonalController::class,'registrarPersonal'])->name('registrarPersonal');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
