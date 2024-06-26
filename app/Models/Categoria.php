@@ -11,9 +11,4 @@ class Categoria extends Model
     protected $primaryKey = "IdCategoria";
     protected $guarded = [];
     protected $table="categoria";
-
-    public function patrimonio()
-    {
-        return $this->hasMany(Patrimonio::class, 'IdCategoria');
-    }
 }

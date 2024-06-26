@@ -11,9 +11,4 @@ class DetallePatrimonio extends Model
     protected $guarded = [];
     protected $table = "detallepatrimonio";
     use HasFactory;
-    
-    public function patrimonio()
-    {
-        return $this->belongsTo(Patrimonio::class, 'IdPatrimonio');
-    }
 }

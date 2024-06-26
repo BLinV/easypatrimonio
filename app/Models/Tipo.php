@@ -11,9 +11,4 @@ class Tipo extends Model
     protected $guarded = [];
     protected $table="tipo";
     use HasFactory;
-
-    public function patrimonio()
-    {
-        return $this->hasMany(Patrimonio::class, 'IdTipo');
-    }
 }

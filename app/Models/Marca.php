@@ -11,9 +11,4 @@ class Marca extends Model
     protected $guarded = [];
     protected $table = "marca";
     use HasFactory;
-
-    public function patrimonio()
-    {
-        return $this->hasMany(Patrimonio::class, 'IdMarca');
-    }
 }

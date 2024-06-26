@@ -11,14 +11,4 @@ class Servicio extends Model
     protected $guarded = [];
     protected $table="servicio";
     use HasFactory;
-
-    public function personal()
-    {
-        return $this->hasMany(Personal::class, 'IdServicio');
-    }
-
-    public function patrimonio()
-    {
-        return $this->hasMany(Patrimonio::class, 'IdServicio');
-    }
 }
