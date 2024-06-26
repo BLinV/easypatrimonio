@@ -16,8 +16,32 @@ class MovimientoController extends Controller
         return view('pages.patrimonio.movimiento.list', []);
     }
 
-    public function create(){
-        return view('pages.patrimonio.movimiento.show', []);
+    public function isshow($idDetallePatrimonio){
+        try {
+            $ubicacionpatrimonio = UbicacionPatrimonio::select('CodUTES', 'CodInterno',
+                                            DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
+                                            'detallepatrimonio.Descripcion',
+                                            DB::raw("`categoria`.`Descripcion` AS Categoria"),
+                                            'Operativo')
+                                                -> join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
+                                                -> join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
+                                                -> join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
+                                                -> join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
+                                                -> where('IdDetallePatrimonio', '=', $idDetallePatrimonio)
+                                                -> get();
+            return response()->json([
+                'exito' => true,
+                'mensajeError' => '',
+                'mensaje' => '',
+                '_ubicacionpatrimonio' => $ubicacionpatrimonio,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $ex->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
     }
     
     # Metodos
@@ -68,5 +92,4 @@ ORDER BY p.IdPatrimonio, dp.IdDetallePatrimonio;
             ]);
         }
     }
-
 }

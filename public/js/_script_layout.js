@@ -8,7 +8,7 @@ const Alertas = (titulo, texto, icono) => {
 
 const ValidarTexto = (input) => {
     var campo = $(input).val()
-    var regex = /^[a-zA-Z ]+$/;
+    var regex = /^[a-zA-Z]+$/;
     if (!regex.test(campo)) {
         $(input).val($(input).val().substring(0, $(input).val().length - 1));
     }

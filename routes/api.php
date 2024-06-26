@@ -27,6 +27,7 @@ Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'infor
 Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
 Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
 Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');
+Route::get('/informacion_movimientopatrimonio', [PatrimonioController::class, 'isshow'])->name('informacion_movimientopatrimonio');
 
 
 //Personal

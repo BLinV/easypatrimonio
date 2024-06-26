@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function(){
     $('.openModalButton').on('click', function(){
         let target = $(this).data('target');
@@ -12,8 +9,7 @@ $(document).ready(function(){
 
 $(document).ready(function() {
     $('.ver-btn').on('click', function() {
-        let patrimonioId = $(this).data('id');
-        
+        let patrimonioId = $(this).data('IdPatrimonio');
         $.ajax({
             url: `/api/patrimonio/${patrimonioId}/movimientos`, // Cambia esta URL a la ruta correcta en tu API
             method: 'GET',

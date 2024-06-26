@@ -12,6 +12,7 @@ $(`#tipo`).autocomplete({
         });
     }
 });
+
 $(`#marca`).autocomplete({
     source: function (request, response){
         $.ajax({
