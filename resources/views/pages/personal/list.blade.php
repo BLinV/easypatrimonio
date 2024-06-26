@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Sistema de Control Patrimonial - Personal')
 @section('content')
+<script>
+    LoadingOverlay(true)
+    LoadingOverlay(false)
+</script>
+
+<script src="{{ asset('js/personal.js') }}"></script>
+
     <div class="container">
         <main>
             <h1>Administrar Personal</h1>
@@ -13,19 +20,19 @@
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                             <div class="form-group mb-2">
                                 <label for="nombre" class="form-label">Nombre:</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control" value="">
+                                <input type="text" id="nombre" name="nombre" class="form-control" value=""  onkeyup="return ValidarTexto(this)">
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                             <div class="form-group mb-2">
                                 <label for="apellidos" class="form-label">Apellidos:</label>
-                                <input type="text" id="apellidos" name="apellidos" class="form-control" value="">
+                                <input type="text" id="apellidos" name="apellidos" class="form-control" value="" onkeyup="return ValidarTexto(this)">
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                             <div class="form-group mb-2">
                                 <label for="dni" class="form-label">DNI:</label>
-                                <input type="text" id="dni" name="dni" class="form-control" value=""  placeholder="Número de 9 digitos.">
+                                <input type="text" id="dni" name="dni" class="form-control" value=""  placeholder="Número de 9 digitos." onkeyup="return ValidarNumeros(this)">
                             </div>
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
@@ -70,7 +77,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <script src="{{ asset('js/personal.js') }}"></script>
+                        
                     </div>
                 </div>
             </div>
