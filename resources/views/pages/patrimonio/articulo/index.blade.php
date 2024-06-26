@@ -6,7 +6,7 @@
     LoadingOverlay(false)
 </script>
 
-<script src="{{ asset('js/patrimonio.js') }}"></script>
+<script src="{{ asset('js/patrimonio/patrimonio.js') }}"></script>
 
 <div class="container">
     <main>

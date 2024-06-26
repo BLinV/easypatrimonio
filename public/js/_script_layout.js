@@ -35,7 +35,6 @@ const ValidarNumeros = (input) => {
     }
 }
 
-
 const LoadingOverlay = (validar) => {
     if (validar) {
         $.LoadingOverlay("show", {
@@ -45,5 +44,16 @@ const LoadingOverlay = (validar) => {
         });
     } else {
         $.LoadingOverlay("hide");
+    }
+}
+
+function ModalAbrirCerrar(name, boolean){
+    var modal = new bootstrap.Modal(document.getElementById(name), {
+    keyboard: false
+    })
+    if (boolean) {
+        modal.show()
+    } else {
+        modal.hide()
     }
 }

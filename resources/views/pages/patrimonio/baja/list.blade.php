@@ -6,7 +6,7 @@
     LoadingOverlay(false)
 </script>
 
-<script src="{{ asset('js/bajaReporte.js') }}"></script>
+<script src="{{ asset('js/baja/bajaReporte.js') }}"></script>
 
 <div class="container">
     <main>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BajaController;
 use App\Http\Controllers\BusquedaController;
 use App\Http\Controllers\IngresoController;
+use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\PatrimonioController;
 use App\Http\Controllers\PersonalController;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'infor
 Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
 Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
 Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');
-Route::get('/informacion_movimientopatrimonio', [PatrimonioController::class, 'isshow'])->name('informacion_movimientopatrimonio');
+Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoReporte']);
 
 
 //Personal
