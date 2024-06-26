@@ -30,7 +30,8 @@ class PersonalController extends Controller
                         DB::raw("CONCAT(`Nombres`, ' ', `Apellidos`) AS Persona"),
                         DB::raw("condicion.Descripcion AS Condicion"),
                         'Celular',
-                        DB::raw("servicio.Descripcion AS Servicio")
+                        DB::raw("servicio.Descripcion AS Servicio"),
+                        'Estado'
                         )
                         ->join('servicio', 'personal.IdServicio', '=', 'servicio.IdServicio')
                         ->join('condicion', 'personal.IdCondicion', '=', 'condicion.IdCondicion')

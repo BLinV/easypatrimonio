@@ -19,6 +19,7 @@ class CreatePersonalTable extends Migration
             $table->string('Apellidos', 70)->nullable(false);
             $table->char("Dni", 8)->nullable(false)->unique();
             $table->string('Celular', 9)->nullable(false);
+            $table->boolean('Estado')->nullable(false)->default(true);
             $table->unsignedInteger('IdCondicion')->nullable(false);
             $table->unsignedInteger('IdServicio')->nullable(false);
             //$table->unsignedBigInteger('IdUsuario')->nullable();

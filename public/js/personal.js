@@ -1,3 +1,6 @@
+/*Todo lo llena el metodo ListarPersonal()
+Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
+e inyecta a Tabla(ID)*/
 function listarPersonal() {
     $.ajax({
         type: "get",
@@ -30,7 +33,7 @@ function listarPersonal() {
                     response._personal.forEach(element => {
                         tabla += `<tr>
                         <td>${element.Dni}</td><td>${element.Persona}</td><td>${element.Celular}</td>
-                        <td>${element.Condicion}</td><td>${element.Servicio}</td>
+                        <td>${element.Condicion}</td><td>${element.Servicio}</td><td>${element.Estado}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-info dropdown-toggle" type="button"
@@ -38,9 +41,8 @@ function listarPersonal() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a class="dropdown-item" href="#">Ver</a></li>
                                     <li><a class="dropdown-item" href="#">Actualizar</a></li>
-                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#">Retirar</a></li>
                                 </ul>
                             </div>
                         </td></tr>`
@@ -49,6 +51,8 @@ function listarPersonal() {
                     tabla += `<tr><td colspan="9">No se encontraron registros.</td></tr>`
                 }
                 $('#tablaPersonal').html(tabla);
+                /*Todo lo llena el metodo ListarPersonal()
+                Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML e inyecta a Tabla(ID)*/
             }
         }
     });
