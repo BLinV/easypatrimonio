@@ -24,7 +24,7 @@ function listarDatosTabla(){
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
                                     <li><a class="dropdown-item" href="#">Ver</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('actualizar.index') }}">Actualizar</a></li>
+                                    <li><a class="dropdown-item" href="#">Actualizar</a></li>
                                 </ul>
                             </div>
                         </td></tr>`

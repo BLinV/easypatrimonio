@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title','Sistema de Control Patrimonial - Baja de Patrimonio')
 @section('content')
+<script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
 <div class="container">
     <main>
         <div class="shadow p-3 mb-5 bg-body rounded">
@@ -26,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                @include('pages.shared.articulo',['vista'=>['tipo'=>false, 'boton'=>'Añadir']])
+                @include('pages.shared.articulo',['vista'=>['articulo'=>true, 'operativo'=>false, 'ubicacion'=>false, 'comentario'=>true, 'boton'=>'Añadir']])
                 <hr/>
                 <!-- Tabla de informacion -->
                 <div class="table-response">

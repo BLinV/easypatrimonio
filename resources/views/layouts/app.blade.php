@@ -37,9 +37,7 @@
     @include('partials.navbar')
 
     <body>
-        @yield('style')
         @yield('content')
-        @yield('script')
     </body>
     @include('partials.footer')
 

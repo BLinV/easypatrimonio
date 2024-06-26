@@ -1,5 +1,5 @@
 @csrf
-<div class="card">
+<div class="card p-3 mb-5 bg-body rounded">
     <div class="card-header">
         <h5>Información del Artículo</h5>
     </div>
@@ -24,13 +24,13 @@
                         </select>
                     </div>
             </div>
+            @if ($vista['articulo'])
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="tipo" class="form-label">Tipo:</label>
                     <input type="text" id="tipo" name="tipo" class="form-control" value="" placeholder="Monitor/All in One/Estetoscopio/Puloxímetro">
                 </div>
             </div>
-            <script></script>
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="marca" class="form-label">Marca:</label>
@@ -43,6 +43,7 @@
                     <input type="text" id="modelo" name="modelo" class="form-control" value="" placeholder="1800px/Intel Core TM i5/HR digital">
                 </div>
             </div>
+            @endif
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="patrimonio" class="form-label">Articulo: </label>
@@ -56,7 +57,7 @@
                     </select>
                 </div>
             </div>
-            @if ($vista['tipo'])
+            @if ($vista['operativo'])
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="operativo" class="form-label">Operativo:</label>
@@ -67,6 +68,8 @@
                     </select>
                 </div>
             </div>
+            @endif
+            @if ($vista['ubicacion'])
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="ubicacion" class="form-label">Ubicacion:</label>
@@ -75,12 +78,14 @@
                 </div>
             </div>
             @endif
+            @if ($vista['comentario'])
             <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="comentario" class="form-label">Comentario:</label>
                     <textarea type="text" id="comentario" name="comentario" class="form-control" style="resize: none;" value="" placeholder="Máximo 250 caracteres."></textarea>
                 </div>
             </div>
+            @endif
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center align-items-center">
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary btn-block">{{ $vista['boton'] }}</button>

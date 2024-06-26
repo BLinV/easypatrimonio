@@ -1,15 +1,22 @@
 @extends('layouts.app')
 @section('title','Sistema de Control Patrimonial - Ingreso de Patrimonio')
 @section('content')
+<script>
+    LoadingOverlay(true)
+    LoadingOverlay(false)
+</script>
+<script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
+<script src="{{ asset('js/ingresoReporte.js') }}"></script>
+
 <div class="container">
     <main>
         <h1>Ingreso de Patrimonio</h1>
         <div class="card">
             <div class="card-header">
-                <h5>Información de PECOSA</h5>
+                <legend>Información de PECOSA</legend>
             </div>
             <div class="card-body">
-                <div class="row g-2 justify-content-start">
+                <form class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start" action="javascrip:void(0)" method="POST" enctype="multipart/form-data" autocomplete="off">
                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                         <div class="form-group mb-2">
                             <label for="codpecosa" class="form-label">Número de PECOSA:</label>
@@ -32,13 +39,9 @@
                             <button type="button" class="btn btn-primary" onclick="location.href='{{ route('ingresos.create') }}'">Ingresar PECOSA</button>
                         </div>
                     </div>
-                </div>
-                <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
-            </div>
-            <hr/>
-            <div class="shadow p-3 bg-body rounded">
+                </form>
                 <!-- Tabla de informacion -->
-                <div class="table-responsive">
+                <div class="table-responsive  shadow p-3 bg-body rounded mt-2">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -52,7 +55,6 @@
                         </thead>
                         <tbody id="tablaIngreso">
                         </tbody>
-                        <script src="{{ asset('js/ingresoReporte.js') }}"></script>
                     </table>
                 </div>
             </div>
