@@ -2,18 +2,6 @@
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
 
-function Buscador(e) {
-    var buscador = $(e).val()
-    console.log(buscador);
-    if (buscador == '') {
-        $("#tablaPersonal .option-table").show();
-    } else {
-        $("#tablaPersonal .option-table").hide();
-        $("#tablaPersonal .option-table[data-filter\*='" + buscador.toUpperCase() + "']").show();
-    }
-
-}
-
 function listarPersonal() {
     $.ajax({
         type: "get",

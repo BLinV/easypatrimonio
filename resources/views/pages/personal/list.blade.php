@@ -57,12 +57,14 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                     </form>
-                    <div class="shadow p-3 bg-body rounded mt-2">
+                    <hr />
+                    <div class="shadow px-3 bg-body rounded m-2">
                         <!-- Tabla de informacion -->
                         <div class="table-responsive">
 
                             <div class="m-1 px-5 pb-1">
-                                <input type="text" name="buscador" id="buscador" class="form-control" value="" placeholder="Buscar Personal en el Sistema ....." onkeyup="Buscador(this)">
+                                <input type="text" name="buscador" id="buscador" class="form-control" value=""
+                                    placeholder="Buscar Personal en el Sistema ....." onkeyup="return ValidarTexto(this)">
                             </div>
 
                             <table class="table table-bordered">
@@ -81,6 +83,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <script src="{{ asset('js/personal/buscador.js') }}"></script>
                     </div>
                 </div>
             </div>
