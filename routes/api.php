@@ -19,6 +19,7 @@ Route::get('/informacion_personalcondicion', [PersonalController::class,'informa
 
 //Reportes
 Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'informacionPatrimonioReporte'])->name('informacion_patrimonioreporte');
+Route::get('/detalle_patrimonio/{id}', [PatrimonioController::class, 'obtenerDetallePatrimonio']);
 Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
 Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
 Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');

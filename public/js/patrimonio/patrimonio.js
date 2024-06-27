@@ -9,26 +9,10 @@ function listarDatosTabla(){
         success: function (response) {
             if(response.exito){
                 let tabla = ''
-                console.log(response)
-                if(response._detallePatrimonio.length > 0){              //Tabla informacion personal
-                    response._detallePatrimonio.forEach(element => {
+                if(response._patrimonio.length > 0){              //Tabla informacion personal
+                    response._patrimonio.forEach(element => {
                         tabla += `<tr class="option-table" data-filter="${element.CodUTES} ${element.CodInterno} ${element.Articulo.toUpperCase()}">
-                        <td>${element.CodUTES}</td><td>${element.CodInterno}</td><td>${element.Articulo}</td>
-                        <td>${element.Descripcion}</td><td>${element.Categoria}</td>`
-                        if (element.Operativo == 1) {
-                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">Si</p></td>`
-                        } else {
-                            tabla += `<td><p class="bg-danger text-white p-2 d-inline rounded-pill">No</p></td>`
-                        }
-                        if (element.Baja == 1) {
-                            tabla += `<td><p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p></td>`
-                        } else {
-                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">No</p></td>`
-                        }
-                        tabla += `
-                        <td>
-                        LE SERVICIO
-                        </td>
+                        <td>${element.CodUTES}</td><td>${element.CodInterno}</td><td>${element.Articulo}</td><td>${element.Servicio}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-info dropdown-toggle" type="button"
@@ -36,7 +20,7 @@ function listarDatosTabla(){
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a class="dropdown-item" href="#">Ver</a></li>
+                                    <li><a class="dropdown-item" onClick="ver('${element.CodUTES}')" data-id="${element.CodUTES}">Ver</a></li>
                                     <li><a class="dropdown-item" href="#">Actualizar</a></li>
                                 </ul>
                             </div>
@@ -50,4 +34,39 @@ function listarDatosTabla(){
         }
     });
 }
+
 listarDatosTabla();
+/* 
+if (element.Operativo == 1) {
+                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">Si</p></td>`
+                        } else {
+                            tabla += `<td><p class="bg-danger text-white p-2 d-inline rounded-pill">No</p></td>`
+                        }
+                        if (element.Baja == 1) {
+                            tabla += `<td><p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p></td>`
+                        } else {
+                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">No</p></td>`
+                        }*/
+
+function ver(id) {
+    $.ajax({
+        type: "get",
+        url: `/api/detalle_patrimonio/${id}`,
+        dataType: "json",
+        success: function(response) {
+            if(response._detallepatrimonio.length > 0) {
+                $('#detalleDescripcion').text(response._detallepatrimonio[0].Descripcion);
+                $('#detalleCategoria').text(response._detallepatrimonio[0].Categoria);
+                $('#detalleOperativo').text(response._detallepatrimonio[0].Operativo ? 'Sí' : 'No');
+                $('#detalleBaja').text(response._detallepatrimonio[0].Baja ? 'Sí' : 'No');
+                $('#detalleUbicacion').text(response._detallepatrimonio[0].Ubicacion);
+                ModalAbrirCerrar('verDetalle', true);
+            } else {
+                alert('No se pudo obtener el detalle.');
+            }
+        },
+        error: function() {
+            alert('Error al obtener el detalle.');
+        }
+    });
+}

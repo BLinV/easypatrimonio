@@ -27,23 +27,20 @@ class PatrimonioController extends Controller
     # Metodos (Eloquent) “where()”, “first()”, “find()”, “pluck()”, “join()”
     public function informacionPatrimonioReporte(){
         try {
-            $detallePatrimonio = DetallePatrimonio::select('CodUTES',
+            $patrimonio = DetallePatrimonio::select('CodUTES',
                                             'CodInterno',
                                             DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
-                                            'detallepatrimonio.Descripcion',
-                                            DB::raw("`categoria`.`Descripcion` AS Categoria"),
-                                            'Operativo',
-                                            'Baja')
+                                            DB::raw("servicio.Descripcion AS Servicio"))
                                                 -> join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
                                                 -> join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
                                                 -> join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
-                                                -> join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
+                                                -> join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
                                                 -> get();
             return response()->json([
                 'exito' => true,
                 'mensajeError' => '',
                 'mensaje' => '',
-                '_detallePatrimonio' => $detallePatrimonio
+                '_patrimonio' => $patrimonio
             ]);
         } catch (Exception $ex) {
             return response()->json([
@@ -53,6 +50,32 @@ class PatrimonioController extends Controller
             ]);
         }
     }
+    
+    public function obtenerDetallePatrimonio(string $CodUTES)
+    {
+        $detallePatrimonio = DetallePatrimonio::select('detallepatrimonio.Descripcion',
+                                                        DB::raw("`categoria`.`Descripcion` AS Categoria"),
+                                                        'Operativo',
+                                                        'Baja',
+                                                        DB::raw("servicio.Descripcion AS Ubicacion")) //Modificar con la ubicación actual del patrimonio
+                                                            -> join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
+                                                            -> join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
+                                                            -> join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
+                                                            -> where('detallepatrimonio.CodUTES', $CodUTES)
+                                                            -> get();
+        if ($detallePatrimonio) {
+            return response()->json([
+                'exito' => true,
+                '_detallepatrimonio' => $detallePatrimonio
+            ]);
+        } else {
+            return response()->json([
+                'exito' => false,
+                'mensaje' => 'Detalle no encontrado.'
+            ], 404);
+        }
+    }
+
     public function registrarPatrimonio(PatrimonioRequest $request)
     {
         // Transacción: Iniciar
@@ -112,7 +135,7 @@ class PatrimonioController extends Controller
             ]);
         }
     }
-    
+
     public function registrarIngreso()
     {
         

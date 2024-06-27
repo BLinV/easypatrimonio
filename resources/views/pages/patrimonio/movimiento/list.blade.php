@@ -11,8 +11,6 @@
     <script src="{{ asset('js/buscador.js') }}"></script>
 
     <div class="container">
-
-
         <div class="modal fade" id="verMovimiento" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -27,7 +25,6 @@
                 </div>
             </div>
         </div>
-
         <main>
             <h1>Movimiento del Patrimonio</h1>
             <div class="card">
@@ -89,6 +86,4 @@
             </div>
         </main>
     </div>
-
-
 @endsection
