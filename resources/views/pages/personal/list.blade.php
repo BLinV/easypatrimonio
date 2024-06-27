@@ -63,8 +63,12 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block"
-                            onsubmit="GuardarPersona()">Registrar</button>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-danger me-2"
+                                onclick="Limpiar()">Limpiar</button>
+                            <button type="submit" class="registro btn btn-primary"
+                                onsubmit="GuardarPersona()">Registrar</button>
+                        </div>
                     </form>
                     <div class="shadow px-3 bg-body rounded">
                         <!-- Tabla de informacion -->
@@ -72,7 +76,8 @@
                             <div class="m-1 px-5 pb-1 pt-2">
                                 <label for="buscador" class="form-label">Buscar en lista:</label>
                                 <input type="text" id="buscador" name="buscador" class="form-control" value=""
-                                    placeholder="Buscar Personal en el Sistema por NOMBRE o DNI ..." data-table="#tablaPersonal">
+                                    placeholder="Buscar Personal en el Sistema por el nombre o n° de documento ..."
+                                    data-table="#tablaPersonal">
                             </div>
                             <table class="table table-bordered">
                                 <thead>

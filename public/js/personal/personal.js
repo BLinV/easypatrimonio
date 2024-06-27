@@ -48,8 +48,9 @@ function listarPersonal() {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a class="dropdown-item" data-dni="${element.Dni}" onclick="Ver(this)">Actualizar</a></li>
-                                    <li><a class="dropdown-item" href="#">Retirar</a></li>
+                                    <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${element.Dni}" onclick="Ver(this)">Ver</a></li>    
+                                    <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${element.Dni}" onclick="Editar(this)">Editar</a></li>
+                                    <li><a style="cursor: pointer;" class="dropdown-item" href="#">Retirar</a></li>
                                 </ul>
                             </div>
                         </td></tr>`
@@ -64,9 +65,95 @@ function listarPersonal() {
         }
     });
 }
+
 listarPersonal()
 
+function Editar(e) {
+    let dni = $(e).attr('data-dni')
+    $.ajax({
+        type: "get",
+        url: "/api/buscar_personal/" + dni,
+        data: false,
+        dataType: "json",
+        contentType: "application/json",
+        processData: false,
+        success: function (response) {
+            if (response.exito) {
+                if (response._persona.length > 0) {
+
+
+                    if ($('.registro').hasClass('btn-primary')) {
+                        $('.registro').removeClass('btn-primary');
+                        $('.registro').addClass('btn-warning');
+                        $('.registro').text('Actualizar')
+                    }
+
+                    response._persona.forEach(element => {
+                        $('#dni').attr({ 'disabled': true })
+                        $('#nombre').val(element['Nombres'])
+                        $('#apellido').val(element['Apellidos'])
+                        $('#dni').val(element['Dni'])
+                        $('#celular').val(element['Celular'])
+                        $('#condicion').val(element['IdCondicion'])
+                        $('#servicio').val(element['IdServicio'])
+                    });
+                }
+            } else {
+                Alertas('Error', response.mensajeError, 'error')
+            }
+        }, error: function (error) {
+            console.log(error);
+        }, before: function () {
+
+        }
+    });
+}
+
+function Ver(e) {
+    let dni = $(e).attr('data-dni')
+    $.ajax({
+        type: "get",
+        url: "/api/buscar_personal/" + dni,
+        data: false,
+        dataType: "json",
+        contentType: "application/json",
+        processData: false,
+        success: function (response) {
+            if (response.exito) {
+                if (response._personal.length > 0) {
+                    response._personal.forEach(element => {
+                        let informacion = `
+                                Personal: ${element['Persona']}
+                                Documento: ${element['Dni']}
+                                Celular: ${element['Celular']}
+                                Condicion: ${element['Condicion']}
+                                Servicio: ${element['Servicio']}
+                                Estado: ${element['Esatado'] = 1 ? 'Activo' : 'Inactivo'}
+                                `
+
+                        Alertas('Información', informacion, 'info')
+                    });
+                }
+            } else {
+                Alertas('Error', response.mensajeError, 'error')
+            }
+        }, error: function (error) {
+            console.log(error);
+        }, before: function () {
+
+        }
+    });
+}
+
 function Limpiar() {
+
+    if ($('.registro').hasClass('btn-warning')) {
+        $('.registro').removeClass('btn-warning');
+        $('.registro').addClass('btn-primary');
+        $('.registro').text('Registrar')
+    }
+
+    $('#dni').attr({ 'disabled': false })
     $('#nombre').val('')
     $('#apellido').val('')
     $('#dni').val('')
@@ -75,7 +162,7 @@ function Limpiar() {
     $('#servicio').val('')
 }
 
-function validar() {
+const GuardarPersona = () => {
     let nombre = $('#nombre').val()
     let apellido = $('#apellido').val()
     let dni = $('#dni').val()
@@ -83,67 +170,17 @@ function validar() {
     let condicion = $('#condicion').val()
     let servicio = $('#servicio').val()
 
-    if (nombre == '') {
-        Alertas('Error', 'El nombre es requerido', 'error')
-        return false
+
+    let datos = {
+        "nombre": nombre,
+        "apellido": apellido,
+        "dni": dni,
+        "celular": celular,
+        "condicion": condicion,
+        "servicio": servicio
     }
 
-    if (apellido == '') {
-        Alertas('Error', 'El apellido es requerido', 'error')
-        return false
-    }
-
-    if (dni == '') {
-        Alertas('Error', 'El dni es requerido', 'error')
-        return false
-    }
-
-    if (dni.length < 8) {
-        Alertas('Error', 'El dni debe tener 8 caracteres', 'error')
-        return false
-    }
-
-    if (celular == '') {
-        Alertas('Error', 'El celular es requerido', 'error')
-        return false
-    }
-
-    if (celular.length < 9) {
-        Alertas('Error', 'El celular debe tener 9 caracteres', 'error')
-        return false
-    }
-
-    if (condicion == '') {
-        Alertas('Error', 'La condicion es requerido', 'error')
-        return false
-    }
-
-    if (servicio == '') {
-        Alertas('Error', 'El servicio es requerido', 'error')
-        return false
-    }
-    return true
-}
-
-const GuardarPersona = () => {
-    if (validar()) {
-        let nombre = $('#nombre').val()
-        let apellido = $('#apellido').val()
-        let dni = $('#dni').val()
-        let celular = $('#celular').val()
-        let condicion = $('#condicion').val()
-        let servicio = $('#servicio').val()
-
-
-        let datos = {
-            "nombre": nombre,
-            "apellido": apellido,
-            "dni": dni,
-            "celular": celular,
-            "condicion": condicion,
-            "servicio": servicio
-        }
-
+    if (!$('#dni').prop('disabled')) {
         $.ajax({
             type: "post",
             url: "/api/registrar_personal",
@@ -165,6 +202,8 @@ const GuardarPersona = () => {
             },
             error: function (xhr) {
                 LoadingOverlay(false);
+
+                console.log(xhr);
 
                 let errorMsg = 'Error al registrar la persona.';
 

@@ -72,28 +72,71 @@ class PersonalController extends Controller
             $personal->Estado = 1;
             $personal->IdCondicion = $condicion;
             $personal->IdServicio = $servicio;
-    
-            $personal->save();
-    
-            $last_id = Personal::select('IdPersonal')->where('Dni','=',$dni)->get();
 
-            if($last_id){
+            $personal->save();
+
+            $last_id = Personal::select('IdPersonal')->where('Dni', '=', $dni)->get();
+
+            if ($last_id) {
                 return response()->json([
                     'exito' => true,
                     'mensajeError' => '',
                     'mensaje' => 'Registrado Correctamente.'
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'exito' => false,
                     'mensajeError' => 'Error al Registrar.',
                     'mensaje' => ''
                 ]);
             }
-        } catch(Exception $ex) {
+        } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
                 'mensajeError' => $ex->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
+    }
+
+    public function verPersonal($dni)
+    {
+        try {
+            $personal = Personal::select(
+                'Dni',
+                DB::raw("CONCAT(`Nombres`, ' ', `Apellidos`) AS Persona"),
+                DB::raw("condicion.Descripcion AS Condicion"),
+                'Celular',
+                DB::raw("servicio.Descripcion AS Servicio"),
+                'Estado'
+            )
+                ->join('servicio', 'personal.IdServicio', '=', 'servicio.IdServicio')
+                ->join('condicion', 'personal.IdCondicion', '=', 'condicion.IdCondicion')
+                ->where('Dni', '=', $dni)
+                ->get();
+
+            if ($personal) {
+
+                $persona = Personal::select('*')->where('Dni','=',$dni)->get();
+
+                return response()->json([
+                    'exito' => true,
+                    'mensajeError' => '',
+                    'mensaje' => '',
+                    '_personal' => $personal,
+                    '_persona' => $persona
+                ]);
+            } else {
+                return response()->json([
+                    'exito' => false,
+                    'mensajeError' => 'El personal no exite en el sistema',
+                    'mensaje' => ''
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $e->getMessage(),
                 'mensaje' => ''
             ]);
         }
