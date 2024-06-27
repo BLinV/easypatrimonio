@@ -6,25 +6,25 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BajaRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'codigobaja' => 'required|string|max:20|unique:baja,CodigoBaja',
+            'observacion' => 'required|string|max:255'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'codigobaja.required' => 'El CÓDIGO DE BAJA es obligatorio.',
+            'codigobaja.unique' => 'El CÓDIGO DE BAJA  ya está registrado.',
+            'codigobaja.max' => 'El CÓDIGO DE BAJA no puede tener más de 20 caracteres.',
         ];
     }
 }

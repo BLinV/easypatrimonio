@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Marca;
+use App\Models\Origen;
+use App\Models\Servicio;
 use App\Models\Tipo;
+use Exception;
 use Illuminate\Http\Request;
 
 class BusquedaController extends Controller
@@ -30,5 +34,27 @@ class BusquedaController extends Controller
             ];
         }
         return $data;
+    }
+
+    public function informacionOrSerCat(){
+        try {
+            $origen = Origen::select('IdOrigen', 'Descripcion')->orderBy('Descripcion','asc')->get();
+            $categoria = Categoria::select('IdCategoria', 'Descripcion')->orderBy('Descripcion','asc')->get();
+            $servicio = Servicio::select('IdServicio', 'Descripcion')->orderBy('Descripcion','asc')->get();
+            return response()->json([
+                'exito' => true,
+                'mensajeError' => '',
+                'mensaje' => '',
+                '_origen' => $origen,
+                '_categoria' => $categoria,
+                '_servicio' => $servicio,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $ex->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
     }
 }

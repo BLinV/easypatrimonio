@@ -31,7 +31,7 @@ function listarPersonal() {
                 let tabla = ''
                 if (response._personal.length > 0) {              //Tabla informacion personal
                     response._personal.forEach(element => {
-                        tabla += `<tr class="option-table" data-filter="${element.Persona.toUpperCase()}">
+                        tabla += `<tr class="option-table" data-filter="${element.Persona.toUpperCase()} ${element.Dni}">
                         <td>${element.Dni}</td><td>${element.Persona}</td><td>${element.Celular}</td>
                         <td>${element.Condicion}</td><td>${element.Servicio}</td>
                         <td>`
@@ -162,7 +162,27 @@ const GuardarPersona = () => {
                     Alertas('Error', response.mensajeError, 'error')
                 }
 
-            }, beforeSend: function () {
+            },
+            error: function (xhr) {
+                LoadingOverlay(false);
+
+                let errorMsg = 'Error al registrar la persona.';
+
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `${errors[field][0]}`;
+                        }
+                    }
+                } else if (xhr.responseJSON?.mensajeError) {
+                    errorMsg = xhr.responseJSON.mensajeError;
+                }
+
+                Alertas('Error', errorMsg, 'error');
+            },
+            beforeSend: function () {
                 LoadingOverlay(true)
             }
         });

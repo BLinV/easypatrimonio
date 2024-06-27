@@ -7,6 +7,7 @@
 </script>
 
 <script src="{{ asset('js/patrimonio/patrimonio.js') }}"></script>
+<script src="{{ asset('js/buscador.js') }}"></script>
 
 <div class="container">
     <main>
@@ -16,13 +17,7 @@
                 <legend>Información del Patrimonio:</legend>
             </div>
             <div class="card-body">
-                <form class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start" action="javascrip:void(0)" method="POST" enctype="multipart/form-data" autocomplete="off">
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                        <div class="form-group mb-2">
-                            <label for="buscar" class="form-label">Buscar en lista:</label>
-                            <input type="text" id="buscar" name="buscar" class="form-control" value="" placeholder="Código UTES o código interno">
-                        </div>
-                    </div>
+                <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                         <div class="form-group mb-2">
                             <label for="estado" class="form-label">Filtrar por Estado:</label>
@@ -43,10 +38,14 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                </form>
+                </div>
                 <!-- Tabla de informacion -->
                 <div class="table-responsive  shadow p-3 bg-body rounded mt-2">
+                    <div class="m-1 px-5 pb-1 pt-2">
+                        <label for="buscador" class="form-label">Buscar en lista:</label>
+                        <input type="text" id="buscador" name="buscador" class="form-control" value=""
+                            placeholder="Buscar Patrimonio por CÓDIGOS o ARTICULO..." data-table="#tablaPatrimonio">
+                    </div>
                     <table class="table table-bordered">
                         <thead>
                             <tr>

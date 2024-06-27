@@ -12,7 +12,7 @@ function listarDatos() {
                 let tabla = ''
                 if(response._ingreso.length > 0){
                     response._ingreso.forEach(element => {
-                        tabla += `<tr>
+                        tabla += `<tr class="option-table" data-filter="${element.NumeroPecosa} ${element.Origen} ${element.Personal.toUpperCase()}">
                         <td>${element.NumeroPecosa}</td><td>${element.Fecha}</td><td>${element.Origen}</td>
                         <td>${element.Observacion}</td><td>${element.Personal}</td>
                         <td>

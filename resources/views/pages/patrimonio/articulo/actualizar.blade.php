@@ -2,7 +2,6 @@
 @section('title','Sistema de Control Patrimonial - Actualizar registros Patrimonio')
 @section('content')
 <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
-<script src="{{ asset('js/autocompletar.js') }}"></script>
 
 <div class="container">
     <h1>Actualizar</h1>

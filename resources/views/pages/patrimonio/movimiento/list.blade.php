@@ -8,6 +8,7 @@
 
     <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
     <script src="{{ asset('js/movimiento/movimiento.js') }}"></script>
+    <script src="{{ asset('js/buscador.js') }}"></script>
 
     <div class="container">
 
@@ -34,23 +35,14 @@
                     <legend>Información de Patrimonio</legend>
                 </div>
                 <div class="card-body">
-                    <form class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start" action="javascrip:void(0)"
-                        method="POST" enctype="multipart/form-data" autocomplete="off">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                            <div class="form-group mb-2">
-                                <label for="codpecosa" class="form-label">Buscar en lista:</label>
-                                <input type="text" id="codpecosa" name="codpecosa" class="form-control" value=""
-                                    placeholder="UTES o Interno.">
-                            </div>
-                        </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                            <div class="form-group mb-2">
-                                <label for="ubicacion" class="form-label">Filtrar por Ubicacion:</label>
-                                <select id="ubicacion" name="ubicacion" class="form-select"></select>
-                            </div>
+                    <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
+                        <div class="m-1 px-5 pb-1 pt-2">
+                            <label for="buscador" class="form-label">Buscar en lista:</label>
+                            <input type="text" id="buscador" name="buscador" class="form-control" value=""
+                                placeholder="Buscar Patrimonio por CODIGO, ARTICULO, CATEGORIA o SERVICIO..." data-table="#tablaMovimiento">
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                    </form>
+                    </div>
                     <!-- Tabla de informacion -->
                     <div class="table-responsive  shadow p-3 bg-body rounded mt-2">
                         <table class="table table-bordered">

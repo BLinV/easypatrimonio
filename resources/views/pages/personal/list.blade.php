@@ -7,6 +7,7 @@
     </script>
 
     <script src="{{ asset('js/personal/personal.js') }}"></script>
+    <script src="{{ asset('js/buscador.js') }}"></script>
 
     <div class="container">
         <main>
@@ -20,20 +21,6 @@
                         method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return GuardarPersona()">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                             <div class="form-group mb-2">
-                                <label for="nombre" class="form-label">Nombre:</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control" value=""
-                                    onkeyup="return ValidarTexto(this)" placeholder="Ingrese el nombre">
-                            </div>
-                        </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                            <div class="form-group mb-2">
-                                <label for="apellidos" class="form-label">Apellidos:</label>
-                                <input type="text" id="apellido" name="apellido" class="form-control" value=""
-                                    onkeyup="return ValidarTexto(this)" placeholder="Ingrese el apellido">
-                            </div>
-                        </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                            <div class="form-group mb-2">
                                 <label for="dni" class="form-label">DNI:</label>
                                 <input type="text" id="dni" name="dni" class="form-control" value=""
                                     placeholder="Número de 9 digitos." maxlength="8"
@@ -42,7 +29,21 @@
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                             <div class="form-group mb-2">
-                                <label for="celular" class="form-label">Celular:</label>
+                                <label for="nombre" class="form-label">Nombre:</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control" value=""
+                                    onkeyup="return ValidarTexto(this)" placeholder="Ingrese el nombre">
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                            <div class="form-group mb-2">
+                                <label for="apellido" class="form-label">Apellidos:</label>
+                                <input type="text" id="apellido" name="apellido" class="form-control" value=""
+                                    onkeyup="return ValidarTexto(this)" placeholder="Ingrese el apellido">
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                            <div class="form-group mb-2">
+                                <label for="celular" class="form-label">Número de Celular:</label>
                                 <input type="text" id="celular" name="celular" class="form-control" value=""
                                     placeholder="Número de 9 digitos." maxlength="9" placeholder="Ingrese el celular"
                                     onkeyup="return ValidarNumeros(this)">
@@ -68,12 +69,11 @@
                     <div class="shadow px-3 bg-body rounded">
                         <!-- Tabla de informacion -->
                         <div class="table-responsive">
-
                             <div class="m-1 px-5 pb-1 pt-2">
-                                <input type="text" name="buscador" id="buscador" class="form-control" value=""
-                                    placeholder="Buscar Personal en el Sistema ....." onkeyup="return ValidarTexto(this)">
+                                <label for="buscador" class="form-label">Buscar en lista:</label>
+                                <input type="text" id="buscador" name="buscador" class="form-control" value=""
+                                    placeholder="Buscar Personal en el Sistema por NOMBRE o DNI ..." data-table="#tablaPersonal">
                             </div>
-
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -90,7 +90,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <script src="{{ asset('js/personal/buscador.js') }}"></script>
                     </div>
                 </div>
             </div>

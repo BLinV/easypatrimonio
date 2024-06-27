@@ -27,6 +27,7 @@ class IngresoController extends Controller
                 'NumeroPecosa',
                 'Fecha',
                 DB::raw("`origen`.`Descripcion` AS Origen"),
+                'OtroOrigen',
                 'Observacion',
                 DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Personal"))
                 -> join('origen', 'ingreso.IdOrigen', '=', 'origen.IdOrigen')

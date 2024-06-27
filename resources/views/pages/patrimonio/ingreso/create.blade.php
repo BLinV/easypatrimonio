@@ -5,8 +5,8 @@
 
 
 
-
-<script src="{{ asset('js/autocompletar.js') }}"></script>
+<script src="{{ asset('js/baja/formulario.js') }}"></script>
+<script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
 
 <div class="container">
     <main>
@@ -28,6 +28,12 @@
                             <label for="origen" class="form-label">Origen:</label>
                             <select id="origen" name="origen" class="form-select">
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12" id="otroorigen-container" style="display:none;">
+                        <div class="form-group mb-2">
+                            <label for="otroorigen" class="form-label">Nombre de Origen:</label>
+                            <input type="text" id="otroorigen" name="otroorigen" class="form-control" value="" placeholder="Especificar otro origen">
                         </div>
                     </div>
                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
@@ -76,7 +82,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
                     </div>
                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                         <div class="form-group gap-2">

@@ -13,7 +13,7 @@ use App\Http\Controllers\PersonalController;
 });*/
 Route::get('/', [BienvenidoController::class, 'index'])->name('home');
 
-/* Módulos */   //php artisan route:list
+// Módulos      php artisan route:list
 Route::resource('Personal', PersonalController::class)->names('personal');
 Route::resource('Patrimonio', PatrimonioController::class)->names('patrimonio');
 Route::resource('Ingresos', IngresoController::class)->names('ingresos');

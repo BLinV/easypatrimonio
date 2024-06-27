@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tipo extends Model
 {
-    protected $primaryKey = "IdTipo";
-    protected $guarded = [];
-    protected $table="tipo";
     use HasFactory;
+
+    protected $primaryKey = "IdTipo";
+    protected $table="tipo";
+    
+    protected $fillable = ['Descripcion'];
 }

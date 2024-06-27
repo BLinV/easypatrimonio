@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PersonalRequest;
 use App\Models\condicion;
 use App\Models\Personal;
 use App\Models\Servicio;
 use FFI\Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
@@ -54,20 +54,20 @@ class PersonalController extends Controller
         }
     }
 
-    public function registrarPersonal(Request $request)
+    public function registrarPersonal(PersonalRequest $request)
     {
-        try{
+        try {
+            $dni = $request->dni;
             $nombre = $request->nombre;
             $apellido = $request->apellido;
-            $dni = $request->dni;
             $celular = $request->celular;
             $condicion = $request->condicion;
             $servicio = $request->servicio;
 
             $personal = new Personal();
+            $personal->Dni = $dni;
             $personal->Nombres = $nombre;
             $personal->Apellidos = $apellido;
-            $personal->Dni = $dni;
             $personal->Celular = $celular;
             $personal->Estado = 1;
             $personal->IdCondicion = $condicion;
@@ -81,16 +81,16 @@ class PersonalController extends Controller
                 return response()->json([
                     'exito' => true,
                     'mensajeError' => '',
-                    'mensaje' => 'Registrado Correctamente'
+                    'mensaje' => 'Registrado Correctamente.'
                 ]);
             }else{
                 return response()->json([
                     'exito' => false,
-                    'mensajeError' => 'Error al Registrar',
+                    'mensajeError' => 'Error al Registrar.',
                     'mensaje' => ''
                 ]);
             }
-        }catch(Exception $ex){
+        } catch(Exception $ex) {
             return response()->json([
                 'exito' => false,
                 'mensajeError' => $ex->getMessage(),

@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateIngresosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('ingreso', function (Blueprint $table) {
@@ -18,6 +13,7 @@ class CreateIngresosTable extends Migration
             $table->string('NumeroPecosa', 20)->nullable(false)->unique();
             $table->dateTime("Fecha")->useCurrent();
             $table->unsignedInteger('IdOrigen')->nullable(false);
+            $table->string('OtroOrigen')->nullable(true);
             $table->string('Observacion', 100)->nullable();
             $table->unsignedInteger('IdPersonal')->nullable(false);
             $table->foreign('IdOrigen')->references('IdOrigen')->on('origen');
@@ -26,11 +22,6 @@ class CreateIngresosTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('ingreso');

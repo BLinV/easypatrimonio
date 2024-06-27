@@ -36,12 +36,10 @@
 
 <body>
     @include('partials.navbar')
+    
+    @yield('content')
 
-    <body>
-        @yield('content')
-    </body>
     @include('partials.footer')
-
 </body>
 
 </html>

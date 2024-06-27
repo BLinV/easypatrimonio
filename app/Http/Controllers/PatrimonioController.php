@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
+use App\Http\Requests\DetallePatrimonioRequest;
+use App\Http\Requests\PatrimonioRequest;
 use App\Models\DetallePatrimonio;
-use App\Models\Origen;
-use App\Models\Servicio;
+use App\Models\Marca;
+use App\Models\Patrimonio;
+use App\Models\Tipo;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -23,28 +25,6 @@ class PatrimonioController extends Controller
     }
 
     # Metodos (Eloquent) “where()”, “first()”, “find()”, “pluck()”, “join()”
-
-    public function informacionOrSerCat(){
-        try {
-            $origen = Origen::select('IdOrigen', 'Descripcion')->orderBy('Descripcion','asc')->get();
-            $categoria = Categoria::select('IdCategoria', 'Descripcion')->orderBy('Descripcion','asc')->get();
-            $servicio = Servicio::select('IdServicio', 'Descripcion')->orderBy('Descripcion','asc')->get();
-            return response()->json([
-                'exito' => true,
-                'mensajeError' => '',
-                'mensaje' => '',
-                '_origen' => $origen,
-                '_categoria' => $categoria,
-                '_servicio' => $servicio,
-            ]);
-        } catch (Exception $ex) {
-            return response()->json([
-                'exito' => false,
-                'mensajeError' => $ex->getMessage(),
-                'mensaje' => ''
-            ]);
-        }
-    }
     public function informacionPatrimonioReporte(){
         try {
             $detallePatrimonio = DetallePatrimonio::select('CodUTES',
@@ -72,6 +52,70 @@ class PatrimonioController extends Controller
                 'mensaje' => ''
             ]);
         }
+    }
+    public function registrarPatrimonio(PatrimonioRequest $request)
+    {
+        // Transacción: Iniciar
+        DB::beginTransaction();
+
+        try {
+            // Descripción del tipo y marca desde el request
+            $tipoDescripcion = $request->tipo_descripcion;
+            $marcaDescripcion = $request->marca_descripcion;
+
+            // Verificar o crear tipo
+            $tipo = Tipo::firstOrCreate(
+                ['Descripcion' => $tipoDescripcion], //Busqueda del resgitro
+                ['Descripcion' => $tipoDescripcion]  //Crear el registro si no se encuentra
+            );
+
+            // Verificar o crear marca
+            $marca = Marca::firstOrCreate(
+                ['Descripcion' => $marcaDescripcion],
+                ['Descripcion' => $marcaDescripcion]
+            );
+
+            // Crear el registro en patrimonio
+            $patrimonio = new Patrimonio();
+            $patrimonio->IdTipo = $tipo->IdTipo;
+            $patrimonio->IdMarca = $marca->IdMarca;
+            $patrimonio->Modelo = $request->modelo;
+            $patrimonio->IdCategoria = $request->IdCategoria; // Asegúrate de pasar este valor desde el request
+            $patrimonio->save();
+
+            // Crear detalle patrimonio
+            $detallePatrimonio = new DetallePatrimonio();
+            $detallePatrimonio->IdPatrimonio = $patrimonio->IdPatrimonio;
+            $detallePatrimonio->CodUTES = $request->detalle['CodUTES'];
+            $detallePatrimonio->CodInterno = $request->detalle['CodInterno'];
+            $detallePatrimonio->Descripcion = $request->detalle['Descripcion'];
+            $detallePatrimonio->Operativo = $request->detalle['Operativo'];
+            $detallePatrimonio->Baja = $request->detalle['Baja'];
+            $detallePatrimonio->IdServicio = $request->detalle['IdServicio'];
+            $detallePatrimonio->save();
+
+            // Transacción: Confirmar
+            DB::commit();
+
+            return response()->json([
+                'exito' => true,
+                'mensaje' => 'Patrimonio y detalle registrado correctamente.'
+            ]);
+
+        } catch (Exception $ex) {
+            // Transacción: Revertir en caso de error
+            DB::rollBack();
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $ex->getMessage(),
+                'mensaje' => 'Error al registrar el patrimonio.'
+            ]);
+        }
+    }
+    
+    public function registrarIngreso()
+    {
+        
     }
     /*
     SELECT p.IdPatrimonio, dp.IdDetallePatrimonio, CONCAT(t.Descripcion, " ", m.Descripcion, " ", p.Modelo) AS Articulo, dp.CodUTES, dp.CodInterno, dp.Descripcion AS Comentario, c.Descripcion AS Categoria,

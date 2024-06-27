@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetallePatrimonio extends Model
 {
-    protected $primaryKey = "IdDetallePatrimonio";
-    protected $guarded = [];
-    protected $table = "detallepatrimonio";
     use HasFactory;
+
+    protected $primaryKey = "IdDetallePatrimonio";
+    protected $table = "detallepatrimonio";
+
+    protected $fillable = [
+        'IdPatrimonio',
+        'CodUTES',
+        'CodInterno',
+        'Descripcion',
+        'Operativo',
+        'Baja',
+        'IdServicio'
+    ];
 }

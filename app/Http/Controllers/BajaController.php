@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BajaRequest;
 use App\Models\Baja;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,25 @@ class BajaController extends Controller
                 'mensajeError' => $ex->getMessage(),
                 'mensaje' => ''
             ]);
+        }
+    }
+
+    public function registrarBaja(BajaRequest $request){
+        try {
+            $codigo = $request->codigobaja;
+            $obervacion = $request->observacion;
+            $personal = $request->personal;
+            
+            $baja = new Baja();
+            $baja->codigobaja = $codigo;
+            $baja->codigobaja = $obervacion;
+            $baja->codigobaja = $personal;
+
+            $baja->save();
+
+            
+        } catch(Exception $ex){
+
         }
     }
 }

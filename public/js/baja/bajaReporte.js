@@ -12,7 +12,7 @@ function listarDatos() {
                 let tabla = ''
                 if(response._baja.length > 0){
                     response._baja.forEach(element => {
-                        tabla += `<tr>
+                        tabla += `<tr class="option-table" data-filter="${element.CodigoBaja} ${element.Personal.toUpperCase()}">
                         <td>${element.CodigoBaja}</td><td>${element.Fecha}</td>
                         <td>${element.Observacion}</td><td>${element.Personal}</td>
                         <td>
@@ -22,7 +22,7 @@ function listarDatos() {
                         </td></tr>`
                     });
             } else {
-                tabla += `<tr><td colspan="9">No se encontraron registros.</td></tr>`
+                tabla += `<tr><td colspan="5">No se encontraron registros.</td></tr>`
             }
             $('#tablaBaja').html(tabla);
             }

@@ -25,6 +25,7 @@
                     </div>
             </div>
             @if ($vista['articulo'])
+            <script src="{{ asset('js/autocompletar.js') }}"></script>
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                 <div class="form-group mb-2">
                     <label for="tipo" class="form-label">Tipo:</label>

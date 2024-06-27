@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Marca extends Model
 {
-    protected $primaryKey = "IdMarca";
-    protected $guarded = [];
-    protected $table = "marca";
     use HasFactory;
+
+    protected $primaryKey = "IdMarca";
+    protected $table = "marca";
+
+    protected $fillable = ['Descripcion'];
 }
