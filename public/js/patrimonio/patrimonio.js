@@ -36,17 +36,6 @@ function listarDatosTabla(){
 }
 
 listarDatosTabla();
-/* 
-if (element.Operativo == 1) {
-                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">Si</p></td>`
-                        } else {
-                            tabla += `<td><p class="bg-danger text-white p-2 d-inline rounded-pill">No</p></td>`
-                        }
-                        if (element.Baja == 1) {
-                            tabla += `<td><p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p></td>`
-                        } else {
-                            tabla += `<td><p class="bg-success text-white p-2 d-inline rounded-pill">No</p></td>`
-                        }*/
 
 function ver(id) {
     $.ajax({
@@ -57,8 +46,14 @@ function ver(id) {
             if(response._detallepatrimonio.length > 0) {
                 $('#detalleDescripcion').text(response._detallepatrimonio[0].Descripcion);
                 $('#detalleCategoria').text(response._detallepatrimonio[0].Categoria);
-                $('#detalleOperativo').text(response._detallepatrimonio[0].Operativo ? 'Sí' : 'No');
-                $('#detalleBaja').text(response._detallepatrimonio[0].Baja ? 'Sí' : 'No');
+                $('#detalleOperativo').html(
+                    response._detallepatrimonio[0].Operativo ?
+                    `<p class="bg-success text-white p-2 d-inline rounded-pill">Si</p>`:
+                    `<p class="bg-danger text-white p-2 d-inline rounded-pill">No</p>`
+                );
+                $('#detalleBaja').html(response._detallepatrimonio[0].Baja ?
+                    `<p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p>`:
+                    `<p class="bg-success text-white p-2 d-inline rounded-pill">No</p>`);
                 $('#detalleUbicacion').text(response._detallepatrimonio[0].Ubicacion);
                 ModalAbrirCerrar('verDetalle', true);
             } else {

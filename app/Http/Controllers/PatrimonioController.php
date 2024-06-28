@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DetallePatrimonioRequest;
 use App\Http\Requests\PatrimonioRequest;
 use App\Models\DetallePatrimonio;
 use App\Models\Marca;
