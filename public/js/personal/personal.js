@@ -225,5 +225,50 @@ const GuardarPersona = () => {
                 LoadingOverlay(true)
             }
         });
+    }else{
+        $.ajax({
+            type: "put",
+            url: "/api/actualizar_personal/"+dni,
+            data: JSON.stringify(datos),
+            dataType: "json",
+            contentType: 'application/json',
+            processData: false,
+            success: function (response) {
+                LoadingOverlay(false)
+
+                if (response.exito) {
+                    Alertas('Confirmación', response.mensaje, 'success')
+                    Limpiar()
+                    listarPersonal()
+                } else {
+                    Alertas('Error', response.mensajeError, 'error')
+                }
+
+            },
+            error: function (xhr) {
+                LoadingOverlay(false);
+
+                console.log(xhr);
+
+                let errorMsg = 'Error al registrar la persona.';
+
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `${errors[field][0]}`;
+                        }
+                    }
+                } else if (xhr.responseJSON?.mensajeError) {
+                    errorMsg = xhr.responseJSON.mensajeError;
+                }
+
+                Alertas('Error', errorMsg, 'error');
+            },
+            beforeSend: function () {
+                LoadingOverlay(true)
+            }
+        });
     }
 }

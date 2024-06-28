@@ -34,6 +34,9 @@ Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatri
 //Buscar Informacion
 Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
 
+//Actualizaciones
+Route::put('/actualizar_personal/{id}',[PersonalController::class,'actualizarPersonal'])->name('actualizarPersonal');
+
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

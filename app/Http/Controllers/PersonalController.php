@@ -7,6 +7,7 @@ use App\Models\condicion;
 use App\Models\Personal;
 use App\Models\Servicio;
 use FFI\Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
@@ -36,6 +37,7 @@ class PersonalController extends Controller
             )
                 ->join('servicio', 'personal.IdServicio', '=', 'servicio.IdServicio')
                 ->join('condicion', 'personal.IdCondicion', '=', 'condicion.IdCondicion')
+                ->orderBy('Persona','asc')
                 ->get();
             return response()->json([
                 'exito' => true,
@@ -54,7 +56,7 @@ class PersonalController extends Controller
         }
     }
 
-    public function registrarPersonal(PersonalRequest $request)
+    public function registrarPersonal(Request $request)
     {
         try {
             $dni = $request->dni;
@@ -99,6 +101,58 @@ class PersonalController extends Controller
         }
     }
 
+
+    public function actualizarPersonal(Request $request, $dni)
+    {
+        try {
+            //$dni = $request->dni;
+            $nombre = $request->nombre;
+            $apellido = $request->apellido;
+            $celular = $request->celular;
+            $condicion = $request->condicion;
+            $servicio = $request->servicio;
+
+            $persona = Personal::select('IdPersonal')->where('Dni', '=', $dni)->get();
+
+            if ($persona) {
+            } else {
+                return response()->json([
+                    'exito' => false,
+                    'mensajeError' => 'El personal no existe en el sistema',
+                    'mensaje' => ''
+                ]);
+            }
+
+            $personal = new Personal();
+            $personal->Dni = $dni;
+            $personal->Nombres = $nombre;
+            $personal->Apellidos = $apellido;
+            $personal->Celular = $celular;
+            $personal->Estado = 1;
+            $personal->IdCondicion = $condicion;
+            $personal->IdServicio = $servicio;
+
+            Personal::where('Dni', '=', $dni)->update([
+                'Nombres' => $nombre,
+                'Apellidos' => $apellido,
+                'Celular' => $celular,
+                'IdCondicion' => $condicion,
+                'IdServicio' => $servicio
+            ]);
+            return response()->json([
+                'exito' => true,
+                'mensajeError' => '',
+                'mensaje' => 'Actualizado Correctamente.'
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $ex->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
+    }
+
     public function verPersonal($dni)
     {
         try {
@@ -117,7 +171,7 @@ class PersonalController extends Controller
 
             if ($personal) {
 
-                $persona = Personal::select('*')->where('Dni','=',$dni)->get();
+                $persona = Personal::select('*')->where('Dni', '=', $dni)->get();
 
                 return response()->json([
                     'exito' => true,
