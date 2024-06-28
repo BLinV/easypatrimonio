@@ -37,7 +37,7 @@ class PersonalController extends Controller
             )
                 ->join('servicio', 'personal.IdServicio', '=', 'servicio.IdServicio')
                 ->join('condicion', 'personal.IdCondicion', '=', 'condicion.IdCondicion')
-                ->orderBy('Persona','asc')
+                ->orderBy('Persona', 'asc')
                 ->get();
             return response()->json([
                 'exito' => true,
@@ -56,7 +56,7 @@ class PersonalController extends Controller
         }
     }
 
-    public function registrarPersonal(Request $request)
+    public function registrarPersonal(PersonalRequest $request)
     {
         try {
             $dni = $request->dni;
@@ -100,7 +100,6 @@ class PersonalController extends Controller
             ]);
         }
     }
-
 
     public function actualizarPersonal(Request $request, $dni)
     {
@@ -179,6 +178,36 @@ class PersonalController extends Controller
                     'mensaje' => '',
                     '_personal' => $personal,
                     '_persona' => $persona
+                ]);
+            } else {
+                return response()->json([
+                    'exito' => false,
+                    'mensajeError' => 'El personal no exite en el sistema',
+                    'mensaje' => ''
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $e->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
+    }
+
+    public function eliminarPersonal($dni)
+    {
+        try {
+            $persona = Personal::select('*')->where('Dni', '=', $dni)->get();
+
+            if ($persona) {
+
+                Personal::where('Dni', '=', $dni)->delete();
+
+                return response()->json([
+                    'exito' => true,
+                    'mensajeError' => '',
+                    'mensaje' => 'Eliminado Correctamente'
                 ]);
             } else {
                 return response()->json([

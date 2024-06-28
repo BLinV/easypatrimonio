@@ -14,8 +14,6 @@ Route::get('/informacion_origenserviciocategoria', [BusquedaController::class, '
 Route::get('/informacion_tipoBuscar', [BusquedaController::class, 'autocompletarTipo'])->name('informacion_tipoBuscar');
 Route::get('/informacion_marcaBuscar', [BusquedaController::class, 'autocompletarMarca'])->name('informacion_marcaBuscar');
 
-Route::get('/informacion_personal', [PersonalController::class,'informacionPersonal'])->name('informacion_personal');
-Route::get('/informacion_personalcondicion', [PersonalController::class,'informacionCondicion'])->name('informacion_personalcondicion');
 
 //Reportes
 Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'informacionPatrimonioReporte'])->name('informacion_patrimonioreporte');
@@ -27,15 +25,19 @@ Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::clas
 
 
 //Registros
-Route::post('/registrar_personal',[PersonalController::class,'registrarPersonal'])->name('registrar_personal');
 Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatrimonio'])->name('registrar_patrimonio');
-
 
 //Buscar Informacion
 Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
 
-//Actualizaciones
+// Personal
+Route::get('/informacion_personal', [PersonalController::class,'informacionPersonal'])->name('informacion_personal');
+Route::post('/registrar_personal',[PersonalController::class,'registrarPersonal'])->name('registrar_personal');
+Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
 Route::put('/actualizar_personal/{id}',[PersonalController::class,'actualizarPersonal'])->name('actualizarPersonal');
+Route::delete('eliminar_personal/{id}',[PersonalController::class,'eliminarPersonal'])->name('eliminarPersonal');
+
+
 
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
