@@ -1,6 +1,8 @@
 /*Todo lo llena el metodo ListarPersonal()
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
+let datatable
+
 
 function listarPersonal() {
     $.ajax({
@@ -28,37 +30,6 @@ function listarPersonal() {
                 }
                 $('#condicion').html(condicion);
 
-                let tabla = ''
-                if (response._personal.length > 0) {              //Tabla informacion personal
-                    response._personal.forEach(element => {
-                        tabla += `<tr class="option-table" data-filter="${element.Persona.toUpperCase()} ${element.Dni}">
-                        <td>${element.Dni}</td><td>${element.Persona}</td><td>${element.Celular}</td>
-                        <td>${element.Condicion}</td><td>${element.Servicio}</td>
-                        <td>`
-                        if (element.Estado == 1) {
-                            tabla += `<p class="bg-success text-white p-2 d-inline rounded-pill">Activo</p>`
-                        } else {
-                            tabla += `<p class="bg-danger text-white p-2 d-inline rounded-pill">Inactivo</p>`
-                        }
-                        tabla += `</td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-info dropdown-toggle" type="button"
-                                    id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Acciones
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${element.Dni}" onclick="Ver(this)">Ver</a></li>    
-                                    <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${element.Dni}" onclick="Editar(this)">Editar</a></li>
-                                    <li><a style="cursor: pointer;" class="dropdown-item" href="#">Retirar</a></li>
-                                </ul>
-                            </div>
-                        </td></tr>`
-                    });
-                } else {
-                    tabla += `<tr><td colspan="9">No se encontraron registros.</td></tr>`
-                }
-                $('#tablaPersonal').html(tabla);
                 /*Todo lo llena el metodo ListarPersonal()
                 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML e inyecta a Tabla(ID)*/
             }
@@ -80,7 +51,6 @@ function Editar(e) {
         success: function (response) {
             if (response.exito) {
                 if (response._persona.length > 0) {
-
 
                     if ($('.registro').hasClass('btn-primary')) {
                         $('.registro').removeClass('btn-primary');
@@ -110,6 +80,7 @@ function Editar(e) {
 }
 
 function Ver(e) {
+    datatable.ajax.reload()
     let dni = $(e).attr('data-dni')
     $.ajax({
         type: "get",
@@ -146,7 +117,7 @@ function Ver(e) {
 }
 
 function Limpiar() {
-
+    
     if ($('.registro').hasClass('btn-warning')) {
         $('.registro').removeClass('btn-warning');
         $('.registro').addClass('btn-primary');
@@ -192,6 +163,7 @@ const GuardarPersona = () => {
                 LoadingOverlay(false)
 
                 if (response.exito) {
+                    datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
                     Limpiar()
                     listarPersonal()
@@ -225,10 +197,10 @@ const GuardarPersona = () => {
                 LoadingOverlay(true)
             }
         });
-    }else{
+    } else {
         $.ajax({
             type: "put",
-            url: "/api/actualizar_personal/"+dni,
+            url: "/api/actualizar_personal/" + dni,
             data: JSON.stringify(datos),
             dataType: "json",
             contentType: 'application/json',
@@ -237,6 +209,7 @@ const GuardarPersona = () => {
                 LoadingOverlay(false)
 
                 if (response.exito) {
+                    datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
                     Limpiar()
                     listarPersonal()
