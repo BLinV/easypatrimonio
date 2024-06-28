@@ -39,6 +39,31 @@ function listarPersonal() {
 
 listarPersonal()
 
+function Eliminar(e) {
+    let dni = $(e).attr('data-dni')
+    $.ajax({
+        type: "delete",
+        url: "/api/eliminar_personal/" + dni,
+        data: false,
+        dataType: "json",
+        contentType: "application/json",
+        processData: false,
+        success: function (response) {
+            if (response.exito) {
+                Limpiar()
+                datatable.ajax.reload()
+                Alertas('Confirmación', response.mensaje, 'success')
+            } else {
+                Alertas('Error', response.mensajeError, 'error')
+            }
+        }, error: function (error) {
+            console.log(error);
+        }, before: function () {
+
+        }
+    });
+}
+
 function Editar(e) {
     let dni = $(e).attr('data-dni')
     $.ajax({
@@ -117,7 +142,7 @@ function Ver(e) {
 }
 
 function Limpiar() {
-    
+
     if ($('.registro').hasClass('btn-warning')) {
         $('.registro').removeClass('btn-warning');
         $('.registro').addClass('btn-primary');
@@ -166,7 +191,6 @@ const GuardarPersona = () => {
                     datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
                     Limpiar()
-                    listarPersonal()
                 } else {
                     Alertas('Error', response.mensajeError, 'error')
                 }
@@ -212,7 +236,6 @@ const GuardarPersona = () => {
                     datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
                     Limpiar()
-                    listarPersonal()
                 } else {
                     Alertas('Error', response.mensajeError, 'error')
                 }

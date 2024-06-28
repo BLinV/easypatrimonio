@@ -32,8 +32,7 @@
 
 
     <script src="{{ asset('js/personal/personal.js') }}"></script>
-    <script src="{{ asset('js/buscador.js') }}"></script>
-
+    
     <div class="container-fluid">
         <main class="m-4">
             <div class="card">
@@ -103,7 +102,7 @@
                             </form>
                         </div>
                         <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12">
-                            <div class="shadow px-3 bg-body rounded m-3">
+                            <div class="shadow px-3 bg-body rounded p-3">
                                 <!-- Tabla de informacion -->
                                 <div class="table-responsive">
                                     <table class="table" id="tablaPersonal">

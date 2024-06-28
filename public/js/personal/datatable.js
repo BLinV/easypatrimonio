@@ -45,7 +45,7 @@ datatable = new DataTable('#tablaPersonal', {
                             <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
                                 <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${param['Dni']}" onclick="Ver(this)">Ver</a></li>    
                                 <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${param['Dni']}" onclick="Editar(this)">Editar</a></li>
-                                <li><a style="cursor: pointer;" class="dropdown-item" href="#">Retirar</a></li>
+                                <li><a style="cursor: pointer;" class="dropdown-item" data-dni="${param['Dni']}" onclick="Eliminar(this)">Eliminar</a></li>
                             </ul>
                         </div>`
         }
