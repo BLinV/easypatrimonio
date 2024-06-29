@@ -82,11 +82,11 @@ function Ver(e) {
                 if (response._personal.length > 0) {
                     response._personal.forEach(element => {
                         let informacion = `
-                                Personal: ${element['Persona']}
-                                Documento: ${element['Dni']}
-                                Celular: ${element['Celular']}
-                                Condicion: ${element['Condicion']}
-                                Servicio: ${element['Servicio']}
+                                Personal: ${element['Persona']} <br/>
+                                Documento: ${element['Dni']} <br/>
+                                Celular: ${element['Celular']} <br/>
+                                Condicion: ${element['Condicion']} <br/>
+                                Servicio: ${element['Servicio']} <br/>
                                 Estado: ${element['Esatado'] = 1 ? 'Activo' : 'Inactivo'}
                                 `
 
