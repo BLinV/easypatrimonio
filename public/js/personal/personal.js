@@ -1,43 +1,6 @@
 /*Todo lo llena el metodo ListarPersonal()
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
-let datatable
-
-
-function listarPersonal() {
-    $.ajax({
-        type: "get",
-        url: "/api/informacion_personal",
-        data: false,
-        dataType: "json",
-        contentType: "application/json",
-        processData: false,
-        success: function (response) {
-            if (response.exito) {
-                let servicio = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
-                if (response._servicio.length > 0) {              //Cbobox Servicio
-                    response._servicio.forEach(element => {
-                        servicio += `<option value=${element.IdServicio}>${element.Descripcion}</option>`
-                    });
-                }
-                $('#servicio').html(servicio);
-
-                let condicion = `<option value="">.: Seleccionar :.</option>`
-                if (response._condicion.length > 0) {             //Cbobox Condicion
-                    response._condicion.forEach(element => {
-                        condicion += `<option value=${element.IdCondicion}>${element.Descripcion}</option>`
-                    });
-                }
-                $('#condicion').html(condicion);
-
-                /*Todo lo llena el metodo ListarPersonal()
-                Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML e inyecta a Tabla(ID)*/
-            }
-        }
-    });
-}
-
-listarPersonal()
 
 function Eliminar(e) {
     let dni = $(e).attr('data-dni')
@@ -168,9 +131,9 @@ const GuardarPersona = () => {
 
 
     let datos = {
+        "dni": dni,
         "nombre": nombre,
         "apellido": apellido,
-        "dni": dni,
         "celular": celular,
         "condicion": condicion,
         "servicio": servicio

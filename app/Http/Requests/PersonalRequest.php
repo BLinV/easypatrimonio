@@ -15,7 +15,7 @@ class PersonalRequest extends FormRequest
     public function rules()
     {
         return [
-            'dni' => 'required|unique:personal,Dni',
+            'dni' => 'required|string|unique:personal,Dni|size:8',
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'celular' => 'required|string|max:9',
@@ -29,7 +29,7 @@ class PersonalRequest extends FormRequest
         return [
             'dni.required' => 'El DNI es obligatorio.',
             'dni.unique' => 'El DNI ya está registrado.',
-            'dni.max' => 'El DNI no puede tener más de 8 caracteres.',
+            'dni.size' => 'El DNI debe tener 8 caracteres.',
             'nombre.required' => 'El nombre es obligatorio.',
             'apellido.required' => 'El apellido es obligatorio.',
             'celular.required' => 'El celular es obligatorio.',

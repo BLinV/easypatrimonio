@@ -12,7 +12,7 @@
         <main>
             <h1>Formulario de Registro de Ingreso de Patrimonio</h1>
             <div class="card">
-                <form id="formIngresoPatrimonio">
+                <form id="formIngresoPatrimonio" onsubmit="return registrarIngreso()">
                     <div class="card-header">
                         <legend>Información de PECOSA</legend>
                     </div>
@@ -28,7 +28,7 @@
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                 <div class="form-group mb-2">
                                     <label for="origen" class="form-label">Origen:</label>
-                                    <select id="origen" name="origen" class="form-select">
+                                    <select id="origen" name="origen" class="form-select">disabled
                                     </select>
                                 </div>
                             </div>
@@ -47,19 +47,20 @@
                             </div-->
                         </div>
                     </div>
+                <div id = "ingresoListaPatrimonio" class="shadow p-3 bg-body rounded">style="display:none;"
                     @include('pages.shared.articulo', [
                         'vista' => [
                             'articulo' => true,
                             'operativo' => false,
                             'ubicacion' => false,
                             'comentario' => true,
+                            'scriptBoton' => 'agregarPatrimonio()',
                             'boton' => 'Añadir',
                         ],
                     ])
-                <div class="shadow p-3 bg-body rounded">
                     <!-- Tabla de informacion -->
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="tablaIngreso">
                             <thead>
                                 <tr>
                                     <th>Código UTES</th>
@@ -72,27 +73,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1234asdasd9ABC</td>
-                                    <td>123456789ABC</td>
-                                    <td>Monitor HP 1800px</td>
-                                    <td>Operativo</td>
-                                    <td>Vigilancia</td>
-                                    <td>Vigilancia</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-info dropdown-toggle" type="button"
-                                                id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Acciones
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                                <li><a class="dropdown-item" href="{{ url('/Patrimonio') }}">Modificar</a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -107,4 +87,11 @@
             </div>
         </main>
     </div>
+
+<script>
+    $('').keyup(function (e) { 
+        
+    });
+    </script>
+
 @endsection

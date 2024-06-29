@@ -17,18 +17,21 @@ Route::get('/informacion_marcaBuscar', [BusquedaController::class, 'autocompleta
 
 //Reportes
 Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'informacionPatrimonioReporte'])->name('informacion_patrimonioreporte');
-Route::get('/detalle_patrimonio/{id}', [PatrimonioController::class, 'obtenerDetallePatrimonio']);
 Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
 Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
 Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');
-Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoReporte']);
 
 
 //Registros
 Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatrimonio'])->name('registrar_patrimonio');
 
+Route::post('/registrar_ingreso', [PatrimonioController::class, 'registrarIngreso'])->name('registrar_ingreso');
+Route::get('/verificar_patrimonio', [PatrimonioController::class, 'verificarPatrimonio'])->name('verificar_patrimonio');
+
 //Buscar Informacion
 Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
+Route::get('/detalle_patrimonio/{id}', [PatrimonioController::class, 'obtenerDetallePatrimonio']);
+Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoReporte']);
 
 // Personal
 Route::get('/informacion_personal', [PersonalController::class,'informacionPersonal'])->name('informacion_personal');
