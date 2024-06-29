@@ -8,15 +8,18 @@
     <script src="{{ asset('js/ingreso/formulario.js') }}"></script>
     <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
 
-    <div class="container">
-        <main>
-            <h1>Formulario de Registro de Ingreso de Patrimonio</h1>
+    <div class="container-fluid">
+        <main class="m-3">
+            
             <div class="card">
-                <form id="formIngresoPatrimonio" onsubmit="return registrarIngreso()">
-                    <div class="card-header">
-                        <legend>Información de PECOSA</legend>
-                    </div>
-                    <div class="card-body">
+
+                <div class="card-header bg-white">
+                    <h1>Formulario de Registro de Ingreso de Patrimonio</h1>
+                </div>
+                <div class="card-body">
+
+                    <legend>Información de PECOSA</legend>
+                    <form id="formIngresoPatrimonio" onsubmit="return registrarIngreso()">
                         <div class="row g-2 justify-content-start">
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                 <div class="form-group mb-2">
@@ -28,7 +31,7 @@
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                 <div class="form-group mb-2">
                                     <label for="origen" class="form-label">Origen:</label>
-                                    <select id="origen" name="origen" class="form-select">disabled
+                                    <select id="origen" name="origen" class="form-select" disabled>
                                     </select>
                                 </div>
                             </div>
@@ -41,13 +44,14 @@
                                 </div>
                             </div>
                             <!--div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                                <div class="form-group gap-2">
-                                    <button type="submit" class="btn btn-primary btn-block">Validar</button>
-                                </div>
-                            </div-->
+                                    <div class="form-group gap-2">
+                                        <button type="submit" class="btn btn-primary btn-block">Validar</button>
+                                    </div>
+                                </div-->
                         </div>
-                    </div>
-                <div id = "ingresoListaPatrimonio" class="shadow p-3 bg-body rounded">style="display:none;"
+                    </form>
+                </div>
+                <div id = "ingresoListaPatrimonio" class="shadow p-3 bg-body rounded">
                     @include('pages.shared.articulo', [
                         'vista' => [
                             'articulo' => true,
@@ -82,16 +86,16 @@
                             <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                         </div>
                     </div>
-                </form>
+
                 </div>
             </div>
         </main>
     </div>
 
-<script>
-    $('').keyup(function (e) { 
-        
-    });
+    <script>
+        $('').keyup(function(e) {
+
+        });
     </script>
 
 @endsection
