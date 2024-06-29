@@ -1,7 +1,7 @@
 const Alertas = (titulo, texto, icono) => {
-    swal({
+    Swal.fire({
         title: titulo,
-        text: texto,
+        html: texto,
         icon: icono
     });
 }
