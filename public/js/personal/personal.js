@@ -171,7 +171,7 @@ const GuardarPersona = () => {
                     errorMsg = '';
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
-                            errorMsg += `${errors[field][0]}`;
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
                         }
                     }
                 } else if (xhr.responseJSON?.mensajeError) {
