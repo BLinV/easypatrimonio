@@ -1,4 +1,3 @@
-@csrf
 <div class="card p-3 mb-5 bg-body rounded">
     <div class="card-header">
         <h5>Información del Artículo</h5>
