@@ -44,6 +44,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
+                            <span id="codigoInterno"> No encontrado. </span>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -51,7 +52,7 @@
                                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <p><strong>Codigo Documento Ingreso:</strong> <span id="ingresoDocumento"> No
                                             encontrado. </span></p>
-                                    <p><strong>Codugo Interno Ingreso:</strong> <span id="ingresoIngreso"> No encontrado.
+                                    <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No encontrado.
                                         </span></p>
                                     <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span></p>
                                     <p><strong>Estado Origen:</strong> <span id="ingresoEstado"> No encontrado. </span></p>

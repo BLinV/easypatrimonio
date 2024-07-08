@@ -1,39 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-
-    const servicioSelect = document.getElementById('servicio');
-    servicioSelect.addEventListener('change', function () {
-        if (servicioSelect.value == "") {
-            $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
-        } else {
-            $.ajax({
-                type: "get",
-                url: "/api/informacion_personalBuscar/" + servicioSelect.value,
-                data: false,
-                dataType: "json",
-                contentType: "application/json",
-                processData: false,
-                success: function (response) {
-                    if (response.exito) {
-                        let personal = `<option value="">.: Seleccionar :.</option>`
-                        let maxIdPersonal = null;
-                        if (response._personal.length > 0) {
-                            maxIdPersonal = response._personal.reduce((max, element) =>
-                                element.IdPersonal > max ? element.IdPersonal : max, response._personal[0].IdPersonal);
-                            response._personal.forEach(element => {
-                                personal += `<option value=${element.IdPersonal}>${element.Personal}</option>`
-                            });
-                        }
-                        $('#personal').html(personal);
-                        $('#personal').attr({ 'disabled': false })
-                        if (maxIdPersonal !== null) {
-                            $('#personal').val(maxIdPersonal);
-                        }
-                    }
-                }
-            });
-        }
-    });
-});
 $('#dt-search-0').addClass('pb-2');
 datatable = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de vista.
     'responsive': true,
@@ -118,6 +82,42 @@ datatable = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const servicioSelect = document.getElementById('servicio');
+    servicioSelect.addEventListener('change', function () {
+        if (servicioSelect.value == "") {
+            $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
+        } else {
+            $.ajax({
+                type: "get",
+                url: "/api/informacion_personalBuscar/" + servicioSelect.value,
+                data: false,
+                dataType: "json",
+                contentType: "application/json",
+                processData: false,
+                success: function (response) {
+                    if (response.exito) {
+                        let personal = `<option value="">.: Seleccionar :.</option>`
+                        let maxIdPersonal = null;
+                        if (response._personal.length > 0) {
+                            maxIdPersonal = response._personal.reduce((max, element) =>
+                                element.IdPersonal > max ? element.IdPersonal : max, response._personal[0].IdPersonal);
+                            response._personal.forEach(element => {
+                                personal += `<option value=${element.IdPersonal}>${element.Personal}</option>`
+                            });
+                        }
+                        $('#personal').html(personal);
+                        $('#personal').attr({ 'disabled': false })
+                        if (maxIdPersonal !== null) {
+                            $('#personal').val(maxIdPersonal);
+                        }
+                    }
+                }
+            });
+        }
+    });
+});
+
 $(document).ready(function () {
     $('input[data-table]').keyup(function (e) {
         let buscador = $(this).val().toUpperCase();
@@ -138,6 +138,7 @@ function ver(id) {
         url: `/api/informacion_detallepatrimonioreporte/${id}`,
         dataType: "json",
         success: function (response) {
+            $('#codigoInterno').text(id);
             if (response._origen != null) {
                 $('#ingresoDocumento').text(response._origen.NumeroInterno);
                 $('#ingresoIngreso').text(response._origen.NumeroPecosa);
@@ -184,13 +185,13 @@ function ver(id) {
 
 function GuardarMovimiento() {
     // Informacion PECOSA
-    let numeropecosa = document.getElementById('numeropecosa').value;
+    let codigo = document.getElementById('codigoInterno').value;
     let servicio = document.getElementById('servicio').value;
     let personal = document.getElementById('personal').value;
     let motivo = document.getElementById('motivo').value;
 
-    var ingreso = {
-        "NumeroPecosa": numeropecosa,
+    var movimiento = {
+        "Codigo": codigo,
         "IdServicio": servicio,
         "IdPersonal": personal,
         "Motivo": motivo,
@@ -199,7 +200,7 @@ function GuardarMovimiento() {
     $.ajax({
         type: "post",
         url: "/api/registrar_movimiento",
-        data: JSON.stringify(ingreso),
+        data: JSON.stringify(movimiento),
         dataType: "json",
         contentType: "application/json",
         processData: false,
@@ -208,9 +209,6 @@ function GuardarMovimiento() {
 
             if (response.exito) {
                 Alertas('Confirmación', response.mensaje, 'success');
-                $('#origen').attr({ 'disabled': true });
-                $('#otroorigen').attr({ 'disabled': true });
-                $('#observacion').attr({ 'disabled': true });
                 Limpiar();
                 CargarDetalle();
             } else {
@@ -237,4 +235,10 @@ function GuardarMovimiento() {
             LoadingOverlay(true);
         }
     });
+}
+function Limpiar() {
+    $('#servicio').val("");
+    $('#personal').val("");
+    $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
+    $('#personal').attr({ 'disabled': true })
 }

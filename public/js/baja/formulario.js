@@ -99,7 +99,7 @@ function CargarDetalle() {
             }
         });
     } else {
-        $('#tablaBaja').DataTable().ajax.reload(null, false); // false para que no cambie de página
+        datatable.ajax.reload();
     }
 }
 

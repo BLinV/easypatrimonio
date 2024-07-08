@@ -90,22 +90,11 @@ class PatrimonioController extends Controller
                 ->join('detallebaja', 'detallebaja.IdBaja', '=', 'baja.IdBaja')
                 ->where('detallebaja.idDetallePatrimonio', '=', $idDetallePatrimonio)
                 ->first();
-            $ubicacion = UbicacionPatrimonio::select(
-                DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Persona"),
-                DB::raw("`servicio`.`Descripcion` AS Servicio"),
-                'Fecha',
-                'Motivo'
-            )
-                ->join('personal', 'ubicacionpatrimonio.IdPersonal', '=', 'personal.IdPersonal')
-                ->join('servicio', 'ubicacionpatrimonio.IdServicio', '=', 'servicio.IdServicio')
-                ->where('idDetallePatrimonio', '=', $idDetallePatrimonio)
-                ->get();
             return response()->json([
                 'exito' => true,
                 'mensaje' => '',
                 '_origen' => $origen,
-                '_baja' => $baja,
-                '_ubicacion' => $ubicacion
+                '_baja' => $baja
             ]);
         } catch (Exception $ex) {
             return response()->json([

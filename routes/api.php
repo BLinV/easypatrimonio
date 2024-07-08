@@ -20,9 +20,8 @@ Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'infor
 Route::get('/informacion_detallepatrimonioreporte/{id}', [PatrimonioController::class,'informacionDetallePatrimonio'])->name('informacion_detallepatrimonioreporte');
 Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatrimonio'])->name('registrar_patrimonio');
 //Movimientos
-Route::get('/registrar_movimiento', [MovimientoController::class, 'registrarMovimiento'])->name('registrar_movimiento');
-
-Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoReporte']);
+Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoPatrimonio'])->name('informacion_movimientopatrimonio');
+Route::post('/registrar_movimiento', [MovimientoController::class, 'registrarMovimiento'])->name('registrar_movimiento');
 
 // Personal
 Route::get('/informacion_personal', [PersonalController::class,'informacionPersonal'])->name('informacion_personal');

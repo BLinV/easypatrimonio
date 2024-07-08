@@ -8,9 +8,9 @@ use App\Models\Origen;
 use App\Models\Personal;
 use App\Models\Servicio;
 use App\Models\Tipo;
-use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BusquedaController extends Controller
 {
