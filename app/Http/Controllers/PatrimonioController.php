@@ -33,21 +33,19 @@ class PatrimonioController extends Controller
     {
         try {
             $patrimonio = DetallePatrimonio::select(
-                'CodUTES',
                 'CodInterno',
+                'CodUTES',
+                'CodServicio',
                 DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
-                DB::raw("servicio.Descripcion AS Servicio"),
                 'detallepatrimonio.Descripcion',
                 DB::raw("`categoria`.`Descripcion` AS Categoria"),
                 'Operativo',
-                'Baja',
-                DB::raw("servicio.Descripcion AS Ubicacion")
+                'Baja'
             )
                 ->join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
                 ->join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
                 ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
                 ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
-                ->join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
                 ->get();
             return response()->json([
                 'exito' => true,
@@ -65,11 +63,15 @@ class PatrimonioController extends Controller
     public function informacionDetallePatrimonio(string $Codigo)
     {
         try {
-            $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')->where('CodUTES', '=', $Codigo)
+            $idDetallePatrimonio = DetallePatrimonio::select(
+                'IdDetallePatrimonio',
+                DB::raw("servicio.Descripcion AS Servicio"),
+            )
+                ->join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
+                ->where('CodUTES', '=', $Codigo)
                 ->orwhere('CodInterno', '=', $Codigo)
                 ->orwhere('CodServicio', '=', $Codigo)
-                ->first()
-                ->IdDetallePatrimonio;
+                ->first();
             $origen = Ingreso::select(
                 'NumeroInterno',
                 'NumeroPecosa',
@@ -80,7 +82,7 @@ class PatrimonioController extends Controller
                 ->join('detalleingreso', 'detalleingreso.IdIngreso', '=', 'ingreso.IdIngreso')
                 ->join('detallepatrimonio', 'detallepatrimonio.IdDetallePatrimonio', '=', 'detalleingreso.IdDetallePatrimonio')
                 ->join('origen', 'ingreso.IdOrigen', '=', 'origen.IdOrigen')
-                ->where('detalleingreso.idDetallePatrimonio', '=', $idDetallePatrimonio)
+                ->where('detalleingreso.idDetallePatrimonio', '=', $idDetallePatrimonio->IdDetallePatrimonio)
                 ->first();
             $baja = Baja::select(
                 'CodigoBaja',
@@ -88,13 +90,21 @@ class PatrimonioController extends Controller
                 'detallebaja.Estado'
             )
                 ->join('detallebaja', 'detallebaja.IdBaja', '=', 'baja.IdBaja')
-                ->where('detallebaja.idDetallePatrimonio', '=', $idDetallePatrimonio)
+                ->where('detallebaja.idDetallePatrimonio', '=', $idDetallePatrimonio->IdDetallePatrimonio)
                 ->first();
+            $ubicacion = UbicacionPatrimonio::select(
+                DB::raw("`servicio`.`Descripcion` AS Servicio")
+            )
+                ->join('servicio', 'ubicacionpatrimonio.IdServicio', '=', 'servicio.IdServicio')
+                ->where('idDetallePatrimonio', '=', $idDetallePatrimonio->IdDetallePatrimonio)
+                ->orderBy('Fecha', 'desc')->first()->Servicio;
             return response()->json([
                 'exito' => true,
                 'mensaje' => '',
                 '_origen' => $origen,
-                '_baja' => $baja
+                '_baja' => $baja,
+                '_servicio' => $idDetallePatrimonio->Servicio,
+                '_ubicacion' => $ubicacion
             ]);
         } catch (Exception $ex) {
             return response()->json([

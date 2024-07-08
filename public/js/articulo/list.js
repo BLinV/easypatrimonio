@@ -12,16 +12,16 @@ datatable = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de
         dataSrc: "_patrimonio",
     },
     columns: [{                             //Definicion de contenido de columnas
-        data: 'CodUTES'
-    },
-    {
         data: 'CodInterno'
     },
     {
-        data: 'Articulo'
+        data: 'CodUTES'
     },
     {
-        data: 'Servicio'
+        data: 'CodServicio'
+    },
+    {
+        data: 'Articulo'
     },
     {
         data: 'Descripcion'
@@ -44,9 +44,6 @@ datatable = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de
                 `<p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p>` :
                 `<p class="bg-success text-white p-2 d-inline rounded-pill">No</p>`
         }
-    },
-    {
-        data: 'Servicio'
     },
     {
         data: null,                         //Botones de registro
@@ -131,6 +128,33 @@ $(document).ready(function () {
     });
 });
 
+function verMovmimiento(id) {
+    $.ajax({
+        type: "get",
+        url: `/api/informacion_movimientopatrimonio/${id}`,
+        dataType: "json",
+        success: function (response) {
+            if (response._ubicacion.length > 0) {
+                let tabla = ''
+                response._ubicacion.forEach(element => {
+                    tabla += `<tr>
+                        <td>${element.Fecha}</td>
+                        <td>${element.Servicio}</td>
+                        <td>${element.Persona}</td>
+                        <td>${element.Motivo}</td>`
+                });
+                $('#tablaDetalle').html(tabla);
+            } else {
+                $('#tablaDetalle').html('');
+                alert('No se pudo obtener el detalle.');
+            }
+        },
+        error: function () {
+            alert('Error al obtener el detalle.');
+        }
+    });
+}
+
 function ver(id) {
     ModalAbrirCerrar('verDetalle', true);
     $.ajax({
@@ -138,7 +162,7 @@ function ver(id) {
         url: `/api/informacion_detallepatrimonioreporte/${id}`,
         dataType: "json",
         success: function (response) {
-            $('#codigoInterno').text(id);
+            $('#codInterno').text(id);
             if (response._origen != null) {
                 $('#ingresoDocumento').text(response._origen.NumeroInterno);
                 $('#ingresoIngreso').text(response._origen.NumeroPecosa);
@@ -161,37 +185,33 @@ function ver(id) {
                 $('#bajaFecha').text(" No encontrado. ");
                 $('#bajaEstado').text(" No encontrado. ");
             }
-            //$('#ubicacionActual').text(response._ubicacion.Servicio);
-            if (response._ubicacion.length > 0) {
-                let tabla = ''
-                response._ubicacion.forEach(element => {
-                    tabla += `<tr>
-                        <td>${element.Fecha}</td>
-                        <td>${element.Servicio}</td>
-                        <td>${element.Persona}</td>
-                        <td>${element.Motivo}</td>`
-                });
-                $('#tablaDetalle').html(tabla);
+            if (response._servicio != null) {
+                $('#servicioPertenencia').text(response._servicio);
             } else {
-                $('#tablaDetalle').html('');
-                alert('No se pudo obtener el detalle.');
+                $('#servicioPertenencia').text(" No encontrado. ");
+            }
+            if (response._ubicacion != null) {
+                $('#ubicacionActual').text(response._ubicacion);
+            } else {
+                $('#ubicacionActual').text(" No encontrado. ");
             }
         },
         error: function () {
             alert('Error al obtener el detalle.');
         }
     });
+    verMovmimiento(id);
 }
 
 function GuardarMovimiento() {
     // Informacion PECOSA
-    let codigo = document.getElementById('codigoInterno').value;
+    let codigo = $('#codinterno').text();
     let servicio = document.getElementById('servicio').value;
     let personal = document.getElementById('personal').value;
     let motivo = document.getElementById('motivo').value;
 
     var movimiento = {
-        "Codigo": codigo,
+        "CodInterno": codigo,
         "IdServicio": servicio,
         "IdPersonal": personal,
         "Motivo": motivo,

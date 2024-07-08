@@ -41,8 +41,8 @@ class PersonalController extends Controller
                 ->get();
             return response()->json([
                 'exito' => true,
+                'mensaje' => 'Consulta de Personal exitosa.',
                 'mensajeError' => '',
-                'mensaje' => '',
                 '_servicio' => $servicio,
                 '_condicion' => $condicion,
                 '_personal' => $personal
@@ -50,8 +50,8 @@ class PersonalController extends Controller
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $ex->getMessage(),
-                'mensaje' => ''
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
@@ -59,12 +59,12 @@ class PersonalController extends Controller
     public function registrarPersonal(PersonalRequest $request)
     {
         try {
-            $dni = $request->dni;
-            $nombre = $request->nombre;
-            $apellido = $request->apellido;
-            $celular = $request->celular;
-            $condicion = $request->condicion;
-            $servicio = $request->servicio;
+            $dni = $request->Dni;
+            $nombre = $request->Nombres;
+            $apellido = $request->Apellidos;
+            $celular = $request->Celular;
+            $condicion = $request->IdCondicion;
+            $servicio = $request->IdServicio;
 
             $personal = new Personal();
             $personal->Dni = $dni;
@@ -77,26 +77,25 @@ class PersonalController extends Controller
 
             $personal->save();
 
-            $last_id = Personal::select('IdPersonal')->where('Dni', '=', $dni)->get();
-
+            $last_id = Personal::select('IdPersonal')->where('Dni', '=', $dni)->first();
             if ($last_id) {
                 return response()->json([
                     'exito' => true,
-                    'mensajeError' => '',
-                    'mensaje' => 'Registrado Correctamente.'
+                    'mensaje' => 'Personal registrado Correctamente.',
+                    'mensajeError' => ''
                 ]);
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensajeError' => 'Error al Registrar.',
-                    'mensaje' => ''
+                    'mensaje' => '',
+                    'mensajeError' => 'Error al Registrar.'
                 ]);
             }
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $ex->getMessage(),
-                'mensaje' => ''
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
@@ -105,11 +104,11 @@ class PersonalController extends Controller
     {
         try {
             //$dni = $request->dni;
-            $nombre = $request->nombre;
-            $apellido = $request->apellido;
-            $celular = $request->celular;
-            $condicion = $request->condicion;
-            $servicio = $request->servicio;
+            $nombre = $request->Nombres;
+            $apellido = $request->Apellidos;
+            $celular = $request->Celular;
+            $condicion = $request->IdCondicion;
+            $servicio = $request->IdServicio;
 
             $persona = Personal::select('IdPersonal')->where('Dni', '=', $dni)->first();
 
@@ -117,8 +116,8 @@ class PersonalController extends Controller
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensajeError' => 'El personal no existe en el sistema',
-                    'mensaje' => ''
+                    'mensaje' => '',
+                    'mensajeError' => 'El personal no existe en el sistema'
                 ]);
             }
 
@@ -140,14 +139,14 @@ class PersonalController extends Controller
             ]);
             return response()->json([
                 'exito' => true,
-                'mensajeError' => '',
-                'mensaje' => 'Actualizado Correctamente.'
+                'mensaje' => 'Actualizado Correctamente.',
+                'mensajeError' => ''
             ]);
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $ex->getMessage(),
-                'mensaje' => ''
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
@@ -182,15 +181,15 @@ class PersonalController extends Controller
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensajeError' => 'El personal no exite en el sistema',
-                    'mensaje' => ''
+                    'mensaje' => '',
+                    'mensajeError' => 'El personal no exite en el sistema'
                 ]);
             }
         } catch (Exception $e) {
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $e->getMessage(),
-                'mensaje' => ''
+                'mensaje' => '',
+                'mensajeError' => $e->getMessage()
             ]);
         }
     }
@@ -206,21 +205,21 @@ class PersonalController extends Controller
 
                 return response()->json([
                     'exito' => true,
-                    'mensajeError' => '',
-                    'mensaje' => 'Eliminado Correctamente'
+                    'mensaje' => 'Eliminado Correctamente',
+                    'mensajeError' => ''
                 ]);
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensajeError' => 'El personal no exite en el sistema',
-                    'mensaje' => ''
+                    'mensaje' => '',
+                    'mensajeError' => 'El personal no exite en el sistema'
                 ]);
             }
         } catch (Exception $e) {
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $e->getMessage(),
-                'mensaje' => ''
+                'mensaje' => '',
+                'mensajeError' => $e->getMessage()
             ]);
         }
     }

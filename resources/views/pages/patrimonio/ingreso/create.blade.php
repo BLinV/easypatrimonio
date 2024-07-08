@@ -49,19 +49,21 @@
                                     <div class="text-center">
                                         <legend>Información de PECOSA</legend>
                                     </div>
-                                    <div class="form-group mb-2">
-                                        <label for="numeropecosa" class="form-label">Código del Documento:</label>
-                                        <input type="text" id="numeropecosa" name="numeropecosa" class="form-control"
-                                            value="" placeholder="Código de 20 dígitos." maxlength="20">
-                                    </div>
 
                                     <div id="numerointerno-container" style="display:true;">
                                         <div class="form-group mb-2">
                                             <label for="numerointerno" class="form-label">Código interno del
                                                 Documento:</label>
                                             <input type="text" id="numerointerno" name="numerointerno"
-                                                class="form-control" value="" placeholder="" maxlength="10" disabled>
+                                                class="form-control" value="" placeholder="" maxlength="10">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group mb-2">
+                                        <label for="numeropecosa" class="form-label">Código del Documento (PECOSA u
+                                            OTRO):</label>
+                                        <input type="text" id="numeropecosa" name="numeropecosa" class="form-control"
+                                            value="" placeholder="Código de 20 dígitos." maxlength="20" disabled>
                                     </div>
 
                                     <div class="form-group mb-2">
@@ -94,6 +96,7 @@
                                 <div class="shadow-sm p-3 mb-5 bg-body rounded">
                                     <div class="text-center">
                                         <legend>Información de Patrimonio</legend>
+                                        <span id="codinterno"></span>
                                     </div>
                                     <div class="row g-3 justify-content-start">
                                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-12">
@@ -106,8 +109,8 @@
                                         </div>
                                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-12">
                                             <div class="form-group mb-2">
-                                                <label for="codinterno" class="form-label">Código Interno:</label>
-                                                <input type="text" id="codinterno" name="codinterno"
+                                                <label for="codservicio" class="form-label">Código Servicio:</label>
+                                                <input type="text" id="codservicio" name="codservicio"
                                                     class="form-control" value=""
                                                     placeholder="Código de máxmo 12 digitos." maxlength="12" disabled>
                                             </div>
@@ -197,8 +200,9 @@
                         <table class="table table-bordered" id="tablaIngreso">
                             <thead>
                                 <tr> <!-- Recuerda que DataTable cuenta las columnas que tiene tu tabla -->
-                                    <th>Código UTES</th>
                                     <th>Código Interno</th>
+                                    <th>Código UTES</th>
+                                    <th>Código Servicio</th>
                                     <th>Patrimonio</th>
                                     <th>Caracteristicas</th>
                                     <th>Información Anexa</th>

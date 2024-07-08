@@ -20,8 +20,9 @@ class PatrimonioRequest extends FormRequest
             'modelo' => 'required|string|max:100',
             'IdCategoria' => 'required|integer|exists:categoria,IdCategoria',
             // Tabla DetallePatrimonio
+            'CodInterno' => 'nullable|string|size:12|unique:detallepatrimonio,CodInterno',
             'CodUTES' => 'required|string|size:12|unique:detallepatrimonio,CodUTES',
-            'CodInterno' => 'nullable|string|max:12|unique:detallepatrimonio,CodInterno',
+            'CodServicio' => 'nullable|string|max:12|unique:detallepatrimonio,CodServicio',
             'Descripcion' => 'required|string|max:250',
             'Operativo' => 'boolean',
             'Baja' => 'boolean',

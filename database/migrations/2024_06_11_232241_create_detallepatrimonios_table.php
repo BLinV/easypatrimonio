@@ -11,7 +11,7 @@ class CreateDetallepatrimoniosTable extends Migration
         Schema::create('detallepatrimonio', function (Blueprint $table) {
             $table->Increments("IdDetallePatrimonio");
             $table->unsignedInteger('IdPatrimonio')->nullable(false);
-                $table->string("CodInterno", 12)->nullable()->unique();
+            $table->string("CodInterno", 12)->nullable(false)->unique();
             $table->string("CodUTES", 12)->nullable()->unique();
             $table->string("CodServicio", 12)->nullable()->unique();
             $table->string('Descripcion', 250)->nullable(false);

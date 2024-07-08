@@ -36,7 +36,7 @@ datatable = new DataTable('#tablaIngreso', { //Configuración de DataTable de vi
         data: null,                         //Botones de registro
         render: function (param) {
             return `<div class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-info" type="button" data-numeropecosa="${param['NumeroPecosa']}" onClick="ver('${param['NumeroPecosa']}')">Ver</button>
+                        <button class="btn btn-info" type="button" data-numeriointerno="${param['NumeroInterno']}" onClick="ver('${param['NumeroInterno']}')">Ver</button>
                     </div>`
         }
     }
@@ -90,7 +90,8 @@ function ver(id) {
                 let tabla = ''
                 response._detalleingreso.forEach(element => {
                     tabla += `<tr>
-                        <td>${element.CodUTES}</td><td>${element.CodInterno}</td><td>${element.Articulo}</td>
+                        <td>${element.CodInterno}</td><td>${element.CodUTES}</td><td>${element.CodServicio}</td>
+                        <td>${element.Articulo}</td>
                         <td>${element.Servicio}</td><td>${element.Descripcion}</td><td>${element.Categoria}</td>
                         <td>${element.Estado}</td></tr>`
                         /*

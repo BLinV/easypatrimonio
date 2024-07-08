@@ -52,8 +52,8 @@
                                         <legend>Información del Cargo</legend>
                                     </div>
                                     <div class="form-group mb-2">
-                                        <label for="codoficio" class="form-label">Código de Cargo:</label>
-                                        <input type="text" id="codoficio" name="codoficio" class="form-control"
+                                        <label for="codbaja" class="form-label">Código de Cargo:</label>
+                                        <input type="text" id="codbaja" name="codbaja" class="form-control"
                                             value="" placeholder="Código de 20 dígitos." maxlength="20">
                                     </div>
                                     <div class="form-group mb-2">
@@ -77,7 +77,7 @@
                                     <div class="form-group mb-2">
                                         <label for="codpatrimonio" class="form-label">Buscar patrimonio:</label>
                                         <input type="text" id="codpatrimonio" name="codpatrimonio" class="form-control"
-                                            value="" placeholder="Código UTES o Interno" disabled>
+                                            value="" placeholder="Código Interno, UTES o de Servicio" disabled>
                                     </div>
                                     <div class="d-grid gap-2">
                                         <button type="button" id = "btnBuscar" class="btn btn-danger me-2"
@@ -95,23 +95,30 @@
                                     <div class="row g-3 justify-content-start">
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                             <div class="form-group mb-2">
-                                                <label for="codutes" class="form-label">Código UTES:</label>
-                                                <input type="text" id="codutes" name="codutes" class="form-control"
-                                                    value="" placeholder="" maxlength="12" disabled>
+                                                <label for="codinterno" class="form-label">Código Interno:</label>
+                                                <input type="text" id="codinterno" name="codinterno" class="form-control"
+                                                    disabled>
                                             </div>
                                         </div>
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                             <div class="form-group mb-2">
-                                                <label for="codinterno" class="form-label">Código Interno:</label>
-                                                <input type="text" id="codinterno" name="codinterno" class="form-control"
-                                                    value="" placeholder="" maxlength="12" disabled>
+                                                <label for="codutes" class="form-label">Código UTES:</label>
+                                                <input type="text" id="codutes" name="codutes" class="form-control"
+                                                    disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="codservicio" class="form-label">Código Servicio:</label>
+                                                <input type="text" id="codservicio" name="codservicio" class="form-control"
+                                                    disabled>
                                             </div>
                                         </div>
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                             <div class="form-group mb-2">
                                                 <label for="servicio" class="form-label">Servicio:</label>
                                                 <input type="text" id="servicio" name="servicio" class="form-control"
-                                                    value="" placeholder="" disabled>
+                                                    disabled>
                                                 </select>
                                             </div>
                                         </div>
@@ -126,7 +133,7 @@
                                             <div class="form-group mb-2">
                                                 <label for="categoria" class="form-label">Categoría:</label>
                                                 <input type="text" id="categoria" name="categoria"
-                                                    class="form-control" value="" placeholder="" disabled>
+                                                    class="form-control" disabled>
                                                 </select>
                                             </div>
                                         </div>
@@ -134,8 +141,7 @@
                                             <div class="form-group mb-2">
                                                 <label for="comentario" class="form-label">Características del
                                                     Patrimonio:</label>
-                                                <textarea type="text" id="comentario" name="comentario" class="form-control" style="resize: none;"
-                                                    value="" placeholder="" disabled></textarea>
+                                                <textarea type="text" id="comentario" name="comentario" class="form-control" style="resize: none;" disabled></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -143,8 +149,7 @@
                                         <div class="form-group mb-2">
                                             <label for="estado" class="form-label">Información anexa sobre la baja del
                                                 patrimonio:</label>
-                                            <textarea type="text" id="estado" name="estado" class="form-control" style="resize: none;" value=""
-                                                placeholder="" disabled></textarea>
+                                            <textarea type="text" id="estado" name="estado" class="form-control" style="resize: none;" disabled></textarea>
                                         </div>
                                     </div>
 
@@ -154,8 +159,8 @@
                                                 disabled>Registrar</button>
                                         </div>
                                         <div class="float-end mb-2">
-                                            <button type="button" id="btnLimpiar" class="btn btn-primary" onclick="Limpiar()"
-                                                disabled>Limpiar</button>
+                                            <button type="button" id="btnLimpiar" class="btn btn-primary"
+                                                onclick="Limpiar()" disabled>Limpiar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -167,14 +172,15 @@
                         <table class="table table-bordered" id="tablaBaja">
                             <thead>
                                 <tr>
-                                    <th>Código UTES</th>
                                     <th>Código Interno</th>
+                                    <th>Código UTES</th>
+                                    <th>Código Servicio</th>
                                     <th>Patrimonio</th>
                                     <th>Caracteristicas</th>
                                     <th>Información Anexa</th>
                                     <th>Servicio</th>
                                     <th>Categoría</th>
-                                    <th>Opciones</th> <!-- Eliminar vuelve a poner el patrimonio (baja = false) -->
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                         </table>

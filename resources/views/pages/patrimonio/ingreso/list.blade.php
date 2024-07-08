@@ -48,8 +48,9 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Codigo UTES</th>
                                         <th>Codigo Interno</th>
+                                        <th>Codigo UTES</th>
+                                        <th>Codigo Servicio</th>
                                         <th>Artículo</th>
                                         <th>Servicio</th>
                                         <th>Descripción</th>

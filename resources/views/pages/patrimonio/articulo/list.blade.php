@@ -44,7 +44,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
-                            <span id="codigoInterno"> No encontrado. </span>
+                            <span id="codInterno"> No encontrado. </span>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -55,13 +55,14 @@
                                     <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No encontrado.
                                         </span></p>
                                     <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span></p>
-                                    <p><strong>Estado Origen:</strong> <span id="ingresoEstado"> No encontrado. </span></p>
+                                    <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No encontrado. </span></p>
                                     <p><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado. </span></p>
                                 </div>
                                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <p><strong>Documento Baja:</strong> <span id="bajaDocumento"> No encontrado. </span></p>
                                     <p><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado. </span></p>
-                                    <p><strong>Estado Origen:</strong> <span id="bajaEstado"> No encontrado. </span></p>
+                                    <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No encontrado. </span></p>
+                                    <p><strong>Servicio:</strong> <span id="servicioPertenencia"> No encontrado. </span></p>
                                     <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No encontrado. </span>
                                     </p>
                                 </div>
@@ -139,15 +140,14 @@
                             <table class="table" id="tablaPatrimonio">
                                 <thead>
                                     <tr>
-                                        <th>Código UTES</th>
                                         <th>Código Interno</th>
+                                        <th>Código UTES</th>
+                                        <th>Código Servicio</th>
                                         <th>Patrimonio</th>
-                                        <th>Servicio</th>
                                         <th>Descripción</th>
                                         <th>Categoría</th>
                                         <th>Operativo</th>
                                         <th>Baja</th>
-                                        <th>Ubicación</th>
                                     </tr>
                                 </thead>
                             </table>

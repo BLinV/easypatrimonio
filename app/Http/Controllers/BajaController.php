@@ -46,6 +46,25 @@ class BajaController extends Controller
         }
     }
 
+    public function generarCodigoInterno()
+    {
+        try {
+            $codigo = Baja::generarCodigo();
+            return response()->json([
+                'exito' => true,
+                '_codigo' => $codigo,
+                'mensaje' => 'Ingreso encontrado',
+                'mensajeError' => ''
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
+            ]);
+        }
+    }
+
     public function obtenerBajaDetalle(string $CodigoBaja)
     {
         try {
@@ -54,10 +73,11 @@ class BajaController extends Controller
                 ->first();
             if ($baja) {
                 $detalleBaja = Baja::select(
-                    DB::raw("`detallebaja`.`Estado` AS Estado"),
-                    'detallepatrimonio.CodUTES',
                     'detallepatrimonio.CodInterno',
+                    'detallepatrimonio.CodUTES',
+                    'detallepatrimonio.CodServicio',
                     'detallepatrimonio.Descripcion',
+                    DB::raw("`detallebaja`.`Estado` AS Estado"),
                     DB::raw("servicio.Descripcion AS Servicio"),
                     DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
                     DB::raw("`categoria`.`Descripcion` AS Categoria"),
@@ -73,19 +93,22 @@ class BajaController extends Controller
                     ->get();
                 return response()->json([
                     'exito' => true,
+                    'mensaje' => 'Registro encontrado',
                     '_baja' => $baja,
                     '_detallebaja' => $detalleBaja
                 ]);
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensaje' => 'Registro no encontrado',
+                    'mensaje' => '',
+                    'mensajeError' => 'Registro no encontrado'
                 ]);
             }
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensaje' => $ex->getMessage(),
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
@@ -98,50 +121,65 @@ class BajaController extends Controller
                 ->first();
             return response()->json([
                 'exito' => true,
+                'mensaje' => 'Consulta de Patrimonio exitosa.',
+                'mensajeError' => '',
                 '_baja' => $baja
             ]);
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensaje' => $ex->getMessage(),
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
 
     public function encontrarPatrimonio(string $codigo)
     {
-        $detallePatrimonio = DetallePatrimonio::select(
-            'detallepatrimonio.CodUTES',
-            'detallepatrimonio.CodInterno',
-            DB::raw("`servicio`.`Descripcion` AS Servicio"),
-            DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
-            DB::raw("`categoria`.`Descripcion` AS Categoria"),
-            'detallepatrimonio.Descripcion'
-        )
-            ->join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
-            ->join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
-            ->join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
+        try {
+            $detallePatrimonio = DetallePatrimonio::select(
+                'detallepatrimonio.CodInterno',
+                'detallepatrimonio.CodUTES',
+                'detallepatrimonio.CodServicio',
+                DB::raw("`servicio`.`Descripcion` AS Servicio"),
+                DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
+                DB::raw("`categoria`.`Descripcion` AS Categoria"),
+                'detallepatrimonio.Descripcion'
+            )
+                ->join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
+                ->join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
+                ->join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
 
-            ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
-            ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
-            ->where('detallepatrimonio.CodUTES', $codigo)
-            //->orWhere('CodInterno', '=', $codigo)
-            ->where('detallepatrimonio.Baja', 0)
-            ->first();
+                ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
+                ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
+                ->where('detallepatrimonio.CodInterno', '=', $codigo)
+                ->orWhere('detallepatrimonio.CodUTES', '=', $codigo)
+                ->orWhere('detallepatrimonio.CodServicio', '=', $codigo)
+                ->where('detallepatrimonio.Baja', 0)
+                ->first();
 
-        if ($detallePatrimonio) {
-            return response()->json([
-                'exito' => true,
-                '_detallepatrimonio' => $detallePatrimonio
-            ]);
-        } else {
+            if ($detallePatrimonio) {
+                return response()->json([
+                    'exito' => true,
+                    'mensaje' => 'Consulta de Patrimonio exitosa.',
+                    'mensajeError' => '',
+                    '_detallepatrimonio' => $detallePatrimonio
+                ]);
+            } else {
+                return response()->json([
+                    'exito' => false,
+                    'mensaje' => '',
+                    'mensajeError' => 'Detalle no encontrado.'
+                ], 404);
+            }
+        } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensaje' => 'Detalle no encontrado.'
-            ], 404);
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
+            ]);
         }
     }
-
 
     public function obtenerListaPatrimonio(string $codigo)
     {
@@ -177,30 +215,27 @@ class BajaController extends Controller
         }
     }
 
-
     public function registrarBaja(BajaRequest $request)
     {
-        // Transacción: Iniciar
-        DB::beginTransaction();
-
         try {
             $baja = Baja::where('CodigoBaja', $request->CodigoBaja)->first();
+            $Fecha = Carbon::now();
             if (!$baja) {
                 // Si no existe, crear un nuevo ingreso
                 $baja = new Baja();
                 $baja->CodigoBaja   = $request->CodigoBaja;
-                $baja->Fecha        = Carbon::now();
+                $baja->Fecha        = $Fecha;
                 $baja->Observacion  = $request->Observacion;
                 $baja->IdPersonal   = $request->IdPersonal; // Aplica solo a helen
                 $baja->save();
             }
 
             $detalle = DetallePatrimonio::select('IdDetallePatrimonio', 'Baja')
-                ->where('CodUTES', '=', $request->CodUTES)
+                ->where('CodInterno', '=', $request->CodInterno)
                 ->first();
             if ($detalle->Baja == 0) {
                 // Encontrar el Detalle Patrimonio
-                DetallePatrimonio::where('CodUTES', '=', $request->CodUTES)
+                DetallePatrimonio::where('CodInterno', '=', $request->CodInterno)
                     ->update(['Baja' => 1]);
                 // Consultar información de patrimonio
                 $detalleBaja = new DetalleBaja();
@@ -208,17 +243,17 @@ class BajaController extends Controller
                 $detalleBaja->IdDetallePatrimonio   = $detalle->IdDetallePatrimonio;
                 $detalleBaja->Estado                = $request->Estado;
                 $detalleBaja->save();
-                // Transacción: Confirmar
-                DB::commit();
 
                 return response()->json([
                     'exito' => true,
-                    'mensaje' => 'La baja ha sido registrada correctamente.'
+                    'mensaje' => 'La baja ha sido registrada correctamente.',
+                    'mensajeError' => ''
                 ]);
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensaje' => 'El patrimonio ya se dio de baja.'
+                    'mensaje' => '',
+                    'mensajeError' => 'El patrimonio ya se dio de baja.'
                 ]);
             }
         } catch (Exception $ex) {
@@ -226,17 +261,18 @@ class BajaController extends Controller
             DB::rollBack();
             return response()->json([
                 'exito' => false,
-                'mensaje' => $ex->getMessage(),
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
 
-    public function removerBaja(string $CodUTES)
+    public function removerBaja(string $CodInterno)
     {
         // Transacción: Iniciar
         DB::beginTransaction();
         try {
-            $detallePatrimonio = DetallePatrimonio::where('CodUTES', $CodUTES)->first();
+            $detallePatrimonio = DetallePatrimonio::where('CodInterno', $CodInterno)->first();
             $IdDetallePatrimonio = $detallePatrimonio->IdDetallePatrimonio;
             $detalleBaja = DetalleBaja::where('IdDetallePatrimonio', $IdDetallePatrimonio)->first();
             if ($detalleBaja) {

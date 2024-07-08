@@ -11,7 +11,7 @@ class CreateIngresosTable extends Migration
         Schema::create('ingreso', function (Blueprint $table) {
             $table->Increments("IdIngreso");
             $table->char('NumeroInterno', 10)->nullable()->unique();
-            $table->varchar('NumeroPecosa', 20)->nullable()->unique();
+            $table->string('NumeroPecosa', 20)->nullable()->unique();
             $table->dateTime("Fecha")->useCurrent();
             $table->unsignedInteger('IdOrigen')->nullable(false);
             $table->string('OtroOrigen', 100)->nullable(true);

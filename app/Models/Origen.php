@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Origen extends Model
 {
-    protected $primaryKey = "IdOrigen";
-    protected $guarded = [];
-    protected $table="origen";
     use HasFactory;
+    protected $primaryKey = "IdOrigen";
+    protected $table="origen";
+
+    protected $fillable = ['Descripcion'];
 }

@@ -9,7 +9,6 @@ use App\Models\Ingreso;
 use App\Models\Marca;
 use App\Models\Origen;
 use App\Models\Patrimonio;
-use App\Models\Personal;
 use App\Models\Tipo;
 use App\Models\UbicacionPatrimonio;
 use Carbon\Carbon;
@@ -76,16 +75,108 @@ class IngresoController extends Controller
         }
     }
 
-    public function obtenerIngresoDetalle(string $NumeroPecosa)
+    public function generarCodigoInterno()
+    {
+        try {
+            $codigo = Ingreso::generarCodigo();
+            return response()->json([
+                'exito' => true,
+                '_codigo' => $codigo,
+                'mensaje' => 'Ingreso encontrado',
+                'mensajeError' => ''
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
+            ]);
+        }
+    }
+
+    public function registrarIngreso(IngresoRequest $request)
+    {
+        try {
+            $ingreso = Ingreso::where('NumeroInterno', $request->NumeroInterno)->first();
+            $Fecha = Carbon::now();
+
+            if (!$ingreso) { //Existe el registro?
+                // Si no existe, crear un nuevo ingreso
+                $ingreso = new Ingreso();
+                $ingreso->NumeroInterno = $request->NumeroInterno;
+                $ingreso->NumeroPecosa  = $request->NumeroPecosa;
+                $ingreso->Fecha         = $Fecha;
+                $ingreso->IdOrigen      = $request->IdOrigen;
+                $ingreso->OtroOrigen    = $request->OtroOrigen;
+                $ingreso->Observacion   = $request->Observacion;
+                $ingreso->IdPersonal    = $request->IdPersonal; // Aplica solo a helen
+                $ingreso->save(); //Guarda y captura los datos registrados en la BD
+            }
+            // Crear Patrimonio
+            $patrimonio = new Patrimonio();
+            $tipoDescripcion    = $request->tipo_descripcion;
+            $tipo = Tipo::firstOrCreate(
+                ['Descripcion' => $tipoDescripcion],
+                ['Descripcion' => $tipoDescripcion]
+            );
+            $patrimonio->IdTipo = $tipo->IdTipo;
+            $marcaDescripcion   = $request->marca_descripcion;
+            $marca = Marca::firstOrCreate(
+                ['Descripcion' => $marcaDescripcion],
+                ['Descripcion' => $marcaDescripcion]
+            );
+            $patrimonio->IdMarca        = $marca->IdMarca;
+            $patrimonio->Modelo         = $request->Modelo;
+            $patrimonio->IdCategoria    = $request->IdCategoria;
+            $patrimonio->save();
+            // Crear Detalle Patrimonio (uniendo a Patrimonio)
+            $detallePatrimonio = new DetallePatrimonio();
+            $detallePatrimonio->IdPatrimonio    = $patrimonio->IdPatrimonio;
+            $detallePatrimonio->CodInterno      = $request->CodInterno;
+            $detallePatrimonio->CodUTES         = $request->CodUTES;
+            $detallePatrimonio->CodServicio     = $request->CodServicio;
+            $detallePatrimonio->Descripcion     = $request->Descripcion;
+            $detallePatrimonio->IdServicio      = $request->IdServicio;
+            $detallePatrimonio->save();
+            // Crear Detalle Ingreso
+            $detalleIngreso = new DetalleIngreso();
+            $detalleIngreso->IdIngreso           = $ingreso->IdIngreso;
+            $detalleIngreso->IdDetallePatrimonio = $detallePatrimonio->IdDetallePatrimonio;
+            $detalleIngreso->Estado              = $request->Estado;
+            $detalleIngreso->save();
+            // Crear UbicacionPatrimonio
+            $ubicacionPatrimonio = new UbicacionPatrimonio();
+            $ubicacionPatrimonio->IdDetallePatrimonio = $detallePatrimonio->IdDetallePatrimonio;
+            $ubicacionPatrimonio->IdPersonal          = $request->IdEncargado;
+            $ubicacionPatrimonio->IdServicio          = $request->IdServicio;
+            $ubicacionPatrimonio->Motivo              = $request->Motivo;
+            $ubicacionPatrimonio->Fecha               = $Fecha;
+            $ubicacionPatrimonio->save();
+
+            return response()->json([
+                'exito' => true,
+                'mensaje' => 'Ingreso y patrimonio registrados correctamente.'
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensaje' => 'Error al registrar el patrimonio.',
+                'mensajeError' => $ex->getMessage()
+            ]);
+        }
+    }
+
+    public function obtenerIngresoDetalle(string $numeroInterno)
     {
         try {
             $ingreso = Ingreso::select('NumeroInterno', 'NumeroPecosa', 'Fecha', 'IdOrigen', 'OtroOrigen', 'Observacion', 'IdPersonal')
-                ->where('ingreso.NumeroPecosa', $NumeroPecosa)
+                ->where('ingreso.NumeroInterno', $numeroInterno)
                 ->first();
             if ($ingreso) {
                 $detalleIngreso = Ingreso::select(
-                    'detallepatrimonio.CodUTES',
                     'detallepatrimonio.CodInterno',
+                    'detallepatrimonio.CodUTES',
+                    'detallepatrimonio.CodServicio',
                     DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
                     'detallepatrimonio.Descripcion',
                     DB::raw("`detalleingreso`.`Estado` AS Estado"),
@@ -99,7 +190,7 @@ class IngresoController extends Controller
                     ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
                     ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
                     ->join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
-                    ->where('ingreso.NumeroPecosa', $NumeroPecosa)
+                    ->where('ingreso.NumeroInterno', $numeroInterno)
                     ->get();
                 return response()->json([
                     'exito' => true,
@@ -139,87 +230,12 @@ class IngresoController extends Controller
         }
     }
 
-    public function registrarIngreso(IngresoRequest $request)
+    public function actualizarPatrimonio(Request $request, $CodInterno)
     {
         try {
-
-            $ingreso = Ingreso::where('NumeroPecosa', $request->NumeroPecosa)
-                        //->where('NumeroInterno', $request->NumeroInterno)
-                        ->first();
-            $Fecha = Carbon::now();
-
-            if (!$ingreso) { //Existe el registro?
-                // Si no existe, crear un nuevo ingreso
-                $ingreso = new Ingreso();
-                $ingreso->NumeroPecosa  = $request->NumeroPecosa;
-                $ingreso->Fecha         = $Fecha;
-                $ingreso->IdOrigen      = $request->IdOrigen;
-                $ingreso->OtroOrigen    = $request->OtroOrigen;
-                $ingreso->Observacion   = $request->Observacion;
-                $ingreso->IdPersonal    = $request->IdPersonal; // Aplica solo a helen
-                $ingreso->save(); //Guarda y captura los datos registrados en la BD
-            }
-
-            // Crear Patrimonio
-            $patrimonio = new Patrimonio();
-            $tipoDescripcion    = $request->tipo_descripcion;
-            $tipo = Tipo::firstOrCreate(
-                ['Descripcion' => $tipoDescripcion],
-                ['Descripcion' => $tipoDescripcion]
-            );
-            $patrimonio->IdTipo         = $tipo->IdTipo;
-            $marcaDescripcion   = $request->marca_descripcion;
-            $marca = Marca::firstOrCreate(
-                ['Descripcion' => $marcaDescripcion],
-                ['Descripcion' => $marcaDescripcion]
-            );
-            $patrimonio->IdMarca        = $marca->IdMarca;
-            $patrimonio->Modelo         = $request->Modelo;
-            $patrimonio->IdCategoria    = $request->IdCategoria;
-            $patrimonio->save();
-            // Crear Detalle Patrimonio (uniendo a Patrimonio)
-            $detallePatrimonio = new DetallePatrimonio();
-            $detallePatrimonio->IdPatrimonio    = $patrimonio->IdPatrimonio;
-            $detallePatrimonio->CodUTES         = $request->CodUTES;
-            $detallePatrimonio->CodInterno      = $request->CodInterno;
-            $detallePatrimonio->Descripcion     = $request->Descripcion;
-            $detallePatrimonio->IdServicio      = $request->IdServicio;
-            $detallePatrimonio->save();
-            // Crear Detalle Ingreso
-            $detalleIngreso = new DetalleIngreso();
-            $detalleIngreso->IdIngreso           = $ingreso->IdIngreso;
-            $detalleIngreso->IdDetallePatrimonio = $detallePatrimonio->IdDetallePatrimonio;
-            $detalleIngreso->Estado              = $request->Estado;
-            $detalleIngreso->save();
-            // Crear UbicacionPatrimonio
-            $ubicacionPatrimonio = new UbicacionPatrimonio();
-            $ubicacionPatrimonio->IdDetallePatrimonio = $detallePatrimonio->IdDetallePatrimonio;
-            $ubicacionPatrimonio->IdPersonal          = $request->IdEncargado;
-            $ubicacionPatrimonio->IdServicio          = $request->IdServicio;
-            $ubicacionPatrimonio->Motivo              = $request->Motivo;
-            $ubicacionPatrimonio->Fecha               = $Fecha;
-            $ubicacionPatrimonio->save();
-
-            return response()->json([
-                'exito' => true,
-                'mensaje' => 'Ingreso y patrimonio registrados correctamente.'
-            ]);
-        } catch (Exception $ex) {
-            return response()->json([
-                'exito' => false,
-                'mensaje' => 'Error al registrar el patrimonio.',
-                'mensajeError' => $ex->getMessage()
-            ]);
-        }
-    }
-
-    public function actualizarPatrimonio(Request $request, $CodUTES)
-    {
-        try {
-            $CodInterno         = $request->CodInterno;
+            $CodUTES            = $request->CodUTES;
+            $CodServicio        = $request->CodServicio;
             $Descripcion        = $request->Descripcion;
-            //$Operativo          = $request->Operativo;
-            //$Baja               = $request->Baja;
             $IdServicio         = $request->IdServicio;
             $tipoDescripcion    = $request->tipo_descripcion;
             $marcaDescripcion   = $request->marca_descripcion;
@@ -227,14 +243,13 @@ class IngresoController extends Controller
             $IdCategoria        = $request->IdCategoria;
             $Estado             = $request->Estado;
 
-            $patrimonioDB = DetallePatrimonio::select('IdDetallePatrimonio', 'IdPatrimonio')->where('CodUTES', '=', $CodUTES)->first();
+            $patrimonioDB = DetallePatrimonio::select('IdDetallePatrimonio', 'IdPatrimonio')->where('CodInterno', '=', $CodInterno)->first();
 
             if (isset($patrimonioDB)) { //Verificar que sea inicializada y no sea null
                 $detallePatrimonio = new DetallePatrimonio();
-                $detallePatrimonio->CodInterno      = $CodInterno;
+                $detallePatrimonio->CodUTES         = $CodUTES;
+                $detallePatrimonio->CodServicio     = $CodServicio;
                 $detallePatrimonio->Descripcion     = $Descripcion;
-                //$detallePatrimonio->Operativo       = $Operativo;
-                //$detallePatrimonio->Baja            = $Baja;
                 $detallePatrimonio->IdServicio      = $IdServicio;
 
                 // Crear Patrimonio
@@ -257,13 +272,12 @@ class IngresoController extends Controller
 
                 $detalleIngreso = new DetalleIngreso();
                 $detalleIngreso->IdDetallePatrimonio = $patrimonioDB->IdDetallePatrimonio;
-                $detalleIngreso->Estado             = $Estado;
+                $detalleIngreso->Estado              = $Estado;
 
-                DetallePatrimonio::where('CodUTES', '=', $CodUTES)->update([
-                    'CodInterno'    => $detallePatrimonio->CodInterno,
+                DetallePatrimonio::where('CodInterno', '=', $CodInterno)->update([
+                    'CodUTES'       => $detallePatrimonio->CodUTES,
+                    'CodServicio'   => $detallePatrimonio->CodServicio,
                     'Descripcion'   => $detallePatrimonio->Descripcion,
-                    //'Operativo'     => $detallePatrimonio->Operativo,
-                    //'Baja'          => $detallePatrimonio->Baja,
                     'IdServicio'    => $detallePatrimonio->IdServicio,
                 ]);
                 Patrimonio::where('IdPatrimonio', '=', $patrimonio->IdPatrimonio)->update([
@@ -296,11 +310,12 @@ class IngresoController extends Controller
         }
     }
 
-    public function obtenerPatrimonio(string $CodUTES)
+    public function obtenerPatrimonio(string $CodInterno)
     {
         $detallePatrimonio = DetallePatrimonio::select(
-            'detallepatrimonio.CodUTES',
             'detallepatrimonio.CodInterno',
+            'detallepatrimonio.CodUTES',
+            'detallepatrimonio.CodServicio',
             'detallepatrimonio.IdServicio',
             DB::raw("`tipo`.`Descripcion` AS Tipo"),
             DB::raw("`marca`.`Descripcion` AS Marca"),
@@ -314,7 +329,7 @@ class IngresoController extends Controller
             ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
             ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
             ->join('detalleingreso', 'detallepatrimonio.IdDetallePatrimonio', '=', 'detalleingreso.IdDetallePatrimonio')
-            ->where('detallepatrimonio.CodUTES', $CodUTES)
+            ->where('detallepatrimonio.CodInterno', $CodInterno)
             ->first();
 
         if ($detallePatrimonio) {

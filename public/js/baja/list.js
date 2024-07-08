@@ -81,9 +81,9 @@ function ver(id) {
             if (response._detallebaja.length > 0) {
                 let tabla = ''
                 response._detallebaja.forEach(element => {
-                    tabla += `<tr><td>${element.CodUTES}</td><td>${element.CodInterno}</td><td>${element.Articulo}</td>
-                                  <td>${element.Servicio}</td><td>${element.Descripcion}</td><td>${element.Categoria}</td>
-                                  <td>${element.Estado}</td></tr>`
+                    tabla += `<tr><td>${element.CodInterno}</td><td>${element.CodUTES}</td><td>${element.CodServicio}</td>
+                                  <td>${element.Articulo}</td><td>${element.Servicio}</td><td>${element.Descripcion}</td>
+                                  <td>${element.Categoria}</td><td>${element.Estado}</td></tr>`
                 });
                 $('#tablaDetalle').html(tabla);
                 ModalAbrirCerrar('verDetalle', true);

@@ -35,8 +35,6 @@
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 
-    <script src="{{ asset('js/buscador.js') }}"></script>
-
     <div class="container">
         <div class="modal fade" id="verDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -51,8 +49,9 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Codigo UTES</th>
                                         <th>Codigo Interno</th>
+                                        <th>Codigo UTES</th>
+                                        <th>Codigo Servicio</th>
                                         <th>Artículo</th>
                                         <th>Servicio</th>
                                         <th>Descripción</th>

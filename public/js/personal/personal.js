@@ -160,14 +160,13 @@ const GuardarPersona = () => {
     let condicion = $('#condicion').val()
     let servicio = $('#servicio').val()
 
-
     let datos = {
-        "nombre": nombre,
-        "apellido": apellido,
-        "dni": dni,
-        "celular": celular,
-        "condicion": condicion,
-        "servicio": servicio
+        "Dni": dni,
+        "Nombres": nombre,
+        "Apellidos": apellido,
+        "Celular": celular,
+        "IdCondicion": condicion,
+        "IdServicio": servicio
     }
 
     if (!$('#dni').prop('disabled')) {

@@ -51,13 +51,10 @@ class MovimientoController extends Controller
         try {
             $Fecha = Carbon::now();
             $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')
-                ->where('CodUTES', '=', $request->Codigo)
-                ->orwhere('CodInterno', '=', $request->Codigo)
-                ->orwhere('CodServicio', '=', $request->Codigo)
-                ->first()
-                ->IdDetallePatrimonio;
+                ->where('CodInterno', '=', $request->CodInterno)
+                ->first();
             $movimiento = new UbicacionPatrimonio();
-            $movimiento->IdDetallePatrimonio = $idDetallePatrimonio;
+            $movimiento->IdDetallePatrimonio = $idDetallePatrimonio->IdDetallePatrimonio;
             $movimiento->IdPersonal = $request->IdServicio;
             $movimiento->IdServicio = $request->IdPersonal;
             $movimiento->Fecha = $Fecha;

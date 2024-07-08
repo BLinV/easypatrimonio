@@ -28,9 +28,11 @@ datatable = new DataTable('#tablaPersonal', {
         data: 'Servicio'
     },
     {
-        data: null,
+        data: null,                         //Botnoes de registro
         render: function (param) {
-            return `<a>IMPLEMENTAR</a>`
+            return param['Estado'] ?
+            `<p class="bg-success text-white p-2 d-inline rounded-pill">Activo</p>` :
+            `<p class="bg-warning text-white p-2 d-inline rounded-pill">Retirado</p>`
         }
     },
     {

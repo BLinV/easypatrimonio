@@ -57,52 +57,79 @@ function obtenerTextoOption(selectId, value) {
 }
 
 function IniciarTramite() {
-    let numeropecosa = document.getElementById('numeropecosa').value;
-    if (numeropecosa != "") {
+    let numerointerno = document.getElementById('numerointerno').value;
+    if (numerointerno !== "") {
         $.ajax({
             type: "get",
-            url: `/api/informacion_ingreso/${numeropecosa}`,
+            url: `/api/informacion_ingreso/${numerointerno}`,
             dataType: "json",
             success: function (response) {
                 //Validación de campo
                 if (response._ingreso != null) {
+                    $('#numeropecosa').val(response._ingreso.NumeroPecosa);
                     $('#origen').val(response._ingreso.IdOrigen);
                     $('#otroorigen').text(response._ingreso.OtroOrigen);
                     $('#observacion').text(response._ingreso.Observacion);
                     CargarDetalle();
-                    $('#origen').attr({ 'disabled': true })
-                    $('#otroorigen').attr({ 'disabled': true })
-                    $('#observacion').attr({ 'disabled': true })
-
+                    bloquearFormularioIngreso(true);
                 } else {
                     alert('Se esta ingresando una nueva PECOSA.');
-                    $('#origen').attr({ 'disabled': false })
-                    $('#otroorigen').attr({ 'disabled': false })
-                    $('#observacion').attr({ 'disabled': false })
+                    bloquearFormularioIngreso(false);
                 }
-                $('#btnTramitar').attr({ 'disabled': true })
-                $('#numeropecosa').attr({ 'disabled': true })
-
-                $('#codutes').attr({ 'disabled': false })
-                $('#codinterno').attr({ 'disabled': false })
-                $('#servicio').attr({ 'disabled': false })
-                $('#tipo').attr({ 'disabled': false })
-                $('#marca').attr({ 'disabled': false })
-                $('#modelo').attr({ 'disabled': false })
-                $('#categoria').attr({ 'disabled': false })
-                $('#comentario').attr({ 'disabled': false })
-                $('#estado').attr({ 'disabled': false })
-                $('.registro').attr({ 'disabled': false })
+                $('#numerointerno').attr({ 'disabled': true });
+                $('#btnTramitar').attr({ 'disabled': true });
+                bloquearFormularioPatrimonio(false);
             },
             error: function () {
                 alert('Error al obtener información.');
             }
         });
+    } else {
+        $.ajax({
+            type: "get",
+            url: "/api/generar_codigoingreso",
+            dataType: "json",
+            success: function (response) {
+                if (response.exito) {
+                    alert('Se esta ingresando una nueva PECOSA.');
+                    $('#numerointerno').val(response._codigo);
+                    $('#numerointerno').attr({ 'disabled': true });
+                    $('#btnTramitar').attr({ 'disabled': true });
+                    bloquearFormularioIngreso(false);
+                    bloquearFormularioPatrimonio(false);
+                } else {
+                    alert('Error al generar el código: ' + response.mensajeError);
+                }
+            },
+            error: function () {
+                alert('Error al generar el código.');
+            }
+        });
     }
 }
 
+function bloquearFormularioIngreso(bool) {
+    $('#numeropecosa').attr({ 'disabled': bool });
+    $('#origen').attr({ 'disabled': bool });
+    $('#otroorigen').attr({ 'disabled': bool });
+    $('#observacion').attr({ 'disabled': bool });
+}
+
+function bloquearFormularioPatrimonio(bool) {
+    $('#codutes').attr({ 'disabled': bool });
+    $('#codservicio').attr({ 'disabled': bool });
+    $('#servicio').attr({ 'disabled': bool });
+    $('#tipo').attr({ 'disabled': bool });
+    $('#marca').attr({ 'disabled': bool });
+    $('#modelo').attr({ 'disabled': bool });
+    $('#categoria').attr({ 'disabled': bool });
+    $('#comentario').attr({ 'disabled': bool });
+    $('#estado').attr({ 'disabled': bool });
+    $('.registro').attr({ 'disabled': bool });
+}
+
 function CargarDetalle() {
-    let numeropecosa = document.getElementById('numeropecosa').value;
+    let numerointerno = document.getElementById('numerointerno').value;
     $('#dt-search-0').addClass('pb-2');
     if (!$.fn.DataTable.isDataTable('#tablaIngreso')) {
         datatable = new DataTable('#tablaIngreso', {
@@ -112,40 +139,44 @@ function CargarDetalle() {
             'scrollCollapse': true,
             'scroller': true,
             ajax: {
-                url: '/api/informacion_ingresodetalle/' + numeropecosa,
+                url: '/api/informacion_ingresodetalle/' + numerointerno,
                 type: 'get',
                 dataType: 'json',
                 dataSrc: "_detalleingreso"
             },
-            columns: [{
-                data: 'CodUTES'
-            },
-            {
-                data: 'CodInterno'
-            },
-            {
-                data: 'Articulo'
-            },
-            {
-                data: 'Descripcion'
-            },
-            {
-                data: 'Estado'
-            },
-            {
-                data: 'Servicio'
-            },
-            {
-                data: 'Categoria'
-            },
-            {
-                data: null,
-                render: function (param) {
-                    return `<div class="d-flex justify-content-center align-items-center">
-                                <button class="btn btn-info" type="button" data-codutes="${param['CodUTES']}" onClick="Editar(this)">Editar</button>
-                            </div>`
-                }
-            }],
+            columns: [
+                {
+                    data: 'CodInterno'
+                },
+                {
+                    data: 'CodUTES'
+                },
+                {
+                    data: 'CodServicio'
+                },
+                {
+                    data: 'Articulo'
+                },
+                {
+                    data: 'Descripcion'
+                },
+                {
+                    data: 'Estado'
+                },
+                {
+                    data: 'Servicio'
+                },
+                {
+                    data: 'Categoria'
+                },
+                {
+                    data: null,
+                    render: function (param) {
+                        return `<div class="d-flex justify-content-center align-items-center">
+                                <button class="btn btn-info" type="button" data-codinterno="${param['CodInterno']}" onClick="Editar(this)">Editar</button>
+                                </div>`
+                    }
+                }],
             dom: 'Bfrtip',
             buttons: ['excel', 'pdf'],
             pageLength: 10,
@@ -177,15 +208,16 @@ function CargarDetalle() {
 
 function GuardarIngreso() {
     // Informacion PECOSA
+    let numerointerno = document.getElementById('numerointerno').value;
     let numeropecosa = document.getElementById('numeropecosa').value;
     let origen = document.getElementById('origen').value;
     let otroorigen = document.getElementById('otroorigen').value;
     let observacion = document.getElementById('observacion').value;
-    let idpersonal = 1;
+    let idpersonal = 2;
 
     //Informacion Patrimonio
     let codutes = document.getElementById('codutes').value;
-    let codinterno = document.getElementById('codinterno').value;
+    let codservicio = document.getElementById('codservicio').value;
     let tipo = document.getElementById('tipo').value;
     let marca = document.getElementById('marca').value;
     let modelo = document.getElementById('modelo').value;
@@ -205,7 +237,7 @@ function GuardarIngreso() {
         "IdPersonal": idpersonal,
 
         "CodUTES": codutes,
-        "CodInterno": codinterno,
+        "CodServicio": codservicio,
         "tipo_descripcion": tipo,
         "marca_descripcion": marca,
         "Modelo": modelo,
@@ -229,16 +261,13 @@ function GuardarIngreso() {
             processData: false,
             success: function (response) {
                 LoadingOverlay(false);
-
                 if (response.exito) {
                     Alertas('Confirmación', response.mensaje, 'success');
-                    $('#origen').attr({ 'disabled': true });
-                    $('#otroorigen').attr({ 'disabled': true });
-                    $('#observacion').attr({ 'disabled': true });
+                    bloquearFormularioIngreso(true);
                     Limpiar();
                     CargarDetalle();
                 } else {
-                    Alertas('Error', response.mensajeError, 'error');
+                    Alertas('Error', response.mensaje + " " + response.mensajeError, 'error');
                 }
             },
             error: function (xhr) {
@@ -264,7 +293,7 @@ function GuardarIngreso() {
     } else {
         $.ajax({
             type: "put",
-            url: "/api/actualizar_patrimonio/" + ingreso.CodUTES,
+            url: "/api/actualizar_patrimonio/" + $('#codinterno').text(),
             data: JSON.stringify(ingreso),
             dataType: "json",
             contentType: 'application/json',
@@ -274,6 +303,7 @@ function GuardarIngreso() {
 
                 if (response.exito) {
                     Alertas('Confirmación', response.mensaje, 'success');
+                    bloquearFormularioIngreso(true);
                     Limpiar();
                     CargarDetalle();
                 } else {
@@ -282,9 +312,7 @@ function GuardarIngreso() {
             },
             error: function (xhr) {
                 LoadingOverlay(false);
-
                 let errorMsg = 'Error al actualizar el Patrimonio.';
-
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
                     errorMsg = '';
@@ -315,7 +343,10 @@ function Limpiar() {
 
     $('#codutes').attr({ 'disabled': false });
     $('#codutes').val('');
-    $('#codinterno').val('');
+
+    $('#codinterno').text('');
+
+    $('#codservicio').val('');
     $('#servicio').val('');
     $('#tipo').val('');
     $('#marca').val('');
@@ -331,10 +362,10 @@ function Limpiar() {
 }
 
 function Editar(e) {
-    let codutes = $(e).attr('data-codutes');
+    let codinterno = $(e).attr('data-codinterno');
     $.ajax({
         type: "get",
-        url: "/api/informacion_ingresopatrimonio/" + codutes,
+        url: "/api/informacion_ingresopatrimonio/" + codinterno,
         data: false,
         dataType: "json",
         contentType: "application/json",
@@ -347,10 +378,12 @@ function Editar(e) {
                     $('.registro').text('Actualizar');
                 }
 
+                $('#codinterno').text(response._detallepatrimonio['CodInterno']);
                 $('#codutes').attr({ 'disabled': true });
                 $('#codutes').val(response._detallepatrimonio['CodUTES']);
-                $('#codinterno').val(response._detallepatrimonio['CodInterno']);
+                $('#codservicio').val(response._detallepatrimonio['CodServicio']);
                 $('#servicio').val(response._detallepatrimonio['IdServicio']);
+                $('#servicio').attr({ 'disabled': true });
                 $('#tipo').val(response._detallepatrimonio['Tipo']);
                 $('#marca').val(response._detallepatrimonio['Marca']);
                 $('#modelo').val(response._detallepatrimonio['Modelo']);

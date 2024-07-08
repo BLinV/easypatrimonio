@@ -6,13 +6,13 @@ const Alertas = (titulo, texto, icono) => {
     });
 }
 
-const ValidarTexto = (input) => {
+/*const ValidarTexto = (input) => {
     let campo = $(input).val()
     let regex = /^[a-zA-Z]+$/;
     if (!regex.test(campo)) {
         $(input).val($(input).val().substring(0, $(input).val().length - 1));
     }
-}
+}*/
 
 const ValidarNumeros = (input) => {
     let campo = $(input).val()

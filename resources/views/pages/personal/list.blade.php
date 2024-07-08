@@ -28,9 +28,8 @@
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 
-
     <script src="{{ asset('js/personal/personal.js') }}"></script>
-    
+
     <div class="container-fluid">
         <main class="m-4">
             <div class="card">
@@ -47,8 +46,7 @@
                                         <div class="form-group mb-2">
                                             <label for="dni" class="form-label">DNI:</label>
                                             <input type="text" id="dni" name="dni" class="form-control"
-                                                value="" placeholder="Número de 9 digitos." maxlength="8"
-                                                placeholder="Ingrese el n° de identidad"
+                                                value="" maxlength="8" placeholder="Ingrese el N° de identidad"
                                                 onkeyup="return ValidarNumeros(this)">
                                         </div>
                                     </div>
@@ -56,24 +54,22 @@
                                         <div class="form-group mb-2">
                                             <label for="nombre" class="form-label">Nombre:</label>
                                             <input type="text" id="nombre" name="nombre" class="form-control"
-                                                value="" onkeyup="return ValidarTexto(this)"
-                                                placeholder="Ingrese el nombre">
+                                                value="" placeholder="Ingrese el nombre">
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group mb-2">
                                             <label for="apellido" class="form-label">Apellidos:</label>
                                             <input type="text" id="apellido" name="apellido" class="form-control"
-                                                value="" onkeyup="return ValidarTexto(this)"
-                                                placeholder="Ingrese el apellido">
+                                                value="" placeholder="Ingrese el apellido">
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group mb-2">
                                             <label for="celular" class="form-label">Número de Celular:</label>
                                             <input type="text" id="celular" name="celular" class="form-control"
-                                                value="" placeholder="Número de 9 digitos." maxlength="9"
-                                                placeholder="Ingrese el celular" onkeyup="return ValidarNumeros(this)">
+                                                value="" maxlength="9" placeholder="Ingrese el celular"
+                                                onkeyup="return ValidarNumeros(this)">
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">

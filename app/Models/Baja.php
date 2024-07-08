@@ -18,4 +18,11 @@ class Baja extends Model
         'Observacion',
         'IdPersonal'
     ];
+    public static function generarCodigo() // Generar código
+    {
+        do {
+            $code = 'CdB' . substr(strtoupper(uniqid()), 0, 7);
+        } while (self::where('CodigoBaja', $code)->exists());
+        return $code;
+    }
 }

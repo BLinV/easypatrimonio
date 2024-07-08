@@ -10,7 +10,7 @@ class CreateBajasTable extends Migration
     {
         Schema::create('baja', function (Blueprint $table) {
             $table->Increments("IdBaja");
-            $table->string('CodigoBaja', 20)->nullable(false)->unique();
+            $table->string('CodigoBaja', 10)->nullable(false)->unique();
             $table->dateTime("Fecha")->useCurrent();
             $table->string('Observacion', 100)->nullable();
             $table->unsignedInteger('IdPersonal')->nullable(false);

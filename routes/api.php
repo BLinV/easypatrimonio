@@ -34,6 +34,7 @@ Route::delete('/eliminar_personal/{id}',[PersonalController::class,'eliminarPers
 Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
 Route::get('/informacion_ingresodetalle/{id}', [IngresoController::class, 'obtenerIngresoDetalle'])->name('informacion_ingresodetalle');
 Route::get('/informacion_ingreso/{id}', [IngresoController::class, 'obtenerIngreso'])->name('informacion_ingreso');
+Route::get('/generar_codigoingreso', [IngresoController::class, 'generarCodigoInterno'])->name('generar_codigoingreso');
 Route::post('/registrar_ingreso', [IngresoController::class, 'registrarIngreso'])->name('registrar_ingreso');
 Route::put('/actualizar_patrimonio/{id}', [IngresoController::class, 'actualizarPatrimonio'])->name('actualizar_patrimonio');
 Route::get('/informacion_ingresopatrimonio/{id}', [IngresoController::class, 'obtenerPatrimonio'])->name('informacion_ingresopatrimonio');
@@ -42,6 +43,7 @@ Route::get('/informacion_ingresopatrimonio/{id}', [IngresoController::class, 'ob
 Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
 Route::get('/informacion_bajadetalle/{id}', [BajaController::class, 'obtenerBajaDetalle'])->name('informacion_bajadetalle');
 Route::get('/informacion_baja/{id}', [BajaController::class, 'obtenerBaja'])->name('informacion_baja');
+Route::get('/generar_codigobaja', [BajaController::class, 'generarCodigoInterno'])->name('generar_codigobaja');
 Route::get('/informacion_encontrarpatrimonio/{id}', [BajaController::class, 'encontrarPatrimonio'])->name('informacion_encontrarpatrimonio');
 Route::post('/registrar_baja', [BajaController::class, 'registrarBaja'])->name('registrar_baja');
 Route::delete('/remover_bajapatrimonio/{id}', [BajaController::class, 'removerBaja'])->name('remover_bajapatrimonio');

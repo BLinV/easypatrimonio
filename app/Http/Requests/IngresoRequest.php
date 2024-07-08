@@ -14,6 +14,7 @@ class IngresoRequest extends FormRequest
     public function rules()
     {
         return [
+            'NumeroInterno' => 'required|string|size:10',
             'NumeroPecosa' => 'required|string|size:20',
             'IdOrigen' => 'required|integer|exists:origen,IdOrigen',
             'OtroOrigen' => 'nullable|string|max:255',
@@ -38,8 +39,10 @@ class IngresoRequest extends FormRequest
     public function messages()
     {
         return [
+            'NumeroInterno.required' => 'El código Interno es obligatorio.',
+            'NumeroInterno.size' => 'El código Interno debe tener 10 caracteres.',
             'NumeroPecosa.required' => 'El código PECOSA es obligatorio.',
-            'NumeroPecosa.size' => 'El código Numero de Pecosa debe tener 20 caracteres.',
+            'NumeroPecosa.size' => 'El código de Pecosa debe tener 20 caracteres.',
             'tipo_descripcion.max' => 'La descripción no puede tener más de 50 caracteres.',
             'IdOrigen.required' => 'El origen es obligatorio.',
             'OtroOrigen.max' => 'La descripcion de Otro Origen no puede tener más de 255 caracteres.',

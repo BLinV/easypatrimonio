@@ -22,20 +22,13 @@ class Ingreso extends Model
         'IdPersonal'
     ];
 
-    protected static function boot() // Define acciones que se deben tomar cuando el modelo se está inicializando.
-    {
-        parent::boot(); // Asegurar que cualquier comportamiento predeterminado de Eloquent también se ejecute.
-        static::creating(function ($model) { // Antes de crear un registro en BD ejecuta un evento
-            $model->NumeroInterno = self::generarCodigo(); // Asigna el codigo al atributo NumeroInterno
-        });
-    }
-
     public static function generarCodigo() // Generar código
     {
-        $code = 'INT' . substr(strtoupper(uniqid()), 0, 7); // Código con prefijo
-        while (self::where('NumeroInterno', $code)->exists()) { // Verificar si el código ya existe
-            $code = 'INT' . substr(strtoupper(uniqid()), 0, 7);
-        }
+        do {
+            // Código con prefijo, genera un identificador único con los milisegundos, [si uso MD5 lo convierte a un hash
+            // de 32 caracteres, luego a mayusculas], toma los 7 primeros caracteres y alade INT
+            $code = 'NuI' . substr(strtoupper(uniqid()), 0, 7);
+        } while (self::where('NumeroInterno', $code)->exists()); // Verificar si el código ya existe
         return $code;
     }
 }

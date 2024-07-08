@@ -1,9 +1,9 @@
 function IniciarTramite() {
-    let codoficio = document.getElementById('codoficio').value;
-    if (codoficio != "") {
+    let codbaja = document.getElementById('codbaja').value;
+    if (codbaja !== "") {
         $.ajax({
             type: "get",
-            url: `/api/informacion_baja/${codoficio}`,
+            url: `/api/informacion_baja/${codbaja}`,
             dataType: "json",
             success: function (response) {
                 //Validación de campo
@@ -11,13 +11,12 @@ function IniciarTramite() {
                     $('#observacion').text(response._baja.Observacion);
                     CargarDetalle();
                     $('#observacion').attr({ 'disabled': true })
-
                 } else {
                     alert('Se esta registrando un nuevo oficio de baja.');
                     $('#observacion').attr({ 'disabled': false })
                 }
                 $('#btnTramitar').attr({ 'disabled': true })
-                $('#codoficio').attr({ 'disabled': true })
+                $('#codbaja').attr({ 'disabled': true })
 
                 $('#codpatrimonio').attr({ 'disabled': false })
                 $('#btnBuscar').attr({ 'disabled': false })
@@ -26,11 +25,35 @@ function IniciarTramite() {
                 alert('Error al obtener información.');
             }
         });
+    } else {
+        $.ajax({
+            type: "get",
+            url: "/api/generar_codigobaja",
+            dataType: "json",
+            success: function (response) {
+                if (response.exito) {
+                    alert('Se esta registrando un nuevo oficio de baja.');
+                    $('#codbaja').val(response._codigo);
+                    $('#codbaja').attr({ 'disabled': true })
+                    
+                    $('#btnTramitar').attr({ 'disabled': false })
+                    $('#observacion').attr({ 'disabled': false })
+    
+                    $('#codpatrimonio').attr({ 'disabled': false })
+                    $('#btnBuscar').attr({ 'disabled': false })
+                } else {
+                    alert('Error al generar el código: ' + response.mensajeError);
+                }
+            },
+            error: function () {
+                alert('Error al generar el código.');
+            }
+        });
     }
 }
 
 function CargarDetalle() {
-    let codoficio = document.getElementById('codoficio').value;
+    let codbaja = document.getElementById('codbaja').value;
     $('#dt-search-0').addClass('pb-2');
     if (!$.fn.DataTable.isDataTable('#tablaBaja')) {
         datatable = new DataTable('#tablaBaja', {
@@ -40,16 +63,20 @@ function CargarDetalle() {
             'scrollCollapse': true,
             'scroller': true,
             ajax: {
-                url: '/api/informacion_bajadetalle/' + codoficio,
+                url: '/api/informacion_bajadetalle/' + codbaja,
                 type: 'get',
                 dataType: 'json',
                 dataSrc: "_detallebaja"
             },
-            columns: [{
+            columns: [
+            {
+                data: 'CodInterno'
+            },
+            {
                 data: 'CodUTES'
             },
             {
-                data: 'CodInterno'
+                data: 'CodServicio'
             },
             {
                 data: 'Articulo'
@@ -70,7 +97,7 @@ function CargarDetalle() {
                 data: null,
                 render: function (param) {
                     return `<div class="d-flex justify-content-center align-items-center">
-                                <button class="btn btn-warning" type="button" data-codutes="${param['CodUTES']}" onClick="Eliminar(this)">Eliminar</button>
+                                <button class="btn btn-warning" type="button" data-codinterno="${param['CodInterno']}" onClick="Eliminar(this)">Eliminar</button>
                             </div>`
                 }
             }],
@@ -112,8 +139,9 @@ function BuscarPatrimonio() {
         success: function (response) {
             LoadingOverlay(false);
             if (response.exito) {
-                $('#codutes').val(response._detallepatrimonio['CodUTES']);
                 $('#codinterno').val(response._detallepatrimonio['CodInterno']);
+                $('#codutes').val(response._detallepatrimonio['CodUTES']);
+                $('#codservicio').val(response._detallepatrimonio['CodServicio']);
                 $('#servicio').val(response._detallepatrimonio['Servicio']);
                 $('#patrimonio').val(response._detallepatrimonio['Articulo']);
                 $('#categoria').val(response._detallepatrimonio['Categoria']);
@@ -133,7 +161,7 @@ function BuscarPatrimonio() {
             LoadingOverlay(false);
             let errorMsg = 'Error en la validación.';
             if (xhr.status === 422) {
-                let errors = xhr.response.errors;
+                let errors = xhr.responseJSON.errors;
                 errorMsg = '';
                 for (let field in errors) {
                     if (errors.hasOwnProperty(field)) {
@@ -154,24 +182,21 @@ function BuscarPatrimonio() {
 
 function GuardarBaja() {
     // Informacion PECOSA
-    let codoficio = document.getElementById('codoficio').value;
+    let codbaja = document.getElementById('codbaja').value;
     let observacion = document.getElementById('observacion').value;
-    let idpersonal = 1;
+    let idpersonal = 2;
 
     //Informacion Patrimonio
-    let codutes = document.getElementById('codutes').value;
+    let codinterno = document.getElementById('codinterno').value;
     let estado = document.getElementById('estado').value;
     var baja = {
-        "CodigoBaja": codoficio,
+        "CodigoBaja": codbaja,
         "Observacion": observacion,
         "IdPersonal": idpersonal,
 
-        "CodUTES": codutes,
-
+        "CodInterno": codinterno,
         "Estado": estado
     };
-    //Ubicacion
-
     $.ajax({
         type: "post",
         url: "/api/registrar_baja",
@@ -194,12 +219,11 @@ function GuardarBaja() {
             LoadingOverlay(false);
             let errorMsg = 'Error en la validación.';
             if (xhr.status === 422) {
-                let errors = xhr.response.errors;
+                let errors = xhr.responseJSON.errors;
                 errorMsg = '';
                 for (let field in errors) {
                     if (errors.hasOwnProperty(field)) {
                         errorMsg += `${errors[field][0]} `;
-                        console.log(errorMsg);
                     }
                 }
             } else if (xhr.response?.mensajeError) {
@@ -238,7 +262,7 @@ function Limpiar() {
 }
 
 function Eliminar(e) {
-    let codutes = $(e).attr('data-codutes');
+    let codutes = $(e).attr('data-codinterno');
     $.ajax({
         type: "delete",
         url: "/api/remover_bajapatrimonio/" + codutes,
