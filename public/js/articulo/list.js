@@ -205,7 +205,7 @@ function ver(id) {
 
 function GuardarMovimiento() {
     // Informacion PECOSA
-    let codigo = $('#codinterno').text();
+    let codigo = document.getElementById('codInterno').innerText;
     let servicio = document.getElementById('servicio').value;
     let personal = document.getElementById('personal').value;
     let motivo = document.getElementById('motivo').value;
@@ -226,7 +226,6 @@ function GuardarMovimiento() {
         processData: false,
         success: function (response) {
             LoadingOverlay(false);
-
             if (response.exito) {
                 Alertas('Confirmación', response.mensaje, 'success');
                 Limpiar();
@@ -256,9 +255,11 @@ function GuardarMovimiento() {
         }
     });
 }
+
 function Limpiar() {
     $('#servicio').val("");
     $('#personal').val("");
     $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
     $('#personal').attr({ 'disabled': true })
+    $('#motivo').val("");
 }

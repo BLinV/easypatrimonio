@@ -44,7 +44,6 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
-                            <span id="codInterno"> No encontrado. </span>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -74,6 +73,7 @@
                                         <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
                                             <div class="text-center">
                                                 <legend>Información de Movimiento</legend>
+                                                <span id="codInterno"> No encontrado. </span>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="servicio" class="form-label">Servicio:</label>
@@ -102,7 +102,7 @@
                                     <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-6 col-sm-12">
                                         <div class="shadow-sm p-3 mb-5 bg-body rounded">
                                             <div class="text-center">
-                                                <legend>Información de los Movimientos</legend>
+                                                <legend>Historial de Movimientos</legend>
                                             </div>
                                             <div class="row g-3 justify-content-start">
                                                 <div class="table-responsive">

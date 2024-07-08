@@ -52,26 +52,35 @@ class MovimientoController extends Controller
             $Fecha = Carbon::now();
             $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')
                 ->where('CodInterno', '=', $request->CodInterno)
-                ->first();
-            $movimiento = new UbicacionPatrimonio();
-            $movimiento->IdDetallePatrimonio = $idDetallePatrimonio->IdDetallePatrimonio;
-            $movimiento->IdPersonal = $request->IdServicio;
-            $movimiento->IdServicio = $request->IdPersonal;
-            $movimiento->Fecha = $Fecha;
-            $movimiento->Motivo = $request->Motivo;
-            $movimiento->save();
-            DB::commit();
-            return response()->json([
-                'exito' => true,
-                'mensaje' => 'Movimiento registrado correctamente.'
-            ]);
+                ->first()->IdDetallePatrimonio;
+            if ($idDetallePatrimonio) {
+                $movimiento = new UbicacionPatrimonio();
+                $movimiento->IdDetallePatrimonio = $idDetallePatrimonio;
+                $movimiento->IdServicio = $request->IdServicio;
+                $movimiento->IdPersonal = $request->IdPersonal;
+                $movimiento->Fecha = $Fecha;
+                $movimiento->Motivo = $request->Motivo;
+                $movimiento->save();
+                DB::commit();
+                return response()->json([
+                    'exito' => true,
+                    'mensaje' => 'Movimiento registrado correctamente.',
+                    'mensajeError' => ''
+                ]);
+            } else {
+                return response()->json([
+                    'exito' => false,
+                    'mensaje' => '',
+                    'mensajeError' => 'No se encuentra el movimiento.'
+                ]);
+            }
         } catch (Exception $ex) {
             // Transacción: Revertir en caso de error
             DB::rollBack();
             return response()->json([
                 'exito' => false,
-                'mensajeError' => $ex->getMessage(),
-                'mensaje' => 'Error al registrar el movimiento.'
+                'mensaje' => 'Error al registrar el movimiento.',
+                'mensajeError' => $ex->getMessage()
             ]);
         }
     }
