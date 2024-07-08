@@ -93,6 +93,15 @@
                     </div>
                 </div>
             @endif
+            @if ($vista['estado'])
+                <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-12">
+                    <div class="form-group mb-2">
+                        <label for="estado" class="form-label">Estado:</label>
+                        <textarea type="text" id="estado" name="estado" class="form-control" style="resize: none;" value=""
+                            placeholder="Máximo 250 caracteres."></textarea>
+                    </div>
+                </div>
+            @endif
             <div
                 class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center align-items-center">
                 <div class="d-grid gap-2">

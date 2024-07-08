@@ -9,22 +9,181 @@ document.addEventListener('DOMContentLoaded', function () {
             otroOrigenContainer.style.display = 'none';
         }
     });
-});
 
-let listapatrimonios = []
+    const servicioSelect = document.getElementById('servicio');
+    servicioSelect.addEventListener('change', function () {
+        if (servicioSelect.value == "") {
+            $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
+        } else {
+            $.ajax({
+                type: "get",
+                url: "/api/informacion_personalBuscar/" + servicioSelect.value,
+                data: false,
+                dataType: "json",
+                contentType: "application/json",
+                processData: false,
+                success: function (response) {
+                    if (response.exito) {
+                        let personal = `<option value="">.: Seleccionar :.</option>`
+                        let maxIdPersonal = null;
+                        if (response._personal.length > 0) {
+                            maxIdPersonal = response._personal.reduce((max, element) =>
+                                element.IdPersonal > max ? element.IdPersonal : max, response._personal[0].IdPersonal);
+                            response._personal.forEach(element => {
+                                personal += `<option value=${element.IdPersonal}>${element.Personal}</option>`
+                            });
+                        }
+                        $('#personal').html(personal);
+                        $('#personal').attr({ 'disabled': false })
+                        if (maxIdPersonal !== null) {
+                            $('#personal').val(maxIdPersonal);
+                        }
+                    }
+                }
+            });
+        }
+    });
+});
 
 function obtenerTextoOption(selectId, value) {
     const select = document.getElementById(selectId);
     const options = select.options;
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].value === value) {
-            return options[i].text;
+    for (const element of options) {
+        if (element.value === value) {
+            return element.text;
         }
     }
     return null;
 }
 
-function agregarPatrimonio() {
+function IniciarTramite() {
+    let numeropecosa = document.getElementById('numeropecosa').value;
+    if (numeropecosa != "") {
+        $.ajax({
+            type: "get",
+            url: `/api/informacion_ingreso/${numeropecosa}`,
+            dataType: "json",
+            success: function (response) {
+                //Validación de campo
+                if (response._ingreso != null) {
+                    $('#origen').val(response._ingreso.IdOrigen);
+                    $('#otroorigen').text(response._ingreso.OtroOrigen);
+                    $('#observacion').text(response._ingreso.Observacion);
+                    CargarDetalle();
+                    $('#origen').attr({ 'disabled': true })
+                    $('#otroorigen').attr({ 'disabled': true })
+                    $('#observacion').attr({ 'disabled': true })
+
+                } else {
+                    alert('Se esta ingresando una nueva PECOSA.');
+                    $('#origen').attr({ 'disabled': false })
+                    $('#otroorigen').attr({ 'disabled': false })
+                    $('#observacion').attr({ 'disabled': false })
+                }
+                $('#btnTramitar').attr({ 'disabled': true })
+                $('#numeropecosa').attr({ 'disabled': true })
+
+                $('#codutes').attr({ 'disabled': false })
+                $('#codinterno').attr({ 'disabled': false })
+                $('#servicio').attr({ 'disabled': false })
+                $('#tipo').attr({ 'disabled': false })
+                $('#marca').attr({ 'disabled': false })
+                $('#modelo').attr({ 'disabled': false })
+                $('#categoria').attr({ 'disabled': false })
+                $('#comentario').attr({ 'disabled': false })
+                $('#estado').attr({ 'disabled': false })
+                $('.registro').attr({ 'disabled': false })
+            },
+            error: function () {
+                alert('Error al obtener información.');
+            }
+        });
+    }
+}
+
+function CargarDetalle() {
+    let numeropecosa = document.getElementById('numeropecosa').value;
+    $('#dt-search-0').addClass('pb-2');
+    if (!$.fn.DataTable.isDataTable('#tablaIngreso')) {
+        datatable = new DataTable('#tablaIngreso', {
+            'responsive': true,
+            'lengthChange': false,
+            'autoWidth': false,
+            'scrollCollapse': true,
+            'scroller': true,
+            ajax: {
+                url: '/api/informacion_ingresodetalle/' + numeropecosa,
+                type: 'get',
+                dataType: 'json',
+                dataSrc: "_detalleingreso"
+            },
+            columns: [{
+                data: 'CodUTES'
+            },
+            {
+                data: 'CodInterno'
+            },
+            {
+                data: 'Articulo'
+            },
+            {
+                data: 'Descripcion'
+            },
+            {
+                data: 'Estado'
+            },
+            {
+                data: 'Servicio'
+            },
+            {
+                data: 'Categoria'
+            },
+            {
+                data: null,
+                render: function (param) {
+                    return `<div class="d-flex justify-content-center align-items-center">
+                                <button class="btn btn-info" type="button" data-codutes="${param['CodUTES']}" onClick="Editar(this)">Editar</button>
+                            </div>`
+                }
+            }],
+            dom: 'Bfrtip',
+            buttons: ['excel', 'pdf'],
+            pageLength: 10,
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    } else {
+        datatable.ajax.reload();
+    }
+}
+
+function GuardarIngreso() {
+    // Informacion PECOSA
+    let numeropecosa = document.getElementById('numeropecosa').value;
+    let origen = document.getElementById('origen').value;
+    let otroorigen = document.getElementById('otroorigen').value;
+    let observacion = document.getElementById('observacion').value;
+    let idpersonal = 1;
+
+    //Informacion Patrimonio
     let codutes = document.getElementById('codutes').value;
     let codinterno = document.getElementById('codinterno').value;
     let tipo = document.getElementById('tipo').value;
@@ -33,132 +192,181 @@ function agregarPatrimonio() {
     let categoria_id = document.getElementById('categoria').value;
     let servicio_id = document.getElementById('servicio').value;
     let comentario = document.getElementById('comentario').value;
-    let operativo = 1;
+    let estado = document.getElementById('estado').value;
 
-    const servicio = obtenerTextoOption('servicio', servicio_id);
-    const categoria = obtenerTextoOption('categoria', categoria_id);
-    
-                let ubicacion = document.getElementById('servicio').value;
-    let detallePatrimonio = {
+    let idencargado = document.getElementById('personal').value;
+    let motivo = "Registrado";
+
+    var ingreso = {
+        "NumeroPecosa": numeropecosa,
+        "IdOrigen": origen,
+        "OtroOrigen": otroorigen,
+        "Observacion": observacion,
+        "IdPersonal": idpersonal,
+
         "CodUTES": codutes,
         "CodInterno": codinterno,
         "tipo_descripcion": tipo,
         "marca_descripcion": marca,
-        "modelo": modelo,
+        "Modelo": modelo,
         "Descripcion": comentario,
         "IdCategoria": categoria_id,
         "IdServicio": servicio_id,
-        "Operativo": operativo
-    };
 
-    listapatrimonios.push(detallePatrimonio);
-    mostrarPatrimonios();
-    limpiarPatrimonio();
+        "Estado": estado,
+        "IdEncargado": idencargado,
+        "Motivo": motivo
+    };
+    //Ubicacion
+
+    if ($('#metodoFormulario').val() == 'POST') {
         $.ajax({
-            type: "get",
-            url: "/api/verificar_patrimonio",
-            data: JSON.stringify(detallePatrimonio),
+            type: "post",
+            url: "/api/registrar_ingreso",
+            data: JSON.stringify(ingreso),
             dataType: "json",
             contentType: "application/json",
             processData: false,
-            success: function(response) {
-                LoadingOverlay(false)
+            success: function (response) {
+                LoadingOverlay(false);
 
                 if (response.exito) {
-                    Alertas('Confirmación', response.mensaje, 'success')
-                    mostrarPatrimonios();
-                    limpiarPatrimonio();
-
+                    Alertas('Confirmación', response.mensaje, 'success');
+                    $('#origen').attr({ 'disabled': true });
+                    $('#otroorigen').attr({ 'disabled': true });
+                    $('#observacion').attr({ 'disabled': true });
+                    Limpiar();
+                    CargarDetalle();
                 } else {
-                    Alertas('Error', response.mensajeError, 'error')
+                    Alertas('Error', response.mensajeError, 'error');
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 LoadingOverlay(false);
                 let errorMsg = 'Error en la validación.';
-                console.log('xhr.response')
-                console.log(xhr.response)
                 if (xhr.status === 422) {
-                    let errors = xhr.response.errors;
+                    let errors = xhr.responseJSON.errors;
                     errorMsg = '';
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
                             errorMsg += `${errors[field][0]} `;
-                            console.log(errorMsg);
                         }
                     }
                 } else if (xhr.response?.mensajeError) {
                     errorMsg = xhr.response.mensajeError;
                 }
-                
                 Alertas('Error', errorMsg, 'error');
             },
             beforeSend: function () {
-                LoadingOverlay(true)
+                LoadingOverlay(true);
             }
         });
-}
+    } else {
+        $.ajax({
+            type: "put",
+            url: "/api/actualizar_patrimonio/" + ingreso.CodUTES,
+            data: JSON.stringify(ingreso),
+            dataType: "json",
+            contentType: 'application/json',
+            processData: false,
+            success: function (response) {
+                LoadingOverlay(false);
 
-function mostrarPatrimonios() {
-    const tbody = document.querySelector('#tablaIngreso tbody');
-    tbody.innerHTML = '';
-    if (listapatrimonios.length > 0) {
-        listapatrimonios.forEach((detallePatrimonio, index) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-            <td>${detallePatrimonio.CodUTES}</td>
-            <td>${detallePatrimonio.CodInterno}</td>
-            <td>${detallePatrimonio.tipo_descripcion} ${detallePatrimonio.marca_descripcion} ${detallePatrimonio.modelo}</td>
-            <td>${detallePatrimonio.Descripcion}</td>
-            <td>${detallePatrimonio.IdCategoria}</td>
-            <td>${detallePatrimonio.IdServicio}</td>
-            <td>
-                <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button"
-                    id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
-                    Acciones
-                </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                        <li><a class="dropdown-item" onclick="modificarPatrimonio(${index})">Modificar</a></li>
-                        <li><a class="dropdown-item" onclick="eliminarPatrimonio(${index})">Eliminar</a></li>
-                    </ul>
-                </div>
-            </td>`;
-            tbody.appendChild(tr);
+                if (response.exito) {
+                    Alertas('Confirmación', response.mensaje, 'success');
+                    Limpiar();
+                    CargarDetalle();
+                } else {
+                    Alertas('Error', response.mensajeError, 'error');
+                }
+            },
+            error: function (xhr) {
+                LoadingOverlay(false);
+
+                let errorMsg = 'Error al actualizar el Patrimonio.';
+
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `${errors[field][0]}`;
+                        }
+                    }
+                } else if (xhr.responseJSON?.mensajeError) {
+                    errorMsg = xhr.responseJSON.mensajeError;
+                }
+                Alertas('Error', errorMsg, 'error');
+            },
+            beforeSend: function () {
+                LoadingOverlay(true);
+            }
         });
     }
-    //   <button type="button" class="btn btn-danger" onclick="eliminarPatrimonio(${index})">Eliminar</button>
 }
 
+function Limpiar() {
+    if ($('.registro').hasClass('btn-warning')) {
+        $('.registro').removeClass('btn-warning');
+        $('.registro').addClass('btn-primary');
+        $('.registro').text('Registrar');
+    }
+    $('#metodoFormulario').val('POST');
 
-function limpiarPatrimonio() {
-    //$('#dni').attr({ 'disabled': false })
-    $('#codutes').val('')
-    $('#codinterno').val('')
-    $('#tipo').val('')
-    $('#marca').val('')
-    $('#modelo').val('')
-    $('#patrimonio').val('')
-    $('#comentario').val('')
-    $('#categoria').val('')
-    $('#servicio').val('')
+    $('#codutes').attr({ 'disabled': false });
+    $('#codutes').val('');
+    $('#codinterno').val('');
+    $('#servicio').val('');
+    $('#tipo').val('');
+    $('#marca').val('');
+    $('#modelo').val('');
+    $('#patrimonio').val('');
+    $('#categoria').val('');
+    $('#comentario').val('');
+    $('#estado').val('');
+
+    $('#personal').val('');
+    $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
+    $('#personal').attr({ 'disabled': true });
 }
 
-function eliminarPatrimonio(index) {
-    listapatrimonios.splice(index, 1);
-    mostrarPatrimonios();
-}
+function Editar(e) {
+    let codutes = $(e).attr('data-codutes');
+    $.ajax({
+        type: "get",
+        url: "/api/informacion_ingresopatrimonio/" + codutes,
+        data: false,
+        dataType: "json",
+        contentType: "application/json",
+        processData: false,
+        success: function (response) {
+            if (response.exito) {
+                if ($('.registro').hasClass('btn-primary')) {
+                    $('.registro').removeClass('btn-primary');
+                    $('.registro').addClass('btn-warning');
+                    $('.registro').text('Actualizar');
+                }
 
-function modificarPatrimonio(index) {
-    $('#codutes').val(listapatrimonios[index].codutes)
-    $('#codinterno').val(listapatrimonios[index].codinterno)
-    $('#tipo').val(listapatrimonios[index].tipo)
-    $('#marca').val(listapatrimonios[index].marca)
-    $('#modelo').val(listapatrimonios[index].modelo)
-    $('#patrimonio').val(listapatrimonios[index].tipo + " "+ listapatrimonios[index].marca + " " + listapatrimonios[index].modelo)
-    $('#comentario').val(listapatrimonios[index].comentario)
-    $('#categoria').val(listapatrimonios[index].categoria_id)
-    $('#servicio').val(listapatrimonios[index].servicio_id)
-    listapatrimonios.splice(index, 1);
-    mostrarPatrimonios();
+                $('#codutes').attr({ 'disabled': true });
+                $('#codutes').val(response._detallepatrimonio['CodUTES']);
+                $('#codinterno').val(response._detallepatrimonio['CodInterno']);
+                $('#servicio').val(response._detallepatrimonio['IdServicio']);
+                $('#tipo').val(response._detallepatrimonio['Tipo']);
+                $('#marca').val(response._detallepatrimonio['Marca']);
+                $('#modelo').val(response._detallepatrimonio['Modelo']);
+                $('#patrimonio').val(response._detallepatrimonio['Articulo']);
+                $('#categoria').val(response._detallepatrimonio['IdCategoria']);
+                $('#comentario').val(response._detallepatrimonio['Descripcion']);
+                $('#estado').val(response._detallepatrimonio['estado']);
+                $('#metodoFormulario').val('PUT');
+
+            } else {
+                Alertas('Error', response.mensajeError, 'error');
+            }
+        }, error: function (error) {
+            Alertas('Error', error, 'error');
+        }, before: function () {
+            LoadingOverlay(true);
+        }
+    });
 }

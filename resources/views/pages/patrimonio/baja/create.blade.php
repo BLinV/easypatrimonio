@@ -1,102 +1,187 @@
 @extends('layouts.app')
-@section('title','Sistema de Control Patrimonial - Baja de Patrimonio')
+@section('title', 'Sistema de Control Patrimonial - Baja de Patrimonio')
 @section('content')
-<script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
-<div class="container">
-    <main>
-        <div class="shadow p-3 mb-5 bg-body rounded">
-            <h1>Baja de Patrimonio</h1>
-            <legend>Información del Cargo</legend>
-            <form action="javascrip:void(0)" method="POST" enctype="multipart/form-data" autocomplete="off">
-                <div class="row g-2 justify-content-start">
-                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-12">
-                        <div class="form-group mb-2">
-                            <label for="codoficio" class="form-label">Código de Cargo:</label>
-                            <input type="text" id="codoficio" name="codoficio" class="form-control" value="">
-                        </div>
-                    </div>
-                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-12">
-                        <div class="form-group mb-2">
-                            <label for="codpatrimonio" class="form-label">Buscar patrimonio:</label>
-                            <input type="text" id="codpatrimonio" name="codpatrimonio" class="form-control" value="" placeholder="Código UTES o Interno">
-                        </div>
-                    </div>
-                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                        </div>
-                    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.min.css">
+
+    <!-- Crear, leer y editar archivos ZIP, permitir exportación de tabla a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Crear PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <!-- Fuentes para el PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- Integrar estilos de Bootstrap a DataTable - declaración de DataTable("", {})-->
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Funcionalidad de botones, como exportar en pdf o excel -->
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.min.js"></script>
+    <!-- Adaptador de estilo con Bootstrap -->
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.bootstrap5.min.js"></script>
+    <!-- Mostrar y ocultar columnas específicas de tabla -->
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+    <!-- Exportar tabla en diferentes formatos -->
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+    <!-- Imprimir tabla -->
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+    <!-- Soporte para tabla responsiva -->
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+
+
+    <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
+
+    <div class="container-fluid">
+        <main class="m-3">
+
+            <div class="card">
+
+                <div class="card-header bg-white">
+                    <h1>Formulario de Registro de Baja de Patrimonio</h1>
                 </div>
-                @include('pages.shared.articulo',['vista'=>['articulo'=>true, 'operativo'=>false, 'ubicacion'=>false, 'comentario'=>true, 'boton'=>'Añadir']])
-                <hr/>
-                <!-- Tabla de informacion -->
-                <div class="table-response">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Código UTES</th>
-                                <th>Código Interno</th>
-                                <th>Patrimonio</th>
-                                <th>Comentario</th>
-                                <th>Categoría</th>
-                                <th>Operativo</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>123456789ABC</td>
-                                <td>123456789ABC</td>
-                                <td>Monitor HP 1800px</td>
-                                <td>Parpadea</td>
-                                <td>Computadoras</td>
-                                <td>Operativo</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-info dropdown-toggle" type="button"
-                                            id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Acciones
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                            <li><a class="dropdown-item" href="#">Ver</a></li>
-                                            <li><a class="dropdown-item" href="{{ url('/Patrimonio') }}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                        </ul>
+                <div class="card-body">
+
+                    <form action="javascript:void(0)" method="post" enctype="multipart/form-data" autocomplete="off"
+                        onsubmit="return GuardarBaja()">
+                        <div class="row g-2 justify-content-start">
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
+                                    <div class="text-center">
+                                        <legend>Información del Cargo</legend>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>223456789ABC</td>
-                                <td>123456789ABC</td>
-                                <td>Esfigmomanómetro aneroide</td>
-                                <td>Dañado</td>
-                                <td>Equipo medico</td>
-                                <td>No Operativo</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-info dropdown-toggle" type="button"
-                                            id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Acciones
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                            <li><a class="dropdown-item" href="#">Ver</a></li>
-                                            <li><a class="dropdown-item" href="{{ url('/Patrimonio') }}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                        </ul>
+                                    <div class="form-group mb-2">
+                                        <label for="codoficio" class="form-label">Código de Cargo:</label>
+                                        <input type="text" id="codoficio" name="codoficio" class="form-control"
+                                            value="" placeholder="Código de 20 dígitos." maxlength="20">
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="9">No se encontraron registros.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <div class="form-group mb-2">
+                                        <div class="form-group mb-2">
+                                            <label for="observacion" class="form-label">Observacion de la baja:</label>
+                                            <textarea type="text" id="observacion" name="observacion" class="form-control" style="resize: none;" value=""
+                                                placeholder="Máximo 250 caracteres." disabled></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="button" id = "btnTramitar" class="btn btn-danger me-2"
+                                            onclick="IniciarTramite()">Documentar Baja</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
+                                    <div class="text-center">
+                                        <legend>Buscar Patrimonio</legend>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="codpatrimonio" class="form-label">Buscar patrimonio:</label>
+                                        <input type="text" id="codpatrimonio" name="codpatrimonio" class="form-control"
+                                            value="" placeholder="Código UTES o Interno" disabled>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="button" id = "btnBuscar" class="btn btn-danger me-2"
+                                            onclick="BuscarPatrimonio()" disabled>Buscar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-6 col-sm-12">
+                                <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                                    <div class="text-center">
+                                        <legend>Información de Patrimonio</legend>
+                                    </div>
+                                    <div class="row g-3 justify-content-start">
+                                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="codutes" class="form-label">Código UTES:</label>
+                                                <input type="text" id="codutes" name="codutes" class="form-control"
+                                                    value="" placeholder="" maxlength="12" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="codinterno" class="form-label">Código Interno:</label>
+                                                <input type="text" id="codinterno" name="codinterno" class="form-control"
+                                                    value="" placeholder="" maxlength="12" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="servicio" class="form-label">Servicio:</label>
+                                                <input type="text" id="servicio" name="servicio" class="form-control"
+                                                    value="" placeholder="" disabled>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group mb-2">
+                                                <label for="patrimonio" class="form-label">Articulo: </label>
+                                                <input type="text" id="patrimonio" name="patrimonio"
+                                                    class="form-control" value="" placeholder="" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="categoria" class="form-label">Categoría:</label>
+                                                <input type="text" id="categoria" name="categoria"
+                                                    class="form-control" value="" placeholder="" disabled>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="comentario" class="form-label">Características del
+                                                    Patrimonio:</label>
+                                                <textarea type="text" id="comentario" name="comentario" class="form-control" style="resize: none;"
+                                                    value="" placeholder="" disabled></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <div class="form-group mb-2">
+                                            <label for="estado" class="form-label">Información anexa sobre la baja del
+                                                patrimonio:</label>
+                                            <textarea type="text" id="estado" name="estado" class="form-control" style="resize: none;" value=""
+                                                placeholder="" disabled></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class=" mb-5 mt-2">
+                                        <div class="float-end mb-2">
+                                            <button type="submit" class="registro btn btn-primary" id="btnFormulario"
+                                                disabled>Registrar</button>
+                                        </div>
+                                        <div class="float-end mb-2">
+                                            <button type="button" id="btnLimpiar" class="btn btn-primary" onclick="Limpiar()"
+                                                disabled>Limpiar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="tablaBaja">
+                            <thead>
+                                <tr>
+                                    <th>Código UTES</th>
+                                    <th>Código Interno</th>
+                                    <th>Patrimonio</th>
+                                    <th>Caracteristicas</th>
+                                    <th>Información Anexa</th>
+                                    <th>Servicio</th>
+                                    <th>Categoría</th>
+                                    <th>Opciones</th> <!-- Eliminar vuelve a poner el patrimonio (baja = false) -->
+                                </tr>
+                            </thead>
+                        </table>
+                        <script src="{{ asset('js/baja/formulario.js') }}"></script>
+                    </div>
                 </div>
-                <div class="d-grid gap-2  d-flex justify-content-end align-items-center">
-                    <button type="submit" class="btn btn-primary btn-block">Registrar</button>
-                </div>
-            </form>
-        </div>
-    </main>
-</div>
+            </div>
+        </main>
+    </div>
 @endsection

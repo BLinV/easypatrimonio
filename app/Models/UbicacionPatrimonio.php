@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class UbicacionPatrimonio extends Model
 {
     protected $primaryKey = "IdUbicacionPatrimonio";
-    protected $guarded = [];
     protected $table="ubicacionpatrimonio";
+
+    protected $fillable = [
+        'IdDetallePatrimonio',
+        'IdPersonal',
+        'IdServicio',
+        'Fecha',
+        'Motivo'
+    ];
+
     use HasFactory;
 }

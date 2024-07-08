@@ -7,17 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Baja extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = "IdBaja";
+    protected $table = "baja";
 
     protected $fillable = [
-        'IdBaja',
         'CodigoBaja',
         'Fecha',
         'Observacion',
         'IdPersonal'
     ];
-
-    protected $guarded = [];
-    protected $table = "baja";
-    use HasFactory;
 }

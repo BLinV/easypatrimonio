@@ -111,7 +111,7 @@ class PersonalController extends Controller
             $condicion = $request->condicion;
             $servicio = $request->servicio;
 
-            $persona = Personal::select('IdPersonal')->where('Dni', '=', $dni)->get();
+            $persona = Personal::select('IdPersonal')->where('Dni', '=', $dni)->first();
 
             if ($persona) {
             } else {

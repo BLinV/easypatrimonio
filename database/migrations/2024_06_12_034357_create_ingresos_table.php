@@ -10,11 +10,12 @@ class CreateIngresosTable extends Migration
     {
         Schema::create('ingreso', function (Blueprint $table) {
             $table->Increments("IdIngreso");
-            $table->string('NumeroPecosa', 20)->nullable(false)->unique();
+            $table->char('NumeroInterno', 10)->nullable()->unique();
+            $table->varchar('NumeroPecosa', 20)->nullable()->unique();
             $table->dateTime("Fecha")->useCurrent();
             $table->unsignedInteger('IdOrigen')->nullable(false);
-            $table->string('OtroOrigen')->nullable(true);
-            $table->string('Observacion', 100)->nullable();
+            $table->string('OtroOrigen', 100)->nullable(true);
+            $table->string('Observacion')->nullable();
             $table->unsignedInteger('IdPersonal')->nullable(false);
             $table->foreign('IdOrigen')->references('IdOrigen')->on('origen');
             $table->foreign('IdPersonal')->references('IdPersonal')->on('personal');

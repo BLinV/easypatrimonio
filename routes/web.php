@@ -18,4 +18,3 @@ Route::resource('Personal', PersonalController::class)->names('personal');
 Route::resource('Patrimonio', PatrimonioController::class)->names('patrimonio');
 Route::resource('Ingresos', IngresoController::class)->names('ingresos');
 Route::resource('Bajas', BajaController::class)->names('bajas');
-Route::resource('Movimientos', MovimientoController::class)->names('movimientos');

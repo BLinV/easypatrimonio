@@ -1,8 +1,6 @@
 /*Todo lo llena el metodo ListarPersonal()
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
-let datatable
-
 
 function listarPersonal() {
     $.ajax({
@@ -30,13 +28,10 @@ function listarPersonal() {
                 }
                 $('#condicion').html(condicion);
 
-                /*Todo lo llena el metodo ListarPersonal()
-                Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML e inyecta a Tabla(ID)*/
             }
         }
     });
 }
-
 listarPersonal()
 
 function Eliminar(e) {
@@ -126,7 +121,6 @@ function Ver(e) {
                                 Servicio: ${element['Servicio']} <br/>
                                 Estado: ${element['Esatado'] = 1 ? 'Activo' : 'Inactivo'}
                                 `
-
                         Alertas('Información', informacion, 'info')
                     });
                 }

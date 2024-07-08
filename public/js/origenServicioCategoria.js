@@ -7,8 +7,7 @@ function listarDatos() {
         contentType: "application/json",
         processData: false,
         success: function (response) {
-            console.log(response)
-            if(response.exito){
+            if (response.exito) {
                 let origen = `<option value="">.: Seleccionar :.</option>`
                 if (response._origen.length > 0) {
                     response._origen.forEach(element => {
@@ -16,7 +15,7 @@ function listarDatos() {
                     });
                 }
                 $('#origen').html(origen);
-                
+
                 let categoria = `<option value="">.: Seleccionar :.</option>`
                 if (response._categoria.length > 0) {
                     response._categoria.forEach(element => {
@@ -24,7 +23,7 @@ function listarDatos() {
                     });
                 }
                 $('#categoria').html(categoria);
-                
+
                 let servicio = `<option value="">.: Seleccionar :.</option>`
                 if (response._servicio.length > 0) {
                     response._servicio.forEach(element => {
@@ -36,5 +35,5 @@ function listarDatos() {
             }
         }
     });
-  }
+}
 listarDatos();

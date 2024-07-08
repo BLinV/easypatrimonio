@@ -23,8 +23,8 @@ class PatrimonioRequest extends FormRequest
             'CodUTES' => 'required|string|size:12|unique:detallepatrimonio,CodUTES',
             'CodInterno' => 'nullable|string|max:12|unique:detallepatrimonio,CodInterno',
             'Descripcion' => 'required|string|max:250',
-            'Operativo' => 'required|boolean',
-            'Baja' => 'required|boolean',
+            'Operativo' => 'boolean',
+            'Baja' => 'boolean',
             'IdServicio' => 'required|integer|exists:servicio,IdServicio',
         ];
     }
@@ -47,8 +47,6 @@ class PatrimonioRequest extends FormRequest
             'CodInterno.unique' => 'El código interno ya está registrado.',
             'Descripcion.required' => 'La descripción es obligatoria.',
             'Descripcion.max' => 'La descripción no puede tener más de 250 caracteres.',
-            'Operativo.required' => 'El campo operativo es obligatorio.',
-            'Baja.required' => 'El campo baja es obligatorio.',
             'IdServicio.required' => 'El campo de servicio es obligatorio.',
             'IdServicio.exists' => 'El servicio seleccionado no es válido.'
         ];

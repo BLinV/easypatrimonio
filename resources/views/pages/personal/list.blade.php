@@ -29,8 +29,6 @@
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 
 
-
-
     <script src="{{ asset('js/personal/personal.js') }}"></script>
     
     <div class="container-fluid">
@@ -95,8 +93,7 @@
                                     <div class="d-flex float-end">
                                         <button type="button" class="btn btn-danger me-2"
                                             onclick="Limpiar()">Limpiar</button>
-                                        <button type="submit" class="registro btn btn-primary"
-                                            onsubmit="GuardarPersona()">Registrar</button>
+                                        <button type="submit" class="registro btn btn-primary">Registrar</button>
                                     </div>
                                 </div>
                             </form>
@@ -118,7 +115,6 @@
                                             </tr>
                                         </thead>
                                     </table>
-
                                     <script src="{{ asset('js/personal/datatable.js') }}"></script>
                                 </div>
                             </div>

@@ -6,9 +6,7 @@
         LoadingOverlay(false)
     </script>
 
-    <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
     <script src="{{ asset('js/movimiento/movimiento.js') }}"></script>
-    <script src="{{ asset('js/buscador.js') }}"></script>
 
     <div class="container">
         <div class="modal fade" id="verMovimiento" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -33,11 +31,6 @@
                 </div>
                 <div class="card-body">
                     <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
-                        <div class="m-1 px-5 pb-1 pt-2">
-                            <label for="buscador" class="form-label">Buscar en lista:</label>
-                            <input type="text" id="buscador" name="buscador" class="form-control" value=""
-                                placeholder="Buscar Patrimonio por CODIGO, ARTICULO, CATEGORIA o SERVICIO..." data-table="#tablaMovimiento">
-                        </div>
                         <button type="submit" class="btn btn-primary btn-block">Buscar</button>
                     </div>
                     <!-- Tabla de informacion -->

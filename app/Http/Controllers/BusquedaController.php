@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Origen;
+use App\Models\Personal;
 use App\Models\Servicio;
 use App\Models\Tipo;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -48,6 +50,30 @@ class BusquedaController extends Controller
                 '_origen' => $origen,
                 '_categoria' => $categoria,
                 '_servicio' => $servicio,
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'exito' => false,
+                'mensajeError' => $ex->getMessage(),
+                'mensaje' => ''
+            ]);
+        }
+    }
+
+    public function informacionPersonal($IdServicio)
+    {
+        try {
+            $personal = Personal::select(
+                'IdPersonal',
+                DB::raw("CONCAT(`Nombres`, ' ', `Apellidos`) AS Personal")
+            )
+                ->where('IdServicio', $IdServicio)
+                ->orderBy('Personal', 'asc')->get();
+            return response()->json([
+                'exito' => true,
+                'mensajeError' => '',
+                'mensaje' => '',
+                '_personal' => $personal,
             ]);
         } catch (Exception $ex) {
             return response()->json([

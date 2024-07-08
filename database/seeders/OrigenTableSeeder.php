@@ -15,13 +15,10 @@ class OrigenTableSeeder extends Seeder
     public function run()
     {
         DB::Table('origen')->insert([
-            ['Descripcion'=>'RDR - RECURSOS DIRECTAMENTE RECAUDADOS'],
-            ['Descripcion'=>'RO - RECURSOS ORDINARIOS'],
-            ['Descripcion'=>'DIT - DONACIONES Y TRANSFERENCIAS'],
-            ['Descripcion'=>'OTROS'],
-            ['Descripcion'=>'UTES'],
-            ['Descripcion'=>'CAJA CHICA'],
-            ['Descripcion'=>'DONACIONES']
+            ['Descripcion'=>'UTES - RDR - RECURSOS DIRECTAMENTE RECAUDADOS'],
+            ['Descripcion'=>'UTES - RO - RECURSOS ORDINARIOS'],
+            ['Descripcion'=>'UTES - DIT - DONACIONES Y TRANSFERENCIAS'],
+            ['Descripcion'=>'OTRO - [CAJA CHICA, DONACIONES, ETC]']
         ]);
     }
 }

@@ -13,24 +13,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/informacion_origenserviciocategoria', [BusquedaController::class, 'informacionOrSerCat'])->name('informacion_origenserviciocategoria');
 Route::get('/informacion_tipoBuscar', [BusquedaController::class, 'autocompletarTipo'])->name('informacion_tipoBuscar');
 Route::get('/informacion_marcaBuscar', [BusquedaController::class, 'autocompletarMarca'])->name('informacion_marcaBuscar');
+Route::get('/informacion_personalBuscar/{id}', [BusquedaController::class, 'informacionPersonal'])->name('informacion_personalBuscar');
 
-
-//Reportes
+//Patrimonio
 Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'informacionPatrimonioReporte'])->name('informacion_patrimonioreporte');
-Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
-Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
-Route::get('/informacion_movimientoreporte', [PatrimonioController::class, 'informacionMovimientoReporte'])->name('informacion_movimientoreporte');
-
-
-//Registros
+Route::get('/informacion_detallepatrimonioreporte/{id}', [PatrimonioController::class,'informacionDetallePatrimonio'])->name('informacion_detallepatrimonioreporte');
 Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatrimonio'])->name('registrar_patrimonio');
+//Movimientos
+Route::get('/registrar_movimiento', [MovimientoController::class, 'registrarMovimiento'])->name('registrar_movimiento');
 
-Route::post('/registrar_ingreso', [PatrimonioController::class, 'registrarIngreso'])->name('registrar_ingreso');
-Route::get('/verificar_patrimonio', [PatrimonioController::class, 'verificarPatrimonio'])->name('verificar_patrimonio');
-
-//Buscar Informacion
-Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
-Route::get('/detalle_patrimonio/{id}', [PatrimonioController::class, 'obtenerDetallePatrimonio']);
 Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoReporte']);
 
 // Personal
@@ -38,7 +29,25 @@ Route::get('/informacion_personal', [PersonalController::class,'informacionPerso
 Route::post('/registrar_personal',[PersonalController::class,'registrarPersonal'])->name('registrar_personal');
 Route::get('/buscar_personal/{id}',[PersonalController::class,'verPersonal'])->name('verPersonal');
 Route::put('/actualizar_personal/{id}',[PersonalController::class,'actualizarPersonal'])->name('actualizarPersonal');
-Route::delete('eliminar_personal/{id}',[PersonalController::class,'eliminarPersonal'])->name('eliminarPersonal');
+Route::delete('/eliminar_personal/{id}',[PersonalController::class,'eliminarPersonal'])->name('eliminarPersonal');
+
+//Ingreso
+Route::get('/informacion_ingresoreporte', [IngresoController::class, 'informacionIngresoReporte'])->name('informacion_ingresoreporte');
+Route::get('/informacion_ingresodetalle/{id}', [IngresoController::class, 'obtenerIngresoDetalle'])->name('informacion_ingresodetalle');
+Route::get('/informacion_ingreso/{id}', [IngresoController::class, 'obtenerIngreso'])->name('informacion_ingreso');
+Route::post('/registrar_ingreso', [IngresoController::class, 'registrarIngreso'])->name('registrar_ingreso');
+Route::put('/actualizar_patrimonio/{id}', [IngresoController::class, 'actualizarPatrimonio'])->name('actualizar_patrimonio');
+Route::get('/informacion_ingresopatrimonio/{id}', [IngresoController::class, 'obtenerPatrimonio'])->name('informacion_ingresopatrimonio');
+
+//Baja
+Route::get('/informacion_bajareporte', [BajaController::class, 'informacionBajaReporte'])->name('informacion_bajareporte');
+Route::get('/informacion_bajadetalle/{id}', [BajaController::class, 'obtenerBajaDetalle'])->name('informacion_bajadetalle');
+Route::get('/informacion_baja/{id}', [BajaController::class, 'obtenerBaja'])->name('informacion_baja');
+Route::get('/informacion_encontrarpatrimonio/{id}', [BajaController::class, 'encontrarPatrimonio'])->name('informacion_encontrarpatrimonio');
+Route::post('/registrar_baja', [BajaController::class, 'registrarBaja'])->name('registrar_baja');
+Route::delete('/remover_bajapatrimonio/{id}', [BajaController::class, 'removerBaja'])->name('remover_bajapatrimonio');
+
+
 
 
 

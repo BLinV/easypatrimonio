@@ -14,8 +14,9 @@ class DetallePatrimonio extends Model
 
     protected $fillable = [
         'IdPatrimonio',
-        'CodUTES',
         'CodInterno',
+        'CodUTES',
+        'CodServicio',
         'Descripcion',
         'Operativo',
         'Baja',

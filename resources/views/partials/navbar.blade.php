@@ -26,12 +26,9 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('/Ingresos') }}">Ingreso de Patrimonio</a>
                         <a class="dropdown-item" href="{{ url('/Bajas') }}">Baja de Patrimonio</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('/Movimientos') }}">Movimiento del Patrimonio</a>
                     </div>
                 </li>
             </ul>
-            
         </div>
     </div>
 </nav>

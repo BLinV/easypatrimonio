@@ -1,3 +1,4 @@
+/*Todo lo llena el metodo - Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML e inyecta a Tabla(ID)*/
 $('#dt-search-0').addClass('pb-2');
 datatable = new DataTable('#tablaPersonal', {
     'responsive': true,
@@ -29,9 +30,7 @@ datatable = new DataTable('#tablaPersonal', {
     {
         data: null,
         render: function (param) {
-            return param['Estado'] = 1 ?
-                `<p class="bg-success text-white p-2 d-inline rounded-pill">Activo</p>` :
-                `<p class="bg-danger text-white p-2 d-inline rounded-pill">Inactivo</p>`
+            return `<a>IMPLEMENTAR</a>`
         }
     },
     {
@@ -55,6 +54,23 @@ datatable = new DataTable('#tablaPersonal', {
     buttons: ['excel', 'pdf'],
     pageLength: 10,
     language: {
-        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
+        "decimal": "",
+        "emptyTable": "No hay información",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        }
     }
 });
