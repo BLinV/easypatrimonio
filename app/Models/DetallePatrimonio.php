@@ -34,7 +34,7 @@ class DetallePatrimonio extends Model
     public static function generarCodigo() // Generar código
     {
         do {
-            $code = 'INT' . substr(strtoupper(uniqid()), 0, 9);
+            $code = 'INP' . substr(strtoupper(uniqid()), 0, 9);
         } while (self::where('CodInterno', $code)->exists());
         return $code;
     }

@@ -14,8 +14,7 @@ class IngresoRequest extends FormRequest
     public function rules()
     {
         return [
-            'NumeroInterno' => 'required|string|size:10',
-            'NumeroPecosa' => 'required|string|size:20',
+            'NumeroPecosa' => 'nullable|string|size:20',
             'IdOrigen' => 'required|integer|exists:origen,IdOrigen',
             'OtroOrigen' => 'nullable|string|max:255',
             'Observacion' => 'nullable|string|max:100',
@@ -25,7 +24,7 @@ class IngresoRequest extends FormRequest
             'Modelo' => 'required|string|max:100',
             'IdCategoria' => 'required|integer|exists:categoria,IdCategoria',
             // Tabla DetallePatrimonio
-            'CodUTES' => 'required|string|size:12|unique:detallepatrimonio,CodUTES',
+            'CodUTES' => 'nullable|string|size:12|unique:detallepatrimonio,CodUTES',
             'CodInterno' => 'nullable|string|max:12|unique:detallepatrimonio,CodInterno',
             'Descripcion' => 'nullable|string|max:250',
             'IdServicio' => 'required|integer|exists:servicio,IdServicio',
@@ -57,7 +56,6 @@ class IngresoRequest extends FormRequest
             'IdCategoria.required' => 'La categoría es obligatoria.',
             'IdCategoria.exists' => 'La categoría seleccionada no es válida.',
 
-            'CodUTES.required' => 'El código UTES es obligatorio.',
             'CodUTES.size' => 'El código UTES debe tener 12 caracteres.',
             'CodUTES.unique' => 'El código UTES ya está registrado.',
             'CodInterno.max' => 'El código interno no puede tener más de 12 caracteres.',

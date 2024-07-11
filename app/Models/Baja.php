@@ -21,7 +21,7 @@ class Baja extends Model
     public static function generarCodigo() // Generar código
     {
         do {
-            $code = 'CdB' . substr(strtoupper(uniqid()), 0, 7);
+            $code = 'INB' . substr(strtoupper(uniqid()), 0, 7);
         } while (self::where('CodigoBaja', $code)->exists());
         return $code;
     }

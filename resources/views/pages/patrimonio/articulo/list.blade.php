@@ -54,13 +54,15 @@
                                     <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No encontrado.
                                         </span></p>
                                     <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span></p>
-                                    <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No encontrado. </span></p>
+                                    <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No
+                                            encontrado. </span></p>
                                     <p><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado. </span></p>
                                 </div>
                                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <p><strong>Documento Baja:</strong> <span id="bajaDocumento"> No encontrado. </span></p>
                                     <p><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado. </span></p>
-                                    <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No encontrado. </span></p>
+                                    <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No encontrado.
+                                        </span></p>
                                     <p><strong>Servicio:</strong> <span id="servicioPertenencia"> No encontrado. </span></p>
                                     <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No encontrado. </span>
                                     </p>
@@ -157,4 +159,5 @@
                 </div>
             </main>
         </div>
-    @endsection
+    </div>
+@endsection

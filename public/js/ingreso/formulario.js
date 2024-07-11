@@ -230,6 +230,7 @@ function GuardarIngreso() {
     let motivo = "Registrado";
 
     var ingreso = {
+        "NumeroInterno": numerointerno,
         "NumeroPecosa": numeropecosa,
         "IdOrigen": origen,
         "OtroOrigen": otroorigen,

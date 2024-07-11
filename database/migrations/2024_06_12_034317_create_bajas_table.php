@@ -11,7 +11,7 @@ class CreateBajasTable extends Migration
         Schema::create('baja', function (Blueprint $table) {
             $table->Increments("IdBaja");
             $table->string('CodigoBaja', 10)->nullable(false)->unique();
-            $table->dateTime("Fecha")->useCurrent();
+            $table->dateTime("Fecha")->nullable(false);
             $table->string('Observacion', 100)->nullable();
             $table->unsignedInteger('IdPersonal')->nullable(false);
             $table->foreign('IdPersonal')->references('IdPersonal')->on('personal');
