@@ -14,7 +14,7 @@ class CreateDetallepatrimoniosTable extends Migration
             $table->string("CodInterno", 12)->nullable(false)->unique();
             $table->string("CodUTES", 12)->nullable()->unique();
             $table->string("CodServicio", 12)->nullable()->unique();
-            $table->string('Descripcion', 250)->nullable(false);
+            $table->string('Descripcion', 250)->nullable();
             $table->boolean('Operativo')->default(1);
             $table->boolean('Baja')->default(0);
             $table->unsignedInteger('IdServicio')->nullable(false);

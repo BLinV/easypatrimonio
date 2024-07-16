@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class TipoTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::Table('tipo')->insert([

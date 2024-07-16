@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group mb-2">
-                                            <label for="celular" class="form-label">Número de Celular:</label>
+                                            <label for="celular" class="form-label">Número de Telefono:</label>
                                             <input type="text" id="celular" name="celular" class="form-control"
                                                 value="" maxlength="9" placeholder="Ingrese el celular"
                                                 onkeyup="return ValidarNumeros(this)">

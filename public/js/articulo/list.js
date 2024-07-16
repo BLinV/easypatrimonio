@@ -128,7 +128,55 @@ $(document).ready(function () {
     });
 });
 
-function verMovmimiento(id) {
+
+$(document).ready(function () {
+    var tablaMovimientos = $('#tablaMovimientos').DataTable({
+        'responsive': true,
+        'lengthChange': false,
+        'autoWidth': false,
+        'scrollCollapse': true,
+        'scroller': true,
+        ajax: {
+            url: "/api/informacion_movimientosreporte",
+            type: "get",
+            dataType: "json",
+            dataSrc: "_movimientos",
+        },
+        columns: [
+            { data: 'Fecha' },
+            { data: 'Servicio' },
+            { data: 'Persona' },
+            { data: 'Motivo' }
+        ],
+        dom: 'Bfrtip',
+        buttons: ['excel', 'pdf'],
+        pageLength: 10,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+});
+
+
+
+function verMovimimiento(id) {
     $.ajax({
         type: "get",
         url: `/api/informacion_movimientopatrimonio/${id}`,
@@ -195,12 +243,12 @@ function ver(id) {
             } else {
                 $('#ubicacionActual').text(" No encontrado. ");
             }
+            verMovimimiento(id);
         },
         error: function () {
             alert('Error al obtener el detalle.');
         }
     });
-    verMovmimiento(id);
 }
 
 function GuardarMovimiento() {

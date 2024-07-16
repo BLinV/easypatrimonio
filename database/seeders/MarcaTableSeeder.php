@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class MarcaTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::Table('marca')->insert([

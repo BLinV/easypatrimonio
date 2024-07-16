@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class CondicionTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::Table('condicion')->insert([

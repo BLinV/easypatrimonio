@@ -2,37 +2,28 @@
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
 
-function listarPersonal() {
+function listarSelect() {
     $.ajax({
         type: "get",
-        url: "/api/informacion_personal",
+        url: "/api/profesional_cargo",
         data: false,
         dataType: "json",
         contentType: "application/json",
         processData: false,
         success: function (response) {
             if (response.exito) {
-                let servicio = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
-                if (response._servicio.length > 0) {              //Cbobox Servicio
-                    response._servicio.forEach(element => {
-                        servicio += `<option value=${element.IdServicio}>${element.Descripcion}</option>`
+                let cargo = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
+                if (response._cargo.length > 0) {              //Cbobox Servicio
+                    response._cargo.forEach(element => {
+                        cargo += `<option value=${element.IdCargo}>${element.Descripcion}</option>`
                     });
                 }
-                $('#servicio').html(servicio);
-
-                let condicion = `<option value="">.: Seleccionar :.</option>`
-                if (response._condicion.length > 0) {             //Cbobox Condicion
-                    response._condicion.forEach(element => {
-                        condicion += `<option value=${element.IdCondicion}>${element.Descripcion}</option>`
-                    });
-                }
-                $('#condicion').html(condicion);
-
+                $('#cargo').html(cargo);
             }
         }
     });
 }
-listarPersonal()
+listarSelect()
 
 function Eliminar(e) {
     let dni = $(e).attr('data-dni')
