@@ -35,14 +35,11 @@
 
     <div class="container-fluid">
         <main class="m-3">
-
             <div class="card">
-
                 <div class="card-header bg-white">
                     <h1>Formulario de Registro de Baja de Patrimonio</h1>
                 </div>
                 <div class="card-body">
-
                     <form action="javascript:void(0)" method="post" enctype="multipart/form-data" autocomplete="off"
                         onsubmit="return GuardarBaja()">
                         <div class="row g-2 justify-content-start">
@@ -68,8 +65,6 @@
                                             onclick="IniciarTramite()">Documentar Baja</button>
                                     </div>
                                 </div>
-
-
                                 <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
                                     <div class="text-center">
                                         <legend>Buscar Patrimonio</legend>
@@ -84,9 +79,7 @@
                                             onclick="BuscarPatrimonio()" disabled>Buscar</button>
                                     </div>
                                 </div>
-
                             </div>
-
                             <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-6 col-sm-12">
                                 <div class="shadow-sm p-3 mb-5 bg-body rounded">
                                     <div class="text-center">
@@ -167,7 +160,6 @@
                             </div>
                         </div>
                     </form>
-
                     <div class="table-responsive">
                         <table class="table table-bordered" id="tablaBaja">
                             <thead>

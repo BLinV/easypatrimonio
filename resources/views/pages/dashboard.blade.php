@@ -2,6 +2,6 @@
 @section('title','Inicio')
 @section('content')
 <div class="container">
-    <h1>Bienvenido a la página principal</h1>
+    <h1>Bienvenido al sistema <b>{{ auth()->user()->name }}</b></h1>
 </div>
 @endsection
