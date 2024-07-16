@@ -1,6 +1,6 @@
 function IniciarTramite() {
     let codbaja = document.getElementById('codbaja').value;
-    if (codbaja !== "") {
+    if (codbaja !== "" && codbaja.length==10) {
         $.ajax({
             type: "get",
             url: `/api/informacion_baja/${codbaja}`,
@@ -12,7 +12,7 @@ function IniciarTramite() {
                     CargarDetalle();
                     $('#observacion').attr({ 'disabled': true })
                 } else {
-                    alert('Se esta registrando un nuevo oficio de baja.');
+                    Alertas('Información', 'Se esta ingresando un nuevo Oficio de Baja.', 'info')
                     $('#observacion').attr({ 'disabled': false })
                 }
                 $('#btnTramitar').attr({ 'disabled': true })
@@ -21,8 +21,21 @@ function IniciarTramite() {
                 $('#codpatrimonio').attr({ 'disabled': false })
                 $('#btnBuscar').attr({ 'disabled': false })
             },
-            error: function () {
-                alert('Error al obtener información.');
+            error: function (xhr) {
+                LoadingOverlay(false);
+                let errorMsg = 'Error en la validación.';
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
+                        }
+                    }
+                } else if (xhr.response?.mensajeError) {
+                    errorMsg = xhr.response.mensajeError;
+                }
+                Alertas('Error', errorMsg, 'error');
             }
         });
     } else {
@@ -32,21 +45,34 @@ function IniciarTramite() {
             dataType: "json",
             success: function (response) {
                 if (response.exito) {
-                    alert('Se esta registrando un nuevo oficio de baja.');
+                    Alertas('Información', 'Se esta ingresando un nuevo Oficio de Baja.', 'info')
                     $('#codbaja').val(response._codigo);
                     $('#codbaja').attr({ 'disabled': true })
-                    
+
                     $('#btnTramitar').attr({ 'disabled': false })
                     $('#observacion').attr({ 'disabled': false })
-    
+
                     $('#codpatrimonio').attr({ 'disabled': false })
                     $('#btnBuscar').attr({ 'disabled': false })
                 } else {
-                    alert('Error al generar el código: ' + response.mensajeError);
+                    Alertas('Error', 'Error al generar el código: '+mensajeError, 'error');
                 }
             },
-            error: function () {
-                alert('Error al generar el código.');
+            error: function (xhr) {
+                LoadingOverlay(false);
+                let errorMsg = 'Error en la validación.';
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
+                        }
+                    }
+                } else if (xhr.response?.mensajeError) {
+                    errorMsg = xhr.response.mensajeError;
+                }
+                Alertas('Error', errorMsg, 'error');
             }
         });
     }
@@ -69,38 +95,38 @@ function CargarDetalle() {
                 dataSrc: "_detallebaja"
             },
             columns: [
-            {
-                data: 'CodInterno'
-            },
-            {
-                data: 'CodUTES'
-            },
-            {
-                data: 'CodServicio'
-            },
-            {
-                data: 'Articulo'
-            },
-            {
-                data: 'Descripcion'
-            },
-            {
-                data: 'Estado'
-            },
-            {
-                data: 'Servicio'
-            },
-            {
-                data: 'Categoria'
-            },
-            {
-                data: null,
-                render: function (param) {
-                    return `<div class="d-flex justify-content-center align-items-center">
+                {
+                    data: 'CodInterno'
+                },
+                {
+                    data: 'CodUTES'
+                },
+                {
+                    data: 'CodServicio'
+                },
+                {
+                    data: 'Articulo'
+                },
+                {
+                    data: 'Descripcion'
+                },
+                {
+                    data: 'Estado'
+                },
+                {
+                    data: 'Servicio'
+                },
+                {
+                    data: 'Categoria'
+                },
+                {
+                    data: null,
+                    render: function (param) {
+                        return `<div class="d-flex justify-content-center align-items-center">
                                 <button class="btn btn-warning" type="button" data-codinterno="${param['CodInterno']}" onClick="Eliminar(this)">Eliminar</button>
                             </div>`
-                }
-            }],
+                    }
+                }],
             dom: 'Bfrtip',
             buttons: ['excel', 'pdf'],
             pageLength: 10,
@@ -165,17 +191,13 @@ function BuscarPatrimonio() {
                 errorMsg = '';
                 for (let field in errors) {
                     if (errors.hasOwnProperty(field)) {
-                        errorMsg += `${errors[field][0]} `;
-                        console.log(errorMsg);
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
                     }
                 }
             } else if (xhr.response?.mensajeError) {
                 errorMsg = xhr.response.mensajeError;
             }
             Alertas('Error', errorMsg, 'error');
-        },
-        beforeSend: function () {
-            LoadingOverlay(true);
         }
     });
 }
@@ -223,16 +245,13 @@ function GuardarBaja() {
                 errorMsg = '';
                 for (let field in errors) {
                     if (errors.hasOwnProperty(field)) {
-                        errorMsg += `${errors[field][0]} `;
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
                     }
                 }
             } else if (xhr.response?.mensajeError) {
                 errorMsg = xhr.response.mensajeError;
             }
             Alertas('Error', errorMsg, 'error');
-        },
-        beforeSend: function () {
-            LoadingOverlay(true);
         }
     });
 }
@@ -254,6 +273,7 @@ function Limpiar() {
 
     $('#codutes').val('');
     $('#codinterno').val('');
+    $('#codservicio').val('');
     $('#servicio').val('');
     $('#patrimonio').val('');
     $('#categoria').val('');
@@ -282,10 +302,22 @@ function Eliminar(e) {
             } else {
                 Alertas('Error', response.mensajeError, 'error');
             }
-        }, error: function (error) {
-            console.log(error);
-        }, before: function () {
-            LoadingOverlay(true);
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }

@@ -43,9 +43,9 @@
                             Bienvenido <b>{{ auth()->user()->name }}</b>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('login.destroy') }}">Log Out</a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('register.index') }}">Nuevo Usuario</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('login.destroy') }}">Cerrar Sesión</a>
                         </div>
                     </li>
                 @else

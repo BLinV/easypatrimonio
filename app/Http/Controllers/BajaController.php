@@ -220,6 +220,7 @@ class BajaController extends Controller
         try {
             $baja = Baja::where('CodigoBaja', $request->CodigoBaja)->first();
             $Fecha = Carbon::now();
+            $Fecha->setTimezone('America/Lima');
             if (!$baja) {
                 // Si no existe, crear un nuevo ingreso
                 $baja = new Baja();

@@ -15,24 +15,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            //Obligatoria
-            OrigenTableSeeder::class,
-            ServicioTableSeeder::class,
-            CondicionTableSeeder::class,
-            
-            CategoriaTableSeeder::class,
+            InformacionBaseSeeder::class,
 
-            PersonalTableSeeder::class,
             //Prueba
-            /*TipoTableSeeder::class,
-            MarcaTableSeeder::class,
-            PatrimonioTableSeeder::class,
-            DetallePatrimonioTableSeeder::class,
+            CategoriaTableSeeder::class,
+            PersonalTableSeeder::class,
+            
+            IngresoTableSeeder::class,
             UbicacionPatrimonioTableSeeder::class,
             BajaTableSeeder::class,
-            DetalleBajaTableSeeder::class,
-            IngresoTableSeeder::class,
-            DetalleIngresoTableSeeder::class,*/
         ]);
     }
 }

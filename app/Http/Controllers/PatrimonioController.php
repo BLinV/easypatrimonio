@@ -68,11 +68,11 @@ class PatrimonioController extends Controller
                 DB::raw("servicio.Descripcion AS Servicio"),
             )
                 ->join('servicio', 'detallepatrimonio.IdServicio', '=', 'servicio.IdServicio')
-                ->where('CodUTES', '=', $Codigo)
-                ->orwhere('CodInterno', '=', $Codigo)
+                ->where('CodInterno', '=', $Codigo)
+                ->orwhere('CodUTES', '=', $Codigo)
                 ->orwhere('CodServicio', '=', $Codigo)
                 ->first();
-            $origen = Ingreso::select(
+            $ingreso = Ingreso::select(
                 'NumeroInterno',
                 'NumeroPecosa',
                 'Fecha',
@@ -101,7 +101,7 @@ class PatrimonioController extends Controller
             return response()->json([
                 'exito' => true,
                 'mensaje' => '',
-                '_origen' => $origen,
+                '_origen' => $ingreso,
                 '_baja' => $baja,
                 '_servicio' => $idDetallePatrimonio->Servicio,
                 '_ubicacion' => $ubicacion

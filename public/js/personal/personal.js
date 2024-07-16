@@ -2,28 +2,55 @@
 Proceso: JS llama a API, API llama a Controller, Controller devuelve a API y luego a JS, JS arma HTML
 e inyecta a Tabla(ID)*/
 
-function listarSelect() {
+function listarPersonal() {
     $.ajax({
         type: "get",
-        url: "/api/profesional_cargo",
+        url: "/api/informacion_personal",
         data: false,
         dataType: "json",
         contentType: "application/json",
         processData: false,
         success: function (response) {
             if (response.exito) {
-                let cargo = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
-                if (response._cargo.length > 0) {              //Cbobox Servicio
-                    response._cargo.forEach(element => {
-                        cargo += `<option value=${element.IdCargo}>${element.Descripcion}</option>`
+                let servicio = `<option value="">.: Seleccionar :.</option>`//El modelo de la respuesta de tu API (en web), recuerda: ``->""->''
+                if (response._servicio.length > 0) {              //Cbobox Servicio
+                    response._servicio.forEach(element => {
+                        servicio += `<option value=${element.IdServicio}>${element.Descripcion}</option>`
                     });
                 }
-                $('#cargo').html(cargo);
+                $('#servicio').html(servicio);
+
+                let condicion = `<option value="">.: Seleccionar :.</option>`
+                if (response._condicion.length > 0) {             //Cbobox Condicion
+                    response._condicion.forEach(element => {
+                        condicion += `<option value=${element.IdCondicion}>${element.Descripcion}</option>`
+                    });
+                }
+                $('#condicion').html(condicion);
             }
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
+        },
+        beforeSend: function () {
+            LoadingOverlay(true);
         }
     });
 }
-listarSelect()
+listarPersonal()
 
 function Eliminar(e) {
     let dni = $(e).attr('data-dni')
@@ -42,10 +69,22 @@ function Eliminar(e) {
             } else {
                 Alertas('Error', response.mensajeError, 'error')
             }
-        }, error: function (error) {
-            console.log(error);
-        }, before: function () {
-
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }
@@ -82,10 +121,22 @@ function Editar(e) {
             } else {
                 Alertas('Error', response.mensajeError, 'error')
             }
-        }, error: function (error) {
-            console.log(error);
-        }, before: function () {
-
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }
@@ -118,10 +169,22 @@ function Ver(e) {
             } else {
                 Alertas('Error', response.mensajeError, 'error')
             }
-        }, error: function (error) {
-            console.log(error);
-        }, before: function () {
-
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }
@@ -170,7 +233,6 @@ const GuardarPersona = () => {
             processData: false,
             success: function (response) {
                 LoadingOverlay(false)
-
                 if (response.exito) {
                     datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
@@ -178,15 +240,10 @@ const GuardarPersona = () => {
                 } else {
                     Alertas('Error', response.mensajeError, 'error')
                 }
-
             },
             error: function (xhr) {
                 LoadingOverlay(false);
-
-                console.log(xhr);
-
                 let errorMsg = 'Error al registrar la persona.';
-
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
                     errorMsg = '';
@@ -198,7 +255,6 @@ const GuardarPersona = () => {
                 } else if (xhr.responseJSON?.mensajeError) {
                     errorMsg = xhr.responseJSON.mensajeError;
                 }
-
                 Alertas('Error', errorMsg, 'error');
             },
             beforeSend: function () {
@@ -215,7 +271,6 @@ const GuardarPersona = () => {
             processData: false,
             success: function (response) {
                 LoadingOverlay(false)
-
                 if (response.exito) {
                     datatable.ajax.reload()
                     Alertas('Confirmación', response.mensaje, 'success')
@@ -223,27 +278,21 @@ const GuardarPersona = () => {
                 } else {
                     Alertas('Error', response.mensajeError, 'error')
                 }
-
             },
             error: function (xhr) {
                 LoadingOverlay(false);
-
-                console.log(xhr);
-
                 let errorMsg = 'Error al registrar la persona.';
-
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
                     errorMsg = '';
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
-                            errorMsg += `${errors[field][0]}`;
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
                         }
                     }
                 } else if (xhr.responseJSON?.mensajeError) {
                     errorMsg = xhr.responseJSON.mensajeError;
                 }
-
                 Alertas('Error', errorMsg, 'error');
             },
             beforeSend: function () {

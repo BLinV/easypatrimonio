@@ -99,6 +99,7 @@ class IngresoController extends Controller
         try {
             $ingreso = Ingreso::where('NumeroInterno', $request->NumeroInterno)->first();
             $Fecha = Carbon::now();
+            $Fecha->setTimezone('America/Lima');
 
             if (!$ingreso) { //Existe el registro?
                 // Si no existe, crear un nuevo ingreso

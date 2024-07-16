@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateModelosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('modelo', function (Blueprint $table) {
@@ -19,12 +14,6 @@ class CreateModelosTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('modelo');

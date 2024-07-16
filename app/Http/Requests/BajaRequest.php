@@ -19,7 +19,7 @@ class BajaRequest extends FormRequest
             'Estado' => 'nullable|string|max:100',
             // Tabla DetallePatrimonio
             'CodInterno' => 'nullable|string|max:12',
-            // Tabla DetalleIngreso
+            // Tabla DetaelleBaja
             'Estado' => 'nullable|string|max:50',
         ];
     }
@@ -28,7 +28,7 @@ class BajaRequest extends FormRequest
     {
         return [
             'CodigoBaja.required' => 'El CÓDIGO DE BAJA es obligatorio.',
-            'CodigoBaja.size' => 'El CÓDIGO DE BAJA no puede tener 10 caracteres.',
+            'CodigoBaja.size' => 'El CÓDIGO DE BAJA debe tener 10 caracteres.',
             'Observacion.max' => 'Las OBSERVACIONES no puede tener más de 100 caracteres.',
             
             'CodInterno.max' => 'El código interno no puede tener más de 12 caracteres.',

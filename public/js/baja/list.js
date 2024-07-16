@@ -77,7 +77,6 @@ function ver(id) {
         url: `/api/informacion_bajadetalle/${id}`,
         dataType: "json",
         success: function (response) {
-            console.log(response)
             if (response._detallebaja.length > 0) {
                 let tabla = ''
                 response._detallebaja.forEach(element => {
@@ -88,11 +87,24 @@ function ver(id) {
                 $('#tablaDetalle').html(tabla);
                 ModalAbrirCerrar('verDetalle', true);
             } else {
-                alert('No se pudo obtener el detalle.');
+                Alertas('Error', 'No existe un detalle.', 'error');
             }
         },
-        error: function () {
-            alert('Error al obtener el detalle.');
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }

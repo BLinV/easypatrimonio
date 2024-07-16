@@ -22,8 +22,16 @@ class SessionsController extends Controller
         ]);
         if (Auth::attempt($credenciales)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+    
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+            // Obtener el personal asociado al usuario autenticado
+            $personal = $user->personal;
+    
+            // Pasar IdPersonal a la vista
+            return redirect()->intended('dashboard')->with('IdPersonal', $personal->IdPersonal);
         }
+    
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);

@@ -86,7 +86,6 @@ function ver(id) {
         dataType: "json",
         success: function (response) {
             if (response._detalleingreso.length > 0) {
-                //$('#detalleCodUtes').text(response._detalleingreso[0].CodUTES);
                 let tabla = ''
                 response._detalleingreso.forEach(element => {
                     tabla += `<tr>
@@ -94,22 +93,28 @@ function ver(id) {
                         <td>${element.Articulo}</td>
                         <td>${element.Servicio}</td><td>${element.Descripcion}</td><td>${element.Categoria}</td>
                         <td>${element.Estado}</td></tr>`
-                        /*
-                    tabla += (element.Operativo == 1) ?
-                        `<td><p class="bg-success text-white p-2 d-inline rounded-pill">Si</p></td>` :
-                        `<td><p class="bg-danger text-white p-2 d-inline rounded-pill">No</p></td>`
-                    tabla += (element.Baja == 1) ?
-                        `<td><p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p></td>` :
-                        `<td><p class="bg-success text-white p-2 d-inline rounded-pill">No</p></td>`*/
                 });
                 $('#tablaDetalle').html(tabla);
                 ModalAbrirCerrar('verDetalle', true);
             } else {
-                alert('No se pudo obtener el detalle.');
+                Alertas('Error', 'No existe un detalle.', 'error');
             }
         },
-        error: function () {
-            alert('Error al obtener el detalle.');
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }

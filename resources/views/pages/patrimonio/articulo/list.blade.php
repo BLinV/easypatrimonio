@@ -37,127 +37,130 @@
     <script src="{{ asset('js/origenServicioCategoria.js') }}"></script>
 
     <div class="container">
-        <div class="container">
-            <div class="modal fade" id="verDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="verDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-2 justify-content-start">
+                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <p><strong>Codigo Documento Ingreso:</strong> <span id="ingresoDocumento"> No
+                                        encontrado. </span></p>
+                                <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No
+                                        encontrado.
+                                    </span></p>
+                                <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span>
+                                </p>
+                                <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No
+                                        encontrado. </span></p>
+                                <p><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado. </span></p>
+                            </div>
+                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <p><strong>Documento Baja:</strong> <span id="bajaDocumento"> No encontrado. </span>
+                                </p>
+                                <p><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado. </span></p>
+                                <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No
+                                        encontrado.
+                                    </span></p>
+                                <p><strong>Servicio:</strong> <span id="servicioPertenencia"> No encontrado. </span>
+                                </p>
+                                <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No encontrado.
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                        <div class="modal-body">
+                        <form action="javascript:void(0)" method="post" enctype="multipart/form-data"
+                            autocomplete="off" onsubmit="return GuardarMovimiento()">
                             <div class="row g-2 justify-content-start">
-                                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <p><strong>Codigo Documento Ingreso:</strong> <span id="ingresoDocumento"> No
-                                            encontrado. </span></p>
-                                    <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No encontrado.
-                                        </span></p>
-                                    <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span></p>
-                                    <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No
-                                            encontrado. </span></p>
-                                    <p><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado. </span></p>
+                                <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                                    <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
+                                        <div class="text-center">
+                                            <legend>Información de Movimiento</legend>
+                                            <span id="codInterno"> No encontrado. </span>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label for="servicio" class="form-label">Servicio:</label>
+                                            <select id="servicio" name="servicio" class="form-select">
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label for="personal" class="form-label">Personal a cargo:</label>
+                                            <select id="personal" name="personal" class="form-select" disabled>
+                                                <option value="">.: Seleccionar :.</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                            <div class="form-group mb-2">
+                                                <label for="motivo" class="form-label">Motivo:</label>
+                                                <textarea type="text" id="motivo" name="motivo" class="form-control" style="resize: none;" value=""
+                                                    placeholder="Máximo 250 caracteres."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger me-2">Registrar
+                                                movimiento</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <p><strong>Documento Baja:</strong> <span id="bajaDocumento"> No encontrado. </span></p>
-                                    <p><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado. </span></p>
-                                    <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No encontrado.
-                                        </span></p>
-                                    <p><strong>Servicio:</strong> <span id="servicioPertenencia"> No encontrado. </span></p>
-                                    <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No encontrado. </span>
-                                    </p>
+                                <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-6 col-sm-12">
+                                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                                        <div class="text-center">
+                                            <legend>Historial de Movimientos</legend>
+                                        </div>
+                                        <div class="row g-3 justify-content-start">
+                                            <div class="table-responsive">
+                                                <table class="table" id="tablaDetalle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Fecha</th>
+                                                            <th>Servicio</th>
+                                                            <th>Personal</th>
+                                                            <th>Motivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <form action="javascript:void(0)" method="post" enctype="multipart/form-data"
-                                autocomplete="off" onsubmit="return GuardarMovimiento()">
-                                <div class="row g-2 justify-content-start">
-                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
-                                            <div class="text-center">
-                                                <legend>Información de Movimiento</legend>
-                                                <span id="codInterno"> No encontrado. </span>
-                                            </div>
-                                            <div class="form-group mb-2">
-                                                <label for="servicio" class="form-label">Servicio:</label>
-                                                <select id="servicio" name="servicio" class="form-select">
-                                                </select>
-                                            </div>
-                                            <div class="form-group mb-2">
-                                                <label for="personal" class="form-label">Personal a cargo:</label>
-                                                <select id="personal" name="personal" class="form-select">
-                                                    <option value="">.: Seleccionar :.</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <div class="form-group mb-2">
-                                                    <label for="motivo" class="form-label">Motivo:</label>
-                                                    <textarea type="text" id="motivo" name="motivo" class="form-control" style="resize: none;" value=""
-                                                        placeholder="Máximo 250 caracteres."></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="d-grid gap-2">
-                                                <button type="submit" class="btn btn-danger me-2">Registrar
-                                                    movimiento</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-6 col-sm-12">
-                                        <div class="shadow-sm p-3 mb-5 bg-body rounded">
-                                            <div class="text-center">
-                                                <legend>Historial de Movimientos</legend>
-                                            </div>
-                                            <div class="row g-3 justify-content-start">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Fecha</th>
-                                                                <th>Servicio</th>
-                                                                <th>Personal</th>
-                                                                <th>Motivo</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tablaDetalle"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <main>
-                <h1>Reporte de Patrimonio</h1>
-                <div class="card">
-                    <div class="card-header">
-                        <legend>Información del Patrimonio:</legend>
-                    </div>
-                    <div class="card-body">
-                        <!-- Tabla de informacion -->
-                        <div class="table-responsive">
-                            <table class="table" id="tablaPatrimonio">
-                                <thead>
-                                    <tr>
-                                        <th>Código Interno</th>
-                                        <th>Código UTES</th>
-                                        <th>Código Servicio</th>
-                                        <th>Patrimonio</th>
-                                        <th>Descripción</th>
-                                        <th>Categoría</th>
-                                        <th>Operativo</th>
-                                        <th>Baja</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <script src="{{ asset('js/articulo/list.js') }}"></script>
-                        </div>
+        <main>
+            <h1>Reporte de Patrimonio</h1>
+            <div class="card">
+                <div class="card-header">
+                    <legend>Información del Patrimonio:</legend>
+                </div>
+                <div class="card-body">
+                    <!-- Tabla de informacion -->
+                    <div class="table-responsive">
+                        <table class="table" id="tablaPatrimonio">
+                            <thead>
+                                <tr>
+                                    <th>Código Interno</th>
+                                    <th>Código UTES</th>
+                                    <th>Código Servicio</th>
+                                    <th>Patrimonio</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Operativo</th>
+                                    <th>Baja</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <script src="{{ asset('js/articulo/list.js') }}"></script>
                     </div>
                 </div>
-            </main>
-        </div>
+            </div>
+        </main>
     </div>
 @endsection

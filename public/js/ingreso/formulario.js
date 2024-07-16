@@ -39,6 +39,22 @@ document.addEventListener('DOMContentLoaded', function () {
                             $('#personal').val(maxIdPersonal);
                         }
                     }
+                },
+                error: function (xhr) {
+                    LoadingOverlay(false);
+                    let errorMsg = 'Error en la validación.';
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        errorMsg = '';
+                        for (let field in errors) {
+                            if (errors.hasOwnProperty(field)) {
+                                errorMsg += `+ ${errors[field][0]} <br/>`;
+                            }
+                        }
+                    } else if (xhr.response?.mensajeError) {
+                        errorMsg = xhr.response.mensajeError;
+                    }
+                    Alertas('Error', errorMsg, 'error');
                 }
             });
         }
@@ -58,7 +74,7 @@ function obtenerTextoOption(selectId, value) {
 
 function IniciarTramite() {
     let numerointerno = document.getElementById('numerointerno').value;
-    if (numerointerno !== "") {
+    if (numerointerno !== "" && numerointerno.length==10) {
         $.ajax({
             type: "get",
             url: `/api/informacion_ingreso/${numerointerno}`,
@@ -73,15 +89,28 @@ function IniciarTramite() {
                     CargarDetalle();
                     bloquearFormularioIngreso(true);
                 } else {
-                    alert('Se esta ingresando una nueva PECOSA.');
+                    Alertas('Información', 'Se esta ingresando una nueva PECOSA.', 'info')
                     bloquearFormularioIngreso(false);
                 }
                 $('#numerointerno').attr({ 'disabled': true });
                 $('#btnTramitar').attr({ 'disabled': true });
                 bloquearFormularioPatrimonio(false);
             },
-            error: function () {
-                alert('Error al obtener información.');
+            error: function (xhr) {
+                LoadingOverlay(false);
+                let errorMsg = 'Error en la validación.';
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
+                        }
+                    }
+                } else if (xhr.response?.mensajeError) {
+                    errorMsg = xhr.response.mensajeError;
+                }
+                Alertas('Error', errorMsg, 'error');
             }
         });
     } else {
@@ -91,7 +120,7 @@ function IniciarTramite() {
             dataType: "json",
             success: function (response) {
                 if (response.exito) {
-                    alert('Se esta ingresando una nueva PECOSA.');
+                    Alertas('Información', 'Se esta ingresando una nueva PECOSA.', 'info')
                     $('#numerointerno').val(response._codigo);
                     $('#numerointerno').attr({ 'disabled': true });
                     $('#btnTramitar').attr({ 'disabled': true });
@@ -101,8 +130,21 @@ function IniciarTramite() {
                     alert('Error al generar el código: ' + response.mensajeError);
                 }
             },
-            error: function () {
-                alert('Error al generar el código.');
+            error: function (xhr) {
+                LoadingOverlay(false);
+                let errorMsg = 'Error en la validación.';
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '';
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
+                        }
+                    }
+                } else if (xhr.response?.mensajeError) {
+                    errorMsg = xhr.response.mensajeError;
+                }
+                Alertas('Error', errorMsg, 'error');
             }
         });
     }
@@ -213,7 +255,8 @@ function GuardarIngreso() {
     let origen = document.getElementById('origen').value;
     let otroorigen = document.getElementById('otroorigen').value;
     let observacion = document.getElementById('observacion').value;
-    let idpersonal = 2;
+
+    let idpersonal = IdPersonal;
 
     //Informacion Patrimonio
     let codutes = document.getElementById('codutes').value;
@@ -279,7 +322,7 @@ function GuardarIngreso() {
                     errorMsg = '';
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
-                            errorMsg += `${errors[field][0]} `;
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
                         }
                     }
                 } else if (xhr.response?.mensajeError) {
@@ -319,7 +362,7 @@ function GuardarIngreso() {
                     errorMsg = '';
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
-                            errorMsg += `${errors[field][0]}`;
+                            errorMsg += `+ ${errors[field][0]} <br/>`;
                         }
                     }
                 } else if (xhr.responseJSON?.mensajeError) {
@@ -348,6 +391,7 @@ function Limpiar() {
     $('#codinterno').text('');
 
     $('#codservicio').val('');
+    $('#servicio').attr({ 'disabled': false });
     $('#servicio').val('');
     $('#tipo').val('');
     $('#marca').val('');
@@ -380,7 +424,6 @@ function Editar(e) {
                 }
 
                 $('#codinterno').text(response._detallepatrimonio['CodInterno']);
-                $('#codutes').attr({ 'disabled': true });
                 $('#codutes').val(response._detallepatrimonio['CodUTES']);
                 $('#codservicio').val(response._detallepatrimonio['CodServicio']);
                 $('#servicio').val(response._detallepatrimonio['IdServicio']);
@@ -393,14 +436,25 @@ function Editar(e) {
                 $('#comentario').val(response._detallepatrimonio['Descripcion']);
                 $('#estado').val(response._detallepatrimonio['estado']);
                 $('#metodoFormulario').val('PUT');
-
             } else {
                 Alertas('Error', response.mensajeError, 'error');
             }
-        }, error: function (error) {
-            Alertas('Error', error, 'error');
-        }, before: function () {
-            LoadingOverlay(true);
+        },
+        error: function (xhr) {
+            LoadingOverlay(false);
+            let errorMsg = 'Error en la validación.';
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                errorMsg = '';
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorMsg += `+ ${errors[field][0]} <br/>`;
+                    }
+                }
+            } else if (xhr.response?.mensajeError) {
+                errorMsg = xhr.response.mensajeError;
+            }
+            Alertas('Error', errorMsg, 'error');
         }
     });
 }

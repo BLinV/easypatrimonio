@@ -186,6 +186,9 @@
                                                 placeholder="Máximo 250 caracteres." disabled></textarea>
                                         </div>
                                     </div>
+                                    <script>
+                                        var IdPersonal = localStorage.getItem('IdPersonal');// Recuperar IdPersonal de localStorage
+                                    </script>
                                     <div class=" mb-5 mt-2">
                                         <div class="float-end mb-2">
                                             <button type="submit" class="registro btn btn-primary" id="btnFormulario"
@@ -218,15 +221,4 @@
             </div>
         </main>
     </div>
-    <script>
-        $('#codpecosa').keyup(function(e) {
-            var input = $(this).val()
-
-            console.log(input);
-
-            if (input.lenght > 12) {
-                console.log('ajax get');
-            }
-        });
-    </script>
 @endsection

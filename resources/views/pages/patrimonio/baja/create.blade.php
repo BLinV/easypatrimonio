@@ -51,7 +51,7 @@
                                     <div class="form-group mb-2">
                                         <label for="codbaja" class="form-label">Código de Cargo:</label>
                                         <input type="text" id="codbaja" name="codbaja" class="form-control"
-                                            value="" placeholder="Código de 20 dígitos." maxlength="20">
+                                            value="" placeholder="" maxlength="10">
                                     </div>
                                     <div class="form-group mb-2">
                                         <div class="form-group mb-2">

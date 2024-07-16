@@ -24,8 +24,9 @@ class IngresoRequest extends FormRequest
             'Modelo' => 'required|string|max:100',
             'IdCategoria' => 'required|integer|exists:categoria,IdCategoria',
             // Tabla DetallePatrimonio
+            'CodInterno' => 'nullable|string|size:10|unique:detallepatrimonio,CodInterno',
             'CodUTES' => 'nullable|string|size:12|unique:detallepatrimonio,CodUTES',
-            'CodInterno' => 'nullable|string|max:12|unique:detallepatrimonio,CodInterno',
+            'CodServicio' => 'nullable|string|size:12|unique:detallepatrimonio,CodServicio',
             'Descripcion' => 'nullable|string|max:250',
             'IdServicio' => 'required|integer|exists:servicio,IdServicio',
             // Tabla DetalleIngreso
@@ -56,10 +57,10 @@ class IngresoRequest extends FormRequest
             'IdCategoria.required' => 'La categoría es obligatoria.',
             'IdCategoria.exists' => 'La categoría seleccionada no es válida.',
 
+            'CodInterno.size' => 'El código interno debe tener 10 caracteres.',
+            'CodInterno.unique' => 'El código interno ya está registrado.',
             'CodUTES.size' => 'El código UTES debe tener 12 caracteres.',
             'CodUTES.unique' => 'El código UTES ya está registrado.',
-            'CodInterno.max' => 'El código interno no puede tener más de 12 caracteres.',
-            'CodInterno.unique' => 'El código interno ya está registrado.',
             'Descripcion.max' => 'La descripción no puede tener más de 250 caracteres.',
             'IdServicio.required' => 'El campo de Servicio es obligatorio.',
             'IdServicio.exists' => 'El Servicio seleccionado no es válido.',

@@ -17,9 +17,10 @@ class CreatePersonalTable extends Migration
             $table->boolean('Estado')->default(true);
             $table->unsignedInteger('IdCondicion')->nullable(false);
             $table->unsignedInteger('IdServicio')->nullable(false);
-            //$table->unsignedBigInteger('IdUsuario')->nullable();
+            $table->unsignedBigInteger('IdUsuario')->nullable();
             $table->foreign('IdServicio')->references('IdServicio')->on('servicio');
             $table->foreign('IdCondicion')->references('IdCondicion')->on('condicion');
+            $table->foreign('IdUsuario')->references('id')->on('users');
             $table->timestamps();
         });
     }

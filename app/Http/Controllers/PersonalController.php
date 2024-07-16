@@ -197,24 +197,13 @@ class PersonalController extends Controller
     public function eliminarPersonal($dni)
     {
         try {
-            $persona = Personal::select('*')->where('Dni', '=', $dni)->get();
+            Personal::where('Dni', '=', $dni)->delete();
 
-            if ($persona) {
-
-                Personal::where('Dni', '=', $dni)->delete();
-
-                return response()->json([
-                    'exito' => true,
-                    'mensaje' => 'Eliminado Correctamente',
-                    'mensajeError' => ''
-                ]);
-            } else {
-                return response()->json([
-                    'exito' => false,
-                    'mensaje' => '',
-                    'mensajeError' => 'El personal no exite en el sistema'
-                ]);
-            }
+            return response()->json([
+                'exito' => true,
+                'mensaje' => 'Eliminado Correctamente',
+                'mensajeError' => ''
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'exito' => false,

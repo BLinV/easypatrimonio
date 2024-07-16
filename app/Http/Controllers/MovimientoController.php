@@ -17,9 +17,7 @@ class MovimientoController extends Controller
     public function informacionMovimientoPatrimonio($Codigo)
     {
         try {
-            $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')->where('CodUTES', '=', $Codigo)
-                ->orwhere('CodInterno', '=', $Codigo)
-                ->orwhere('CodServicio', '=', $Codigo)
+            $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')->where('CodInterno', '=', $Codigo)
                 ->first()
                 ->IdDetallePatrimonio;
             $ubicacion = UbicacionPatrimonio::select(
@@ -50,6 +48,7 @@ class MovimientoController extends Controller
         DB::beginTransaction();
         try {
             $Fecha = Carbon::now();
+            $Fecha->setTimezone('America/Lima');
             $idDetallePatrimonio = DetallePatrimonio::select('IdDetallePatrimonio')
                 ->where('CodInterno', '=', $request->CodInterno)
                 ->first()->IdDetallePatrimonio;
