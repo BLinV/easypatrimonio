@@ -27,10 +27,10 @@
                             Gestión de Patrimonio
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('/Patrimonio') }}">Reporte de Patrimonio</a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('/Ingresos') }}">Ingreso de Patrimonio</a>
                             <a class="dropdown-item" href="{{ url('/Bajas') }}">Baja de Patrimonio</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url('/Patrimonio') }}">Reporte de Patrimonio</a>
                         </div>
                     </li>
                 </ul>
@@ -40,7 +40,7 @@
                     <li class="nav-item dropdown"> <!-- Usa Popper, una libreria de terceros -->
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
-                            Bienvenido <b>{{ auth()->user()->name }}</b>
+                            Bienvenido(a) <b>{{ auth()->user()->name }}</b>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('register.index') }}">Nuevo Usuario</a>

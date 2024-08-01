@@ -49,7 +49,7 @@ function IniciarTramite() {
                     $('#codbaja').val(response._codigo);
                     $('#codbaja').attr({ 'disabled': true })
 
-                    $('#btnTramitar').attr({ 'disabled': false })
+                    $('#btnTramitar').attr({ 'disabled': true })
                     $('#observacion').attr({ 'disabled': false })
 
                     $('#codpatrimonio').attr({ 'disabled': false })
@@ -95,30 +95,14 @@ function CargarDetalle() {
                 dataSrc: "_detallebaja"
             },
             columns: [
-                {
-                    data: 'CodInterno'
-                },
-                {
-                    data: 'CodUTES'
-                },
-                {
-                    data: 'CodServicio'
-                },
-                {
-                    data: 'Articulo'
-                },
-                {
-                    data: 'Descripcion'
-                },
-                {
-                    data: 'Estado'
-                },
-                {
-                    data: 'Servicio'
-                },
-                {
-                    data: 'Categoria'
-                },
+                { data: 'CodInterno' },
+                { data: 'CodUTES' },
+                { data: 'CodServicio' },
+                { data: 'Articulo' },
+                { data: 'Descripcion' },
+                { data: 'Estado' },
+                { data: 'Servicio' },
+                { data: 'Categoria' },
                 {
                     data: null,
                     render: function (param) {
@@ -206,7 +190,8 @@ function GuardarBaja() {
     // Informacion PECOSA
     let codbaja = document.getElementById('codbaja').value;
     let observacion = document.getElementById('observacion').value;
-    let idpersonal = 2;
+    
+    let idpersonal = personal.IdPersonal; // Acceder a IdPersonal desde el objeto personal
 
     //Informacion Patrimonio
     let codinterno = document.getElementById('codinterno').value;

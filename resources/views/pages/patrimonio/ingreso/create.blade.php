@@ -165,8 +165,11 @@
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                             <div class="form-group mb-2">
                                                 <label for="categoria" class="form-label">Categoría:</label>
-                                                <select id="categoria" name="categoria" class="form-select" disabled>
-                                                </select>
+                                                <input type="text" id="categoria" name="categoria"
+                                                    class="form-control" value=""
+                                                    placeholder="Ingrese la Categoria." disabled>
+                                                <!--select id="categoria" name="categoria" class="form-select" disabled>
+                                                        </select-->
                                             </div>
                                         </div>
                                         <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-12">
@@ -187,7 +190,7 @@
                                         </div>
                                     </div>
                                     <script>
-                                        var IdPersonal = localStorage.getItem('IdPersonal');// Recuperar IdPersonal de localStorage
+                                        let personal = JSON.parse(localStorage.getItem('personal')); // Recuperar IdPersonal de localStorage
                                     </script>
                                     <div class=" mb-5 mt-2">
                                         <div class="float-end mb-2">

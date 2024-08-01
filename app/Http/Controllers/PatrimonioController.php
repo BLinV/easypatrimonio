@@ -114,6 +114,29 @@ class PatrimonioController extends Controller
         }
     }
 
+    public function estadoOperativoPatrimonio(string $CodInterno)
+    {
+        DB::beginTransaction();
+        try {
+            $detallePatrimonio = DetallePatrimonio::where('CodInterno', $CodInterno)->first();
+            DetallePatrimonio::where('IdDetallePatrimonio', '=', $detallePatrimonio->IdDetallePatrimonio)
+                ->update(['Operativo' => !$detallePatrimonio->Operativo]);
+            DB::commit();
+            return response()->json([
+                'exito' => true,
+                'mensaje' => 'La operatividad del patrimonio fue modificada.',
+                'mensajeError' => ''
+            ]);
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return response()->json([
+                'exito' => false,
+                'mensaje' => '',
+                'mensajeError' => $ex->getMessage()
+            ]);
+        }
+    }
+
     public function registrarPatrimonio(PatrimonioRequest $request)
     {
         // Transacción: Iniciar

@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.min.css">
 
+    <!-- Calendario -->
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <!-- Crear, leer y editar archivos ZIP, permitir exportación de tabla a Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- Crear PDF -->
@@ -46,35 +49,59 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row g-2 justify-content-start">
-                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <p><strong>Codigo Documento Ingreso:</strong> <span id="ingresoDocumento"> No
-                                        encontrado. </span></p>
-                                <p><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso"> No
-                                        encontrado.
-                                    </span></p>
-                                <p><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No encontrado. </span>
-                                </p>
-                                <p><strong>Información de Estado en Ingreso:</strong> <span id="ingresoEstado"> No
-                                        encontrado. </span></p>
-                                <p><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado. </span></p>
+                        <div class="row g-2 justify-content-center">
+                            <div class="card col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="card-header shadow-sm p-1 mb-1 bg-success rounded text-center text-white">
+                                    <legend>Ingreso de Patrimonio</legend>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Codigo Documento Ingreso:</strong> <span
+                                            id="ingresoDocumento"> No encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Codigo Interno Ingreso:</strong> <span id="ingresoIngreso">
+                                            No encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Fecha Ingreso:</strong> <span id="ingresoFecha"> No
+                                            encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Información de Estado en Ingreso:</strong> <span
+                                            id="ingresoEstado"> No encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Origen:</strong> <span id="ingresoOrigen"> No encontrado.
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <p><strong>Documento Baja:</strong> <span id="bajaDocumento"> No encontrado. </span>
-                                </p>
-                                <p><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado. </span></p>
-                                <p><strong>Información de Estado en Baja:</strong> <span id="bajaEstado"> No
-                                        encontrado.
-                                    </span></p>
-                                <p><strong>Servicio:</strong> <span id="servicioPertenencia"> No encontrado. </span>
-                                </p>
-                                <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No encontrado.
-                                    </span>
-                                </p>
+                            <div class="card col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="card-header shadow-sm p-1 mb-1 bg-warning rounded text-center text-white">
+                                    <legend>Baja de Patrimonio</legend>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Documento Baja:</strong> <span id="bajaDocumento"> No
+                                            encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Fecha Baja:</strong> <span id="bajaFecha"> No encontrado.
+                                        </span>
+                                    </p>
+                                    <p class="card-text"><strong>Información de Estado en Baja:</strong><span
+                                            id="bajaEstado"> No encontrado. </span>
+                                    </p>
+                                </div>
+                                <div class="card-footer shadow-sm p-1 mb-1 bg-secondary rounded text-center text-white">
+                                    <legend>Datos de Ubicación</legend>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Servicio:</strong> <span id="servicioPertenencia"> No
+                                            encontrado. </span>
+                                    </p>
+                                    <p class="card-text"><strong>Ubicación Actual:</strong> <span id="ubicacionActual"> No
+                                            encontrado. </span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <form action="javascript:void(0)" method="post" enctype="multipart/form-data"
-                            autocomplete="off" onsubmit="return GuardarMovimiento()">
+                        <form action="javascript:void(0)" method="post" enctype="multipart/form-data" autocomplete="off"
+                            onsubmit="return GuardarMovimiento()">
                             <div class="row g-2 justify-content-start">
                                 <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
                                     <div class="card-header shadow-sm p-3 mb-3 bg-body rounded">
@@ -141,6 +168,12 @@
                     <legend>Información del Patrimonio:</legend>
                 </div>
                 <div class="card-body">
+                    <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                            <label for="buscar">Buscar:</label>
+                            <input type="text" id="buscar" class="form-control" placeholder="Buscar...">
+                        </div>
+                    </div>
                     <!-- Tabla de informacion -->
                     <div class="table-responsive">
                         <table class="table" id="tablaPatrimonio">
@@ -154,10 +187,16 @@
                                     <th>Categoría</th>
                                     <th>Operativo</th>
                                     <th>Baja</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                         </table>
+                        <script src="{{ asset('js/export/icono_hospital_base64.js') }}"></script>
+                        <script src="{{ asset('js/export/export.js') }}"></script>
                         <script src="{{ asset('js/articulo/list.js') }}"></script>
+                        <script>
+                            let personal = JSON.parse(localStorage.getItem('personal')); // Recuperar IdPersonal de localStorage
+                        </script>
                     </div>
                 </div>
             </div>

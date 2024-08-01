@@ -16,14 +16,6 @@ function listarDatos() {
                 }
                 $('#origen').html(origen);
 
-                let categoria = `<option value="">.: Seleccionar :.</option>`
-                if (response._categoria.length > 0) {
-                    response._categoria.forEach(element => {
-                        categoria += `<option value=${element.IdCategoria}>${element.Descripcion}</option>`
-                    });
-                }
-                $('#categoria').html(categoria);
-
                 let servicio = `<option value="">.: Seleccionar :.</option>`
                 if (response._servicio.length > 0) {
                     response._servicio.forEach(element => {

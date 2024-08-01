@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/informacion_origenserviciocategoria', [BusquedaController::class, 'informacionOrSerCat'])->name('informacion_origenserviciocategoria');
 Route::get('/informacion_tipoBuscar', [BusquedaController::class, 'autocompletarTipo'])->name('informacion_tipoBuscar');
 Route::get('/informacion_marcaBuscar', [BusquedaController::class, 'autocompletarMarca'])->name('informacion_marcaBuscar');
+Route::get('/informacion_categoriaBuscar', [BusquedaController::class, 'autocompletarCategoria'])->name('informacion_categoriaBuscar');
 Route::get('/informacion_personalBuscar/{id}', [BusquedaController::class, 'informacionPersonal'])->name('informacion_personalBuscar');
 
 //Patrimonio
 Route::get('/informacion_patrimonioreporte', [PatrimonioController::class,'informacionPatrimonioReporte'])->name('informacion_patrimonioreporte');
 Route::get('/informacion_detallepatrimonioreporte/{id}', [PatrimonioController::class,'informacionDetallePatrimonio'])->name('informacion_detallepatrimonioreporte');
 Route::post('/registrar_patrimonio',[PatrimonioController::class,'registrarPatrimonio'])->name('registrar_patrimonio');
+Route::put('/operatividad_patrimonio/{id}',[PatrimonioController::class,'estadoOperativoPatrimonio'])->name('operatividad_patrimonio');
 //Movimientos
 Route::get('/informacion_movimientopatrimonio/{id}', [MovimientoController::class, 'informacionMovimientoPatrimonio'])->name('informacion_movimientopatrimonio');
 Route::post('/registrar_movimiento', [MovimientoController::class, 'registrarMovimiento'])->name('registrar_movimiento');

@@ -145,7 +145,9 @@
                                             <textarea type="text" id="estado" name="estado" class="form-control" style="resize: none;" disabled></textarea>
                                         </div>
                                     </div>
-
+                                    <script>
+                                        let personal = JSON.parse(localStorage.getItem('personal')); // Recuperar IdPersonal de localStorage
+                                    </script>
                                     <div class=" mb-5 mt-2">
                                         <div class="float-end mb-2">
                                             <button type="submit" class="registro btn btn-primary" id="btnFormulario"

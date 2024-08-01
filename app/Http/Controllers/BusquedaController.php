@@ -38,17 +38,27 @@ class BusquedaController extends Controller
         return $data;
     }
 
+    public function autocompletarCategoria(Request $request){
+        $term = $request->get('term');
+        $querys = Categoria::where('Descripcion', 'LIKE','%'.$term.'%')->get();
+        $data = [];
+        foreach ($querys as $query){
+            $data[] = [
+                'label' => $query->Descripcion
+            ];
+        }
+        return $data;
+    }
+
     public function informacionOrSerCat(){
         try {
             $origen = Origen::select('IdOrigen', 'Descripcion')->orderBy('Descripcion','asc')->get();
-            $categoria = Categoria::select('IdCategoria', 'Descripcion')->orderBy('Descripcion','asc')->get();
             $servicio = Servicio::select('IdServicio', 'Descripcion')->orderBy('Descripcion','asc')->get();
             return response()->json([
                 'exito' => true,
                 'mensajeError' => '',
                 'mensaje' => '',
                 '_origen' => $origen,
-                '_categoria' => $categoria,
                 '_servicio' => $servicio,
             ]);
         } catch (Exception $ex) {

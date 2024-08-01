@@ -1,120 +1,195 @@
-$('#dt-search-0').addClass('pb-2');
-datatable = new DataTable('#tablaIngreso', { //Configuración de DataTable de vista.
-    'responsive': true,
-    'lengthChange': false,
-    'autoWidth': false,
-    'scrollCollapse': true,
-    'scroller': true,
-    ajax: {                                  //Obtencion de datos
-        url: "/api/informacion_ingresoreporte",
-        type: "get",
-        dataType: "json",
-        dataSrc: "_ingreso",
-    },
-    columns: [{                             //Definicion de contenido de columnas
-        data: 'NumeroInterno'
-    },
-    {
-        data: 'NumeroPecosa'
-    },
-    {
-        data: 'Fecha'
-    },
-    {
-        data: null,                         //Botones de registro
-        render: function (param) {
-            return param['IdOrigen'] == 4 ? param['OtroOrigen'] : param['Origen'];
-        }
-    },
-    {
-        data: 'Personal'
-    },
-    {
-        data: 'Observacion'
-    },
-    {
-        data: null,                         //Botones de registro
-        render: function (param) {
-            return `<div class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-info" type="button" data-numeriointerno="${param['NumeroInterno']}" onClick="ver('${param['NumeroInterno']}')">Ver</button>
-                    </div>`
-        }
-    }
-    ],
-    dom: 'Bfrtip',               //Definicion de estructura de tabla, botones (B), un filtro (f), información (i), paginación (p), y el contenido de la tabla (t).
-    buttons: ['excel', 'pdf'],   //Exportar en excel y pdf
-    pageLength: 10,
-    language: {
-        "decimal": "",
-        "emptyTable": "No hay información",
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-            "first": "Primero",
-            "last": "Ultimo",
-            "next": "Siguiente",
-            "previous": "Anterior"
-        }
-    }
-});
-
 $(document).ready(function () {
-    $('input[data-table]').keyup(function (e) {
-        let buscador = $(this).val().toUpperCase();
-        let tablaID = $(this).data('table'); // Obtener el ID de la tabla desde el atributo data-table
-        if (buscador === '') {
-            $(tablaID + ' .option-table').show();
-        } else {
-            $(tablaID + ' .option-table').hide();
-            $(tablaID + ` .option-table[data-filter*="${buscador}"]`).show();
+    $('#rangoFecha').daterangepicker({
+        locale: { format: 'YYYY-MM-DD' },
+        startDate: moment().startOf('month'),
+        endDate: moment().endOf('month')
+    });
+
+    let tablaLista = new DataTable('#tablaIngreso', {
+        'responsive': true,
+        'lengthChange': false,
+        'autoWidth': false,
+        'scrollCollapse': true,
+        'scroller': true,
+        ajax: {
+            url: "/api/informacion_ingresoreporte",
+            type: "get",
+            dataType: "json",
+            dataSrc: "_ingreso",
+        },
+        columns: [
+            { data: 'NumeroInterno' },
+            { data: 'NumeroPecosa' },
+            { data: 'Fecha' },
+            {
+                data: null,
+                render: function (param) {
+                    return param['IdOrigen'] == 4 ? param['OtroOrigen'] : param['Origen'];
+                }
+            },
+            { data: 'Personal' },
+            { data: 'Observacion' },
+            {
+                data: null,
+                render: function (param) {
+                    return `<div class="d-flex justify-content-center align-items-center">
+                            <button class="btn btn-info" type="button" data-numerointerno="${param['NumeroInterno']}" onclick="Ver(this)">Ver</button>
+                            </div>`
+                }
+            }
+        ],
+        dom: 'Brtip',
+        buttons: [
+            {
+                extend: 'excel',
+                title: 'Reporte de Ingresos',
+                customize: function (xlsx) {
+                    excelEditado(xlsx);
+                }
+            },
+            {
+                extend: 'pdf',
+                filename: 'reporte_ingresos',
+                text: 'PDF',
+                title: 'Reporte de Ingresos',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5] // o ':visible'
+                },
+                customize: function (doc) {
+                    pdfReporteIngreso(doc, false);
+                }
+            }
+        ],
+        pageLength: 10,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
         }
     });
+
+    $('#btnFiltrar').click(function () {
+        let dateRange = $('#rangoFecha').val().split(' - ');
+        let fechaInicio = dateRange[0];
+        let fechaFin = dateRange[1];
+        tablaLista.ajax.url('/api/informacion_ingresoreporte?fechaInicio=' + fechaInicio + '&fechaFin=' + fechaFin).load();
+    });
+
+    // Configurar el buscador
+    $('#buscar').on('keyup', function () {
+        tablaLista.search(this.value).draw();
+    });
+
+    /*$(document).ready(function () {
+        $('input[data-table]').keyup(function (e) {
+            let buscador = $(this).val().toUpperCase();
+            let tablaID = $(this).data('table'); // Obtener el ID de la tabla desde el atributo data-table
+            if (buscador === '') {
+                $(tablaID + ' .option-table').show();
+            } else {
+                $(tablaID + ' .option-table').hide();
+                $(tablaID + ` .option-table[data-filter*="${buscador}"]`).show();
+            }
+        });
+    });*/
 });
 
-function ver(id) {
+var datatable;
+function Ver(e) {
+    let numerointerno = $(e).attr('data-numerointerno');
     $.ajax({
-        type: "get",
-        url: `/api/informacion_ingresodetalle/${id}`,
-        dataType: "json",
+        url: `/api/informacion_ingresodetalle/${numerointerno}`,
+        type: 'get',
+        dataType: 'json',
         success: function (response) {
-            if (response._detalleingreso.length > 0) {
-                let tabla = ''
-                response._detalleingreso.forEach(element => {
-                    tabla += `<tr>
-                        <td>${element.CodInterno}</td><td>${element.CodUTES}</td><td>${element.CodServicio}</td>
-                        <td>${element.Articulo}</td>
-                        <td>${element.Servicio}</td><td>${element.Descripcion}</td><td>${element.Categoria}</td>
-                        <td>${element.Estado}</td></tr>`
-                });
-                $('#tablaDetalle').html(tabla);
+            if (response.exito) {
+                localStorage.setItem('ingreso', JSON.stringify(response._ingreso));
                 ModalAbrirCerrar('verDetalle', true);
+                $('#dt-search-0').addClass('pb-2');
+                if (!$.fn.DataTable.isDataTable('#tablaDetalle')) {
+                    datatable = new DataTable('#tablaDetalle', {
+                        'responsive': true,
+                        'lengthChange': false,
+                        'autoWidth': false,
+                        'scrollCollapse': true,
+                        'scroller': true,
+                        ajax: {
+                            url: `/api/informacion_ingresodetalle/${numerointerno}`,
+                            type: 'get',
+                            dataType: 'json',
+                            dataSrc: "_detalleingreso"
+                        },
+                        columns: [
+                            { data: 'CodInterno' },
+                            { data: 'CodUTES' },
+                            { data: 'CodServicio' },
+                            { data: 'Articulo' },
+                            { data: 'Servicio' },
+                            { data: 'Categoria' },
+                            { data: 'Descripcion' },
+                            { data: 'Estado' }
+                        ],
+                        dom: 'Bfrtip',
+                        buttons: ['excel',
+                            {
+                                extend: 'pdf',
+                                filename: 'reporte_detalle_ingreso',
+                                text: 'PDF',
+                                title: 'Detalle de Ingreso',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                customize: function (doc) {
+                                    pdfReporteIngreso(doc, true);
+                                }
+                            }
+                        ],
+                        pageLength: 10,
+                        language: {
+                            "decimal": "",
+                            "emptyTable": "No hay información",
+                            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                            "infoPostFix": "",
+                            "thousands": ",",
+                            "lengthMenu": "Mostrar _MENU_ Entradas",
+                            "loadingRecords": "Cargando...",
+                            "processing": "Procesando...",
+                            "search": "Buscar:",
+                            "zeroRecords": "Sin resultados encontrados",
+                            "paginate": {
+                                "first": "Primero",
+                                "last": "Ultimo",
+                                "next": "Siguiente",
+                                "previous": "Anterior"
+                            }
+                        }
+                    });
+                } else {
+                    datatable.ajax.url(`/api/informacion_ingresodetalle/${numerointerno}`).load();
+                }
             } else {
-                Alertas('Error', 'No existe un detalle.', 'error');
+                Alertas('Error', response.mensaje, 'error');
             }
         },
-        error: function (xhr) {
-            LoadingOverlay(false);
-            let errorMsg = 'Error en la validación.';
-            if (xhr.status === 422) {
-                let errors = xhr.responseJSON.errors;
-                errorMsg = '';
-                for (let field in errors) {
-                    if (errors.hasOwnProperty(field)) {
-                        errorMsg += `+ ${errors[field][0]} <br/>`;
-                    }
-                }
-            } else if (xhr.response?.mensajeError) {
-                errorMsg = xhr.response.mensajeError;
-            }
-            Alertas('Error', errorMsg, 'error');
+        error: function (xhr, status, error) {
+            Alertas('Error', error, 'error');
         }
     });
 }

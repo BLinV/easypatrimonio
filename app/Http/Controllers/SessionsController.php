@@ -26,14 +26,18 @@ class SessionsController extends Controller
             // Obtener el usuario autenticado
             $user = Auth::user();
             // Obtener el personal asociado al usuario autenticado
-            $personal = $user->personal;
+            $personal = $user->personal->with('servicio')->first();
     
             // Pasar IdPersonal a la vista
-            return redirect()->intended('dashboard')->with('IdPersonal', $personal->IdPersonal);
+            //return redirect()->intended('dashboard')->with('IdPersonal', $personal->IdPersonal);
+            // Pasar el objeto completo del personal a la sesión
+            $request->session()->put('personal', $personal);
+    
+            return redirect()->intended('dashboard');
         }
     
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'La credenciales proveidas no estan registradas.',
         ]);
     }
 

@@ -61,6 +61,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    $(`#categoria`).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/api/informacion_categoriaBuscar",
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function (data) {
+                    response(data)
+                },
+                error: function (xhr) {
+                    LoadingOverlay(false);
+                    let errorMsg = 'Error en la validación.';
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        errorMsg = '';
+                        for (let field in errors) {
+                            if (errors.hasOwnProperty(field)) {
+                                errorMsg += `+ ${errors[field][0]} <br/>`;
+                            }
+                        }
+                    } else if (xhr.response?.mensajeError) {
+                        errorMsg = xhr.response.mensajeError;
+                    }
+                    Alertas('Error', errorMsg, 'error');
+                }
+            });
+        }
+    });
+
     const txtTipo = document.querySelector('#tipo');
     const txtMarca = document.querySelector('#marca');
     const txtModelo = document.querySelector('#modelo');

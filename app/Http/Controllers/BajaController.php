@@ -8,6 +8,7 @@ use App\Models\DetalleBaja;
 use App\Models\DetallePatrimonio;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BajaController extends Controller
@@ -22,7 +23,7 @@ class BajaController extends Controller
         return view('pages.patrimonio.baja.create', []);
     }
 
-    public function informacionBajaReporte()
+    public function informacionBajaReporte(Request $request)
     {
         try {
             $baja = Baja::select(
@@ -30,13 +31,15 @@ class BajaController extends Controller
                 'Fecha',
                 'Observacion',
                 DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Personal")
-            )
-                ->join('personal', 'baja.IdPersonal', '=', 'personal.IdPersonal')
-                ->get();
+            )->join('personal', 'baja.IdPersonal', '=', 'personal.IdPersonal');
+            if ($request->has('fechaInicio') && $request->has('fechaFin')) {
+                $baja->whereBetween('Fecha', [$request->fechaInicio, $request->fechaFin]);
+            }
+            $bajas = $baja->get();
             return response()->json([
                 'exito' => true,
                 'mensaje' => '',
-                '_baja' => $baja,
+                '_baja' => $bajas,
             ]);
         } catch (Exception $ex) {
             return response()->json([
@@ -68,7 +71,13 @@ class BajaController extends Controller
     public function obtenerBajaDetalle(string $CodigoBaja)
     {
         try {
-            $baja = Baja::select('CodigoBaja', 'Fecha', 'Observacion', 'IdPersonal')
+            $baja = Baja::select(
+                'CodigoBaja',
+                'Fecha',
+                'Observacion',
+                'baja.IdPersonal',
+                DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Personal")
+            )->join('personal', 'baja.IdPersonal', '=', 'personal.IdPersonal')
                 ->where('baja.CodigoBaja', $CodigoBaja)
                 ->first();
             if ($baja) {
@@ -76,11 +85,11 @@ class BajaController extends Controller
                     'detallepatrimonio.CodInterno',
                     'detallepatrimonio.CodUTES',
                     'detallepatrimonio.CodServicio',
+                    DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
                     'detallepatrimonio.Descripcion',
                     DB::raw("`detallebaja`.`Estado` AS Estado"),
                     DB::raw("servicio.Descripcion AS Servicio"),
-                    DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
-                    DB::raw("`categoria`.`Descripcion` AS Categoria"),
+                    DB::raw("`categoria`.`Descripcion` AS Categoria")
                 )
                     ->join('detallebaja', 'detallebaja.IdBaja', '=', 'baja.IdBaja')
                     ->join('detallepatrimonio', 'detallepatrimonio.IdDetallePatrimonio', '=', 'detallebaja.IdDetallePatrimonio')
@@ -100,15 +109,13 @@ class BajaController extends Controller
             } else {
                 return response()->json([
                     'exito' => false,
-                    'mensaje' => '',
-                    'mensajeError' => 'Registro no encontrado'
+                    'mensaje' => 'Registro no encontrado'
                 ]);
             }
         } catch (Exception $ex) {
             return response()->json([
                 'exito' => false,
-                'mensaje' => '',
-                'mensajeError' => $ex->getMessage()
+                'mensaje' => $ex->getMessage()
             ]);
         }
     }
@@ -181,7 +188,7 @@ class BajaController extends Controller
         }
     }
 
-    public function obtenerListaPatrimonio(string $codigo)
+    /*public function obtenerListaPatrimonio(string $codigo)
     {
         $detallePatrimonio = DetallePatrimonio::select(
             'detallepatrimonio.CodUTES',
@@ -213,7 +220,7 @@ class BajaController extends Controller
                 'mensaje' => 'Detalle no encontrado.'
             ], 404);
         }
-    }
+    }*/
 
     public function registrarBaja(BajaRequest $request)
     {

@@ -187,30 +187,14 @@ function CargarDetalle() {
                 dataSrc: "_detalleingreso"
             },
             columns: [
-                {
-                    data: 'CodInterno'
-                },
-                {
-                    data: 'CodUTES'
-                },
-                {
-                    data: 'CodServicio'
-                },
-                {
-                    data: 'Articulo'
-                },
-                {
-                    data: 'Descripcion'
-                },
-                {
-                    data: 'Estado'
-                },
-                {
-                    data: 'Servicio'
-                },
-                {
-                    data: 'Categoria'
-                },
+                { data: 'CodInterno' },
+                { data: 'CodUTES' },
+                { data: 'CodServicio' },
+                { data: 'Articulo' },
+                { data: 'Descripcion' },
+                { data: 'Estado' },
+                { data: 'Servicio' },
+                { data: 'Categoria' },
                 {
                     data: null,
                     render: function (param) {
@@ -256,7 +240,7 @@ function GuardarIngreso() {
     let otroorigen = document.getElementById('otroorigen').value;
     let observacion = document.getElementById('observacion').value;
 
-    let idpersonal = IdPersonal;
+    let idpersonal = personal.IdPersonal; // Acceder a IdPersonal desde el objeto personal
 
     //Informacion Patrimonio
     let codutes = document.getElementById('codutes').value;
@@ -264,7 +248,7 @@ function GuardarIngreso() {
     let tipo = document.getElementById('tipo').value;
     let marca = document.getElementById('marca').value;
     let modelo = document.getElementById('modelo').value;
-    let categoria_id = document.getElementById('categoria').value;
+    let categoria = document.getElementById('categoria').value;
     let servicio_id = document.getElementById('servicio').value;
     let comentario = document.getElementById('comentario').value;
     let estado = document.getElementById('estado').value;
@@ -286,7 +270,7 @@ function GuardarIngreso() {
         "marca_descripcion": marca,
         "Modelo": modelo,
         "Descripcion": comentario,
-        "IdCategoria": categoria_id,
+        "categoria_descripcion": categoria,
         "IdServicio": servicio_id,
 
         "Estado": estado,
@@ -432,7 +416,7 @@ function Editar(e) {
                 $('#marca').val(response._detallepatrimonio['Marca']);
                 $('#modelo').val(response._detallepatrimonio['Modelo']);
                 $('#patrimonio').val(response._detallepatrimonio['Articulo']);
-                $('#categoria').val(response._detallepatrimonio['IdCategoria']);
+                $('#categoria').val(response._detallepatrimonio['Categoria']);
                 $('#comentario').val(response._detallepatrimonio['Descripcion']);
                 $('#estado').val(response._detallepatrimonio['estado']);
                 $('#metodoFormulario').val('PUT');

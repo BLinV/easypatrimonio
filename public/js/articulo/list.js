@@ -1,90 +1,104 @@
-$('#dt-search-0').addClass('pb-2');
-datatable = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de vista.
-    'responsive': true,
-    'lengthChange': false,
-    'autoWidth': false,
-    'scrollCollapse': true,
-    'scroller': true,
-    ajax: {                                  //Obtencion de datos
-        url: "/api/informacion_patrimonioreporte",
-        type: "get",
-        dataType: "json",
-        dataSrc: "_patrimonio",
-    },
-    columns: [
-        {                             //Definicion de contenido de columnas
-            data: 'CodInterno'
+var tablaLista
+$(document).ready(function () {
+    tablaLista = new DataTable('#tablaPatrimonio', { //Configuración de DataTable de vista.
+        'responsive': true,
+        'lengthChange': false,
+        'autoWidth': false,
+        'scrollCollapse': true,
+        'scroller': true,
+        ajax: {                                  //Obtencion de datos
+            url: "/api/informacion_patrimonioreporte",
+            type: "get",
+            dataType: "json",
+            dataSrc: "_patrimonio",
         },
-        {
-            data: 'CodUTES'
-        },
-        {
-            data: 'CodServicio'
-        },
-        {
-            data: 'Articulo'
-        },
-        {
-            data: 'Descripcion'
-        },
-        {
-            data: 'Categoria'
-        },
-        {
-            data: null,                         //Botnoes de registro
-            render: function (param) {
-                return (param['Operativo']) ?
-                    `<p class="bg-success text-white p-2 d-inline rounded-pill">Si</p>` :
-                    `<p class="bg-danger text-white p-2 d-inline rounded-pill">No</p>`
-            }
-        },
-        {
-            data: null,                         //Botnoes de registro
-            render: function (param) {
-                return param['Baja'] ?
-                    `<p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p>` :
-                    `<p class="bg-success text-white p-2 d-inline rounded-pill">No</p>`
-            }
-        },
-        {
-            data: null,
-            render: function (param) {
-                return `<div class="dropdown">
+        columns: [
+            { data: 'CodInterno' },
+            { data: 'CodUTES' },
+            { data: 'CodServicio' },
+            { data: 'Articulo' },
+            { data: 'Descripcion' },
+            { data: 'Categoria' },
+            {
+                data: null,                         //Botnoes de registro
+                render: function (param) {
+                    return (param['Operativo']) ?
+                        `<p class="bg-success text-white p-2 d-inline rounded-pill">Si</p>` :
+                        `<p class="bg-danger text-white p-2 d-inline rounded-pill">No</p>`
+                }
+            },
+            {
+                data: null,                         //Botnoes de registro
+                render: function (param) {
+                    return param['Baja'] ?
+                        `<p class="bg-warning text-white p-2 d-inline rounded-pill">Si</p>` :
+                        `<p class="bg-success text-white p-2 d-inline rounded-pill">No</p>`
+                }
+            },
+            {
+                data: null,
+                render: function (param) {
+                    return `<div class="dropdown">
                                 <button class="btn btn-info dropdown-toggle" type="button"
                                     id="dropdown_acciones" data-bs-toggle="dropdown" aria-expanded="false">
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
                                     <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Ver(this)">Ver</a></li>    
-                                    <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Actualizar(this)">Actualizar</a></li>
+                                    <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Operativo(this)">Estado Operativo</a></li>
                                 </ul>
                             </div>`
+                }
+            }
+        ],
+        dom: 'Brtip',               //Definicion de estructura de tabla, botones (B), un filtro (f), información (i), paginación (p), y el contenido de la tabla (t).
+        buttons: [
+            {
+                extend: 'excel',
+                title: 'Reporte de Bajas',
+                customize: function (xlsx) {
+                    excelEditado(xlsx);
+                }
+            },
+            {
+                extend: 'pdf',
+                filename: 'reporte_patrimonios',
+                text: 'PDF',
+                title: 'Reporte de Patrimonios',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                },
+                customize: function (doc) {
+                    pdfReportePatrimonio(doc, false);
+                }
+            }
+        ],   //Exportar en excel y pdf
+        pageLength: 10,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
             }
         }
-    ],
-    dom: 'Bfrtip',               //Definicion de estructura de tabla, botones (B), un filtro (f), información (i), paginación (p), y el contenido de la tabla (t).
-    buttons: ['excel', 'pdf'],   //Exportar en excel y pdf
-    pageLength: 10,
-    language: {
-        "decimal": "",
-        "emptyTable": "No hay información",
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-            "first": "Primero",
-            "last": "Ultimo",
-            "next": "Siguiente",
-            "previous": "Anterior"
-        }
-    }
+    });
+    // Configurar el buscador
+    $('#buscar').on('keyup', function () {
+        tablaLista.search(this.value).draw();
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -175,7 +189,27 @@ function cargarDetalle(codinterno) {
                 { data: 'Motivo' }
             ],
             dom: 'Bfrtip',
-            buttons: ['excel', 'pdf'],
+            buttons: [
+                {
+                    extend: 'excel',
+                    title: 'Reporte de Bajas',
+                    customize: function (xlsx) {
+                        excelEditado(xlsx);
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    filename: 'reporte_patrimonios',
+                    text: 'PDF',
+                    title: 'Reporte de Patrimonios',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    customize: function (doc) {
+                        pdfReportePatrimonio(doc, true);
+                    }
+                }
+            ],
             pageLength: 10,
             language: {
                 "decimal": "",
@@ -242,6 +276,7 @@ function Ver(e) {
             } else {
                 $('#ubicacionActual').text(" No encontrado. ");
             }
+            $('#dt-search-0').addClass('pb-2');
             cargarDetalle(codinterno);
         },
         error: function (xhr) {
@@ -261,6 +296,14 @@ function Ver(e) {
             Alertas('Error', errorMsg, 'error');
         }
     });
+}
+
+function Limpiar() {
+    $('#servicio').val("");
+    $('#personal').val("");
+    $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
+    $('#personal').attr({ 'disabled': true })
+    $('#motivo').val("");
 }
 
 function GuardarMovimiento() {
@@ -316,56 +359,20 @@ function GuardarMovimiento() {
     });
 }
 
-function Limpiar() {
-    $('#servicio').val("");
-    $('#personal').val("");
-    $('#personal').html(`<option value="">.: Seleccionar :.</option>`);
-    $('#personal').attr({ 'disabled': true })
-    $('#motivo').val("");
-}
-
-function Actualizar(e) {
+function Operativo(e) {
     let codinterno = $(e).attr('data-codinterno');
-    ModalAbrirCerrar('actualizar', true);
     $.ajax({
-        type: "get",
-        url: `/api/informacion_detallepatrimonioreporte/${codinterno}`,
+        type: "put",
+        url: `/api/operatividad_patrimonio/${codinterno}`,
         dataType: "json",
         success: function (response) {
-            $('#codInterno').text(codinterno);
-            if (response._origen != null) {
-                $('#ingresoDocumento').text(response._origen.NumeroInterno);
-                $('#ingresoIngreso').text(response._origen.NumeroPecosa);
-                $('#ingresoFecha').text(response._origen.Fecha);
-                $('#ingresoEstado').text(response._origen.Estado);
-                $('#ingresoOrigen').text(response._origen.Origen);
+            LoadingOverlay(false);
+            if (response.exito) {
+                Alertas('Confirmación', response.mensaje, 'success');
+                tablaLista.ajax.reload();
             } else {
-                $('#ingresoDocumento').text(" No encontrado. ");
-                $('#ingresoIngreso').text(" No encontrado. ");
-                $('#ingresoFecha').text(" No encontrado. ");
-                $('#ingresoEstado').text(" No encontrado. ");
-                $('#ingresoOrigen').text(" No encontrado. ");
+                Alertas('Error', response.mensajeError, 'error');
             }
-            if (response._baja != null) {
-                $('#bajaDocumento').text(response._baja.CodigoBaja);
-                $('#bajaFecha').text(response._baja.Fecha);
-                $('#bajaEstado').text(response._baja.Estado);
-            } else {
-                $('#bajaDocumento').text(" No encontrado. ");
-                $('#bajaFecha').text(" No encontrado. ");
-                $('#bajaEstado').text(" No encontrado. ");
-            }
-            if (response._servicio != null) {
-                $('#servicioPertenencia').text(response._servicio);
-            } else {
-                $('#servicioPertenencia').text(" No encontrado. ");
-            }
-            if (response._ubicacion != null) {
-                $('#ubicacionActual').text(response._ubicacion);
-            } else {
-                $('#ubicacionActual').text(" No encontrado. ");
-            }
-            cargarDetalle(codinterno);
         },
         error: function (xhr) {
             LoadingOverlay(false);

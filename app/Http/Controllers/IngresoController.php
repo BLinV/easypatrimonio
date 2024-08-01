@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IngresoRequest;
+use App\Models\Categoria;
 use App\Models\DetalleIngreso;
 use App\Models\DetallePatrimonio;
 use App\Models\Ingreso;
@@ -47,7 +48,7 @@ class IngresoController extends Controller
         }
     }
 
-    public function informacionIngresoReporte()
+    public function informacionIngresoReporte(Request $request)
     {
         try {
             $ingreso = Ingreso::select(
@@ -58,14 +59,16 @@ class IngresoController extends Controller
                 'OtroOrigen',
                 'Observacion',
                 DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Personal")
-            )
-                ->join('origen', 'ingreso.IdOrigen', '=', 'origen.IdOrigen')
-                ->join('personal', 'ingreso.IdPersonal', '=', 'personal.IdPersonal')
-                ->get();
+            )->join('origen', 'ingreso.IdOrigen', '=', 'origen.IdOrigen')
+                ->join('personal', 'ingreso.IdPersonal', '=', 'personal.IdPersonal');
+            if ($request->has('fechaInicio') && $request->has('fechaFin')) {
+                $ingreso->whereBetween('Fecha', [$request->fechaInicio, $request->fechaFin]);
+            }
+            $ingresos = $ingreso->get();
             return response()->json([
                 'exito' => true,
                 'mensaje' => '',
-                '_ingreso' => $ingreso,
+                '_ingreso' => $ingresos,
             ]);
         } catch (Exception $ex) {
             return response()->json([
@@ -120,15 +123,20 @@ class IngresoController extends Controller
                 ['Descripcion' => $tipoDescripcion],
                 ['Descripcion' => $tipoDescripcion]
             );
-            $patrimonio->IdTipo = $tipo->IdTipo;
             $marcaDescripcion   = $request->marca_descripcion;
             $marca = Marca::firstOrCreate(
                 ['Descripcion' => $marcaDescripcion],
                 ['Descripcion' => $marcaDescripcion]
             );
+            $categoriaDescripcion   = $request->categoria_descripcion;
+            $categoria = Categoria::firstOrCreate(
+                ['Descripcion' => $categoriaDescripcion],
+                ['Descripcion' => $categoriaDescripcion]
+            );
+            $patrimonio->IdTipo         = $tipo->IdTipo;
             $patrimonio->IdMarca        = $marca->IdMarca;
             $patrimonio->Modelo         = $request->Modelo;
-            $patrimonio->IdCategoria    = $request->IdCategoria;
+            $patrimonio->IdCategoria    = $categoria->IdCategoria;
             $patrimonio->save();
             // Crear Detalle Patrimonio (uniendo a Patrimonio)
             $detallePatrimonio = new DetallePatrimonio();
@@ -170,7 +178,18 @@ class IngresoController extends Controller
     public function obtenerIngresoDetalle(string $numeroInterno)
     {
         try {
-            $ingreso = Ingreso::select('NumeroInterno', 'NumeroPecosa', 'Fecha', 'IdOrigen', 'OtroOrigen', 'Observacion', 'IdPersonal')
+            $ingreso = Ingreso::select(
+                'NumeroInterno',
+                'NumeroPecosa',
+                'Fecha',
+                'ingreso.IdOrigen',
+                DB::raw("`origen`.`Descripcion` AS Origen"),
+                'OtroOrigen',
+                'Observacion',
+                'ingreso.IdPersonal',
+                DB::raw("CONCAT(`personal`.`Nombres`, ' ', `personal`.`Apellidos`) AS Personal")
+            )->join('origen', 'ingreso.IdOrigen', '=', 'origen.IdOrigen')
+                ->join('personal', 'ingreso.IdPersonal', '=', 'personal.IdPersonal')
                 ->where('ingreso.NumeroInterno', $numeroInterno)
                 ->first();
             if ($ingreso) {
@@ -195,6 +214,7 @@ class IngresoController extends Controller
                     ->get();
                 return response()->json([
                     'exito' => true,
+                    'mensaje' => 'Registro encontrado',
                     '_ingreso' => $ingreso,
                     '_detalleingreso' => $detalleIngreso
                 ]);
@@ -241,7 +261,7 @@ class IngresoController extends Controller
             $tipoDescripcion    = $request->tipo_descripcion;
             $marcaDescripcion   = $request->marca_descripcion;
             $Modelo             = $request->Modelo;
-            $IdCategoria        = $request->IdCategoria;
+            $categoriaDescripcion = $request->categoria_descripcion;
             $Estado             = $request->Estado;
 
             $patrimonioDB = DetallePatrimonio::select('IdDetallePatrimonio', 'IdPatrimonio')->where('CodInterno', '=', $CodInterno)->first();
@@ -264,12 +284,16 @@ class IngresoController extends Controller
                     ['Descripcion' => $marcaDescripcion],
                     ['Descripcion' => $marcaDescripcion]
                 );
+                $categoria = Categoria::firstOrCreate(
+                    ['Descripcion' => $categoriaDescripcion],
+                    ['Descripcion' => $categoriaDescripcion]
+                );
 
                 $patrimonio->IdPatrimonio           = $patrimonioDB->IdPatrimonio;
                 $patrimonio->IdTipo                 = $tipo->IdTipo;
                 $patrimonio->IdMarca                = $marca->IdMarca;
                 $patrimonio->Modelo                 = $Modelo;
-                $patrimonio->IdCategoria            = $IdCategoria;
+                $patrimonio->IdCategoria            = $categoria->IdCategoria;
 
                 $detalleIngreso = new DetalleIngreso();
                 $detalleIngreso->IdDetallePatrimonio = $patrimonioDB->IdDetallePatrimonio;
@@ -322,13 +346,14 @@ class IngresoController extends Controller
             DB::raw("`marca`.`Descripcion` AS Marca"),
             DB::raw("`patrimonio`.`Modelo` AS Modelo"),
             DB::raw("CONCAT(`tipo`.`Descripcion`, ' ', `marca`.`Descripcion`, ' ', `patrimonio`.`Modelo`) AS Articulo"),
-            'patrimonio.IdCategoria',
+            DB::raw("`categoria`.`Descripcion` AS Categoria"),
             'detallepatrimonio.Descripcion',
             'detalleingreso.estado'
         )
             ->join('patrimonio', 'detallepatrimonio.IdPatrimonio', '=', 'patrimonio.IdPatrimonio')
             ->join('tipo', 'patrimonio.IdTipo', '=', 'tipo.IdTipo')
             ->join('marca', 'patrimonio.IdMarca', '=', 'marca.IdMarca')
+            ->join('categoria', 'patrimonio.IdCategoria', '=', 'categoria.IdCategoria')
             ->join('detalleingreso', 'detallepatrimonio.IdDetallePatrimonio', '=', 'detalleingreso.IdDetallePatrimonio')
             ->where('detallepatrimonio.CodInterno', $CodInterno)
             ->first();

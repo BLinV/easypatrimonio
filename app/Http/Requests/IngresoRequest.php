@@ -22,7 +22,7 @@ class IngresoRequest extends FormRequest
             'tipo_descripcion' => 'required|string|max:50',
             'marca_descripcion' => 'required|string|max:50',
             'Modelo' => 'required|string|max:100',
-            'IdCategoria' => 'required|integer|exists:categoria,IdCategoria',
+            'categoria_descripcion' => 'required|string|max:50',
             // Tabla DetallePatrimonio
             'CodInterno' => 'nullable|string|size:10|unique:detallepatrimonio,CodInterno',
             'CodUTES' => 'nullable|string|size:12|unique:detallepatrimonio,CodUTES',
@@ -54,8 +54,8 @@ class IngresoRequest extends FormRequest
             'marca_descripcion.max' => 'La descripción de la marca no puede tener más de 50 caracteres.',
             'Modelo.required' => 'El campo modelo es obligatorio.',
             'Modelo.max' => 'La descripción no puede tener más de 100 caracteres.',
-            'IdCategoria.required' => 'La categoría es obligatoria.',
-            'IdCategoria.exists' => 'La categoría seleccionada no es válida.',
+            'categoria_descripcion.required' => 'La categoría es obligatoria.',
+            'categoria_descripcion.max' => 'La descripción de la categoría no puede tener más de 50 caracteres.',
 
             'CodInterno.size' => 'El código interno debe tener 10 caracteres.',
             'CodInterno.unique' => 'El código interno ya está registrado.',

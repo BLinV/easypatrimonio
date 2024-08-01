@@ -6,17 +6,23 @@
         LoadingOverlay(false)
     </script>
 
-
+    <!-- Data Table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.min.css">
 
+    <!-- Calendario -->
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     <!-- Crear, leer y editar archivos ZIP, permitir exportación de tabla a Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- Crear PDF -->
+    <!-- Crear PDF y Fuentes para el PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <!-- Fuentes para el PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <!-- Integrar estilos de Bootstrap a DataTable - declaración de DataTable("", {})-->
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
@@ -35,6 +41,7 @@
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 
+
     <div class="container">
         <div class="modal fade" id="verDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -46,7 +53,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table" id="tablaDetalle">
                                 <thead>
                                     <tr>
                                         <th>Codigo Interno</th>
@@ -54,12 +61,11 @@
                                         <th>Codigo Servicio</th>
                                         <th>Artículo</th>
                                         <th>Servicio</th>
-                                        <th>Descripción</th>
                                         <th>Categoría</th>
+                                        <th>Descripción</th>
                                         <th>Información Anexa</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaDetalle"></tbody>
                             </table>
                         </div>
                     </div>
@@ -74,30 +80,44 @@
                     <legend>Información del Cargo</legend>
                 </div>
                 <div class="card-body">
-                    <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
-                        <div
-                            class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-12 d-flex justify-content-center align-items-center">
+                    <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-center">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                            <label for="rangoFecha">Rango de Fechas:</label>
+                            <input type="text" id="rangoFecha" class="form-control">
+                            <button type="button" class="btn btn-primary" id="btnFiltrar">Filtrar</button>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                            <label for="buscar">Buscar:</label>
+                            <input type="text" id="buscar" class="form-control" placeholder="Buscar...">
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
                                 <button type="button" class="btn btn-primary"
-                                    onclick="location.href='{{ route('bajas.create') }}'">Generar Oficio de Baja</button>
+                                    onclick="location.href='{{ route('bajas.create') }}'">Generar Oficio de
+                                    Baja</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Tabla de informacion -->
-                    <div class="table-responsive">
-                        <table class="table" id="tablaBaja">
-                            <thead>
-                                <tr>
-                                    <th>Código Baja</th>
-                                    <th>Fecha</th>
-                                    <th>Observacion</th>
-                                    <th>Personal</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <script src="{{ asset('js/baja/list.js') }}"></script>
-                    </div>
+                </div>
+                <!-- Tabla de informacion -->
+                <div class="table-responsive">
+                    <table class="table" id="tablaBaja">
+                        <thead>
+                            <tr>
+                                <th>Código Baja</th>
+                                <th>Fecha</th>
+                                <th>Observacion</th>
+                                <th>Personal</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <script src="{{ asset('js/export/icono_hospital_base64.js') }}"></script>
+                    <script src="{{ asset('js/export/export.js') }}"></script>
+                    <script src="{{ asset('js/baja/list.js') }}"></script>
+                    <script>
+                        let personal = JSON.parse(localStorage.getItem('personal')); // Recuperar IdPersonal de localStorage
+                    </script>
                 </div>
             </div>
         </main>
