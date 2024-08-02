@@ -55,10 +55,10 @@
                                 Gestión de Patrimonio
                             </a>
                             <div class="dropdown-menu rounded-5 text-center px-2" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ url('/Ingresos') }}">Ingreso de Patrimonio</a>
-                                <a class="dropdown-item" href="{{ url('/Bajas') }}">Baja de Patrimonio</a>
+                                <a class="dropdown-item bg-white text-dark rounded-3" href="{{ url('/Ingresos') }}">Ingreso de Patrimonio</a>
+                                <a class="dropdown-item bg-white text-dark rounded-3" href="{{ url('/Bajas') }}">Baja de Patrimonio</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ url('/Patrimonio') }}">Reporte de Patrimonio</a>
+                                <a class="dropdown-item bg-white text-dark rounded-3" href="{{ url('/Patrimonio') }}">Reporte de Patrimonio</a>
                             </div>
                         </li>
                         <hr class="border border-dark" />

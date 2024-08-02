@@ -29,11 +29,11 @@
                     <form action="{{ route('login.store') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                         @csrf
                         <div class="form-group mb-2">
-                            <input type="email" id="email" name="email" class="form-control" value=""
+                            <input type="email" id="email" name="email" class="form-control shadow-none" value=""
                                 placeholder="Email">
                         </div>
                         <div class="form-group mb-2">
-                            <input type="password" id="password" name="password" class="form-control" value=""
+                            <input type="password" id="password" name="password" class="form-control shadow-none" value=""
                                 placeholder="Contraseña">
                         </div>
                         @error('email')
