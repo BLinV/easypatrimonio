@@ -262,7 +262,7 @@ function pdfReporteBaja(doc, detalle) {
     // Agregar encabezado, pie de página e información de personas
     doc['header'] = encabezado(now, personal);
     doc['footer'] = pieDePagina();
-    
+
     // Agregar información específica de baja si está disponible
     if (detalle) {
         var baja = JSON.parse(localStorage.getItem('baja'));
@@ -332,7 +332,7 @@ function pdfReportePatrimonio(doc, detalle) {
     // Agregar encabezado, pie de página e información de personas
     doc['header'] = encabezado(now, personal);
     doc['footer'] = pieDePagina();
-    
+
     // Agregar información específica de baja si está disponible
     if (detalle) {
         var patrimonio = JSON.parse(localStorage.getItem('patrimonio'));

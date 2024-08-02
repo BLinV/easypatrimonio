@@ -169,7 +169,8 @@
                 </div>
                 <div class="card-body">
                     <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                        <div
+                            class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                             <label for="buscar">Buscar:</label>
                             <input type="text" id="buscar" class="form-control" placeholder="Buscar...">
                         </div>
@@ -191,6 +192,10 @@
                                 </tr>
                             </thead>
                         </table>
+                        <img
+                            src = "https://scontent.ftru1-1.fna.fbcdn.net/v/t39.30808-6/300511415_396777729231224_4723039521489360428_n.jpg?stp=dst-jpg_s960x960&_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=AZl0o6legLIQ7kNvgExIJl9&_nc_ht=scontent.ftru1-1.fna&gid=AKtNRh-DcXsqu7deb2eWjFS&oh=00_AYAbot1gH7y_mgI9UqBJsh6mNV8ZwhnqnSmMplPNi3mZqQ&oe=66B1F5AA"
+                            class = "img-fluid"/>
+
                         <script src="{{ asset('js/export/icono_hospital_base64.js') }}"></script>
                         <script src="{{ asset('js/export/export.js') }}"></script>
                         <script src="{{ asset('js/articulo/list.js') }}"></script>

@@ -60,7 +60,7 @@ $(document).ready(function () {
                 }
             }
         ],
-        pageLength: 10,
+        pageLength: 5,
         language: {
             "decimal": "",
             "emptyTable": "No hay información",

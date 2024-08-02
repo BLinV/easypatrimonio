@@ -6,7 +6,6 @@
             $personal = session('personal');
         @endphp
         <h1>Bienvenido(a) al sistema <b>{{ $personal->Nombres }} {{ $personal->Apellidos }}</b></h1>
-        <b>{{ auth()->user()->name }}</b>
         <script>
             // Convertir el objeto personal a JSON y almacenarlo en una variable de JavaScript
             var personal = {!! json_encode($personal) !!};

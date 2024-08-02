@@ -44,7 +44,7 @@ $(document).ready(function () {
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown_acciones">
-                                    <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Ver(this)">Ver</a></li>    
+                                    <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Ver(this)">Ver</a></li>
                                     <li><a style="cursor: pointer;" class="dropdown-item" data-codinterno="${param['CodInterno']}" onclick="Operativo(this)">Estado Operativo</a></li>
                                 </ul>
                             </div>`

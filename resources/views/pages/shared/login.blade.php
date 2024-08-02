@@ -1,25 +1,6 @@
-@extends('layouts.auth')
-@section('title', 'Login')
-@section('content')
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            max-width: 100%;
-        }
-        body {
-            width: 100%;
-            max-width: 100%;
-            position: relative;
-            background-image: url("images/foto.jpg");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-    </style>
-    <div class="row g-2 justify-content-center" style="margin-top: 10px;">
+<div class="container">
+    <div class="row g-2 justify-content-center">
+        <!-- Columna del formulario de login -->
         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header bg-white text-center">
@@ -46,5 +27,11 @@
                 </div>
             </div>
         </div>
+        <!-- Columna de la imagen -->
+        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12 d-flex align-items-center">
+            <div class="text-center w-100">
+                <img src="{{ asset('images/foto.jpg') }}" alt="Imagen de Login" class="img-fluid">
+            </div>
+        </div>
     </div>
-@endsection
+</div>

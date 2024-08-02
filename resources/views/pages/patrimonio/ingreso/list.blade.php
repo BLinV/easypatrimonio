@@ -28,11 +28,11 @@
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="modal fade" id="verDetalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
-                <div class="modal-content">
+                <div class="modal-content rounded-4">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Detalle de Patrimonio:</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -59,30 +59,38 @@
             </div>
         </div>
 
-        <main>
-            <h1>Ingreso de Patrimonio</h1>
-            <div class="card">
-                <div class="card-header">
-                    <legend>Información de PECOSA</legend>
-                </div>
-                <div class="card-body">
-                    <div class="shadow p-3 mb-5 bg-body rounded row g-2 justify-content-start">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <label for="rangoFecha">Rango de Fechas:</label>
-                            <input type="text" id="rangoFecha" class="form-control">
-                            <button type="button" class="btn btn-primary" id="btnFiltrar">Filtrar</button>
-                        </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <label for="buscar">Buscar:</label>
-                            <input type="text" id="buscar" class="form-control" placeholder="Buscar...">
-                        </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <button type="button" class="btn btn-primary"
-                                    onclick="location.href='{{ route('ingresos.create') }}'">Administrar PECOSA</button>
-                            </div>
-                        </div>
+        <main class="shadow p-3 mb-4 rounded-5 mt-2">
+            <h1 class="text-center">Ingreso de Patrimonio</h1>
+            <hr class="border border-dark">
+
+            <div class="d-flex justify-content-between">
+                <h4 class="">Información de PECOSA</h4>
+
+                <button type="button" class="btn btn-primary"
+                    onclick="location.href='{{ route('ingresos.create') }}'">Administrar PECOSA</button>
+
+            </div>
+
+
+            <div class="d-flex justify-content-between">
+                <div class="d-block">
+                    <label for="rangoFecha">Rango de Fechas:</label>
+                    <div class="d-flex">
+                        <input type="text" id="rangoFecha" class="form-control shadow-none me-2">
+                        <button type="button" class="btn btn-primary" id="btnFiltrar">Filtrar</button>
                     </div>
+                </div>
+
+                <div class="d-block">
+                    <label for="buscar">Buscar:</label>
+                    <input type="text" id="buscar" class="form-control shadow-none" placeholder="Buscar...">
+                </div>
+
+            </div>
+
+            <div class="card mt-2 rounded-3">
+                <div class="card-body">
+
                     <!-- Tabla de informacion -->
                     <div class="table-responsive">
                         <table class="table" id="tablaIngreso">
